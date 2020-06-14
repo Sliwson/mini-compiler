@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-G428VO0
-// DateTime: 13/06/2020 11:53:58
+// DateTime: 14/06/2020 19:08:48
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 13/06/2020 11:43:15>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 14/06/2020 19:06:39>
 
 // options: lines gplex
 
@@ -16,15 +16,30 @@ using System.CodeDom.Compiler;
 using System.Globalization;
 using System.Text;
 using QUT.Gppg;
-using Scanner;
 
-namespace Parser
+namespace GardensPoint
 {
-public enum Tokens {error=2,EOF=3,kwAND=4,kwOR=5,ID=6};
+public enum Tokens {error=2,EOF=3,Program=4,Identifier=5,IntegerLiteral=6,
+    DoubleLiteral=7,BoolLiteral=8,StringLiteral=9,Integer=10,Double=11,Bool=12,
+    Assign=13,Or=14,And=15,BitwiseOr=16,BitwiseAnd=17,Equals=18,
+    NotEquals=19,GreaterThan=20,GreaterOrEqual=21,LessThan=22,LessOrEqual=23,Plus=24,
+    Minus=25,Multiply=26,Divide=27,Negate=28,BitwiseNegate=29,IntConversion=30,
+    DoubleConversion=31,If=32,Else=33,While=34,Read=35,Write=36,
+    Return=37,OpenBracket=38,CloseBracket=39,OpenCurl=40,CloseCurl=41,Semicolon=42,
+    Eof=43,Whitespace=44};
 
+public struct ValueType
+#line 4 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+       {
+	public int Integer;
+	public string String;
+	public double Double;
+	public bool Bool;
+}
+#line default
 // Abstract base class for GPLEX scanners
 [GeneratedCodeAttribute( "Gardens Point Parser Generator", "1.5.2")]
-public abstract class ScanBase : AbstractScanner<int,LexLocation> {
+public abstract class ScanBase : AbstractScanner<ValueType,LexLocation> {
   private LexLocation __yylloc = new LexLocation();
   public override LexLocation yylloc { get { return __yylloc; } set { __yylloc = value; } }
   protected virtual bool yywrap() { return true; }
@@ -34,48 +49,33 @@ public abstract class ScanBase : AbstractScanner<int,LexLocation> {
 [GeneratedCodeAttribute( "Gardens Point Parser Generator", "1.5.2")]
 public class ScanObj {
   public int token;
-  public int yylval;
+  public ValueType yylval;
   public LexLocation yylloc;
-  public ScanObj( int t, int val, LexLocation loc ) {
+  public ScanObj( int t, ValueType val, LexLocation loc ) {
     this.token = t; this.yylval = val; this.yylloc = loc;
   }
 }
 
 [GeneratedCodeAttribute( "Gardens Point Parser Generator", "1.5.2")]
-public class Parser: ShiftReduceParser<int, LexLocation>
+public class Parser: ShiftReduceParser<ValueType, LexLocation>
 {
 #pragma warning disable 649
   private static Dictionary<int, string> aliases;
 #pragma warning restore 649
-  private static Rule[] rules = new Rule[7];
-  private static State[] states = new State[10];
+  private static Rule[] rules = new Rule[3];
+  private static State[] states = new State[3];
   private static string[] nonTerms = new string[] {
-      "program", "$accept", "Statements", "EXPR", };
+      "start", "$accept", };
 
   static Parser() {
-    states[0] = new State(new int[]{6,7,3,-2},new int[]{-1,1,-3,3,-4,4});
+    states[0] = new State(-2,new int[]{-1,1});
     states[1] = new State(new int[]{3,2});
     states[2] = new State(-1);
-    states[3] = new State(-3);
-    states[4] = new State(new int[]{4,5,5,8});
-    states[5] = new State(new int[]{6,7},new int[]{-4,6});
-    states[6] = new State(-4);
-    states[7] = new State(-6);
-    states[8] = new State(new int[]{6,7},new int[]{-4,9});
-    states[9] = new State(-5);
 
     for (int sNo = 0; sNo < states.Length; sNo++) states[sNo].number = sNo;
 
     rules[1] = new Rule(-2, new int[]{-1,3});
     rules[2] = new Rule(-1, new int[]{});
-    rules[3] = new Rule(-1, new int[]{-3});
-    rules[4] = new Rule(-3, new int[]{-4,4,-4});
-    rules[5] = new Rule(-3, new int[]{-4,5,-4});
-    rules[6] = new Rule(-4, new int[]{6});
-
-    aliases = new Dictionary<int, string>();
-    aliases.Add(4, "AND");
-    aliases.Add(5, "OR");
   }
 
   protected override void Initialize() {
@@ -104,10 +104,9 @@ public class Parser: ShiftReduceParser<int, LexLocation>
         return CharToString((char)terminal);
   }
 
-#line 26 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 72 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
 
-// Don't forget to declare the Parser-Constructor
-public Parser(Scanner.Scanner scnr) : base(scnr) { }
+public Parser(Scanner scnr) : base(scnr) { }
 #line default
 }
 }

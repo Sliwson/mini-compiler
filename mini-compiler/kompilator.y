@@ -1,28 +1,73 @@
-﻿%using Scanner      //include the Namespace of the scanner-class
-%output=Parser.cs   //names the output-file
-%namespace Parser  //names the namespace of the Parser-class
+﻿%output=Parser.cs
+%namespace GardensPoint
 
-%parsertype Parser      //names the Parserclass to "Parser"
-%scanbasetype ScanBase  //names the ScanBaseclass to "ScanBase"
-%tokentype Tokens       //names the Tokensenumeration to "Tokens"
+%union {
+	public int Integer;
+	public string String;
+	public double Double;
+	public bool Bool;
+}
 
-%token kwAND "AND", kwOR "OR" //the received Tokens from GPLEX
-%token ID
+// Beginning of the program
+%token Program
 
-%% //Grammar Rules Section
+// Types
+%token <String> Identifier
+%token <Integer> IntegerLiteral
+%token <Double> DoubleLiteral
+%token <Bool> BoolLiteral
+%token <String> StringLiteral
 
-program  : /* nothing */
-         | Statements
-         ;
+%token Integer
+%token Double 
+%token Bool
 
-Statements : EXPR "AND" EXPR
-           | EXPR "OR" EXPR
-           ;
+// Operators
+%token Assign 
+%token Or
+%token And 
+%token BitwiseOr
+%token BitwiseAnd
+%token Equals
+%token NotEquals
+%token GreaterThan
+%token GreaterOrEqual
+%token LessThan
+%token LessOrEqual
+%token Plus 
+%token Minus
+%token Multiply
+%token Divide
+%token Negate
+%token BitwiseNegate
+%token IntConversion
+%token DoubleConversion
 
-EXPR : ID
-     ;
+// If instruction
+%token If 
+%token Else 
 
-%% //User-code Section
+// While loop
+%token While 
 
-// Don't forget to declare the Parser-Constructor
-public Parser(Scanner.Scanner scnr) : base(scnr) { }
+// IO
+%token Read
+%token Write
+
+// Blocks
+%token Return    
+%token OpenBracket
+%token CloseBracket
+%token OpenCurl
+%token CloseCurl
+%token Semicolon
+
+%token Eof
+%token Whitespace
+
+%%
+start	:  
+		;
+%% 
+
+public Parser(Scanner scnr) : base(scnr) { }

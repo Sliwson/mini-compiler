@@ -1,23 +1,95 @@
-﻿%using Parser;           //include the namespace of the generated Parser-class
-%namespace Scanner       //names the Namespace of the generated Scanner-class
-%visibility public       //visibility of the types "Tokens","ScanBase","Scanner"
-%scannertype Scanner     //names the Scannerclass to "Scanner"
-%scanbasetype ScanBase   //names the Scanbaseclass to "ScanBase"
-%tokentype Tokens        //names the Tokenenumeration to "Tokens"
+﻿%namespace GardensPoint
+%visibility public
 
-%{ //user-specified code will be copied in the Output-file
+%{
+public override void yyerror(string format, params object[] args)
+{
+	System.Console.WriteLine("Syntax error: line {0} - " + format, yyline);
+}
 %}
 
-OR [Oo][Rr]
-AND [Aa][Nn][Dd]
-Identifier [A-Za-z][A-Za-z0-9_]*
+// Literals
+Identifier [a-zA-Z]([a-zA-Z0-9])*
+IntegerLiteral	([0-9]|[1-9][0-9]*)
+DoubleLiteral	[1-9][0-9]*\.[0-9]+
+BoolLiteral		(true|false)
+StringLiteral	\".*\"
+Whitespace		\s	
 
-%% //Rules Section
-%{ //user-code that will be executed before getting the next token
-%}
+%% 
 
-{OR}           {return (int)Tokens.kwAND;}
-{AND}          {return (int)Tokens.kwAND;}
-{Identifier}   {return (int)Tokens.ID;}
+"program"			{ return (int)Tokens.Program; }
 
-%% //User-code Section
+{IntegerLiteral}	{ 
+						Int32.TryParse (yytext, NumberStyles.Integer, CultureInfo.CurrentCulture, out yylval.Integer);
+						return (int)Tokens.IntegerLiteral; 
+					}
+
+{DoubleLiteral}		{
+						double.TryParse (yytext, NumberStyles.Float, CultureInfo.CurrentCulture, out yylval.Double); 
+						return (int)Tokens.DoubleLiteral; 
+					}
+
+{StringLiteral}		{
+						if (yytext.Length > 2)  
+							yylval.String = yytext.Substring(1, yytext.Length - 2); 
+						else
+							yylval.String = ""; 
+
+						return (int)Tokens.StringLiteral;
+					}
+
+{BoolLiteral}		{ 
+						bool.TryParse(yytext, out yylval.Bool);
+					   return (int)Tokens.BoolLiteral; 
+					}
+
+"int"				{ return (int)Tokens.Integer; }
+"double"			{ return (int)Tokens.Double; }
+"bool"				{ return (int)Tokens.Double; }
+
+"="					{ return (int)Tokens.Assign; }
+"||"				{ return (int)Tokens.Or; }
+"&&"				{ return (int)Tokens.And; }
+"|"					{ return (int)Tokens.BitwiseOr; }
+"&"					{ return (int)Tokens.BitwiseAnd; }
+"=="				{ return (int)Tokens.Equals; }
+"!="				{ return (int)Tokens.NotEquals; }
+">"					{ return (int)Tokens.GreaterThan; }
+">="				{ return (int)Tokens.GreaterOrEqual; }
+"<"					{ return (int)Tokens.LessThan; }
+"<="				{ return (int)Tokens.LessOrEqual; }
+"+"					{ return (int)Tokens.Plus; }
+"-"					{ return (int)Tokens.Minus; }
+"*"					{ return (int)Tokens.Multiply; }
+"/"					{ return (int)Tokens.Divide; }
+"!"					{ return (int)Tokens.Negate; }
+"~"					{ return (int)Tokens.BitwiseNegate; }
+"(int)"				{ return (int)Tokens.IntConversion; }
+"(double)"			{ return (int)Tokens.DoubleConversion; }
+
+
+"if"				{ return (int)Tokens.If; }
+"else"				{ return (int)Tokens.Else; }
+
+"while"				{ return (int)Tokens.While; }
+
+"read"				{ return (int)Tokens.Read; }
+"write"				{ return (int)Tokens.Write; }
+
+"return"			{ return (int)Tokens.Return; }
+"("					{ return (int)Tokens.OpenBracket; }
+")"					{ return (int)Tokens.CloseBracket; }
+"{"					{ return (int)Tokens.OpenCurl; }
+"}"					{ return (int)Tokens.CloseCurl; }
+";"					{ return (int)Tokens.Semicolon; }
+
+<<EOF>>				{ return (int)Tokens.Eof; }
+{Whitespace}		{ return (int)Tokens.Whitespace; }
+
+{Identifier}		{ 
+						yylval.String = yytext;
+						return (int) Tokens.Identifier;
+					}
+
+%% 
