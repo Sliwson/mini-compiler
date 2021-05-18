@@ -3,10 +3,10 @@
 // (see accompanying GPPGcopyright.rtf)
 
 // GPPG version 1.5.2
-// Machine:  DESKTOP-G428VO0
-// DateTime: 14/06/2020 19:08:48
+// Machine:  DESKTOP-9QSNDR4
+// DateTime: 18/05/2021 17:06:06
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 14/06/2020 19:06:39>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 18/05/2021 16:46:25>
 
 // options: lines gplex
 

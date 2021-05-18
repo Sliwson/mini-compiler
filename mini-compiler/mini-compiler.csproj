@@ -52,7 +52,9 @@
   <ItemGroup>
     <None Include="kompilator.lex" />
     <None Include="kompilator.y" />
-    <None Include="source.mini" />
+    <None Include="source.mini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

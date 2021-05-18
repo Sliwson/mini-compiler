@@ -5,10 +5,10 @@
 //  See accompanying file GPLEXcopyright.rtf.
 //
 //  GPLEX Version:  1.2.2
-//  Machine:  DESKTOP-G428VO0
-//  DateTime: 14/06/2020 19:08:48
+//  Machine:  DESKTOP-9QSNDR4
+//  DateTime: 18/05/2021 17:06:05
 //  UserName: Mateusz
-//  GPLEX input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.lex - 14/06/2020 19:08:42>
+//  GPLEX input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.lex - 18/05/2021 16:46:25>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: parser, minimize
