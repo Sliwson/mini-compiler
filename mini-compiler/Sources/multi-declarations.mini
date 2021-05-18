@@ -1,0 +1,8 @@
+﻿program
+{
+	int n;
+	int i, j, k;
+	double wynik;
+	double x, y;
+	bool isOK;
+	bool b1, b2, b3; }

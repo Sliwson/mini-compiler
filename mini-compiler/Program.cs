@@ -3,23 +3,64 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using GardensPoint;
 using QUT.Gppg;
 
 namespace mini_compiler
 {
-    class Compiler
+    class Program
     {
         static void Main(string[] args)
         {
-            FileStream file = new FileStream(args[0], FileMode.Open);
+            string[] files = Directory.GetFiles("Sources", "*.mini");
+            foreach (var file in files)
+                ParseFile(file);
+        }
+
+        private static void ParseFile(string filename)
+        {
+            // reset compiler
+            Compiler.Reset();
+
+            // read and parse file
+            Console.WriteLine("==============================================================================");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"{filename}");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine();
+
+            FileStream file = new FileStream(filename, FileMode.Open);
             var reader = new StreamReader(file);
+            var content = reader.ReadToEnd();
+
+            Console.Write(content);
+            Console.WriteLine();
+
+            Console.WriteLine("______________________________________________________________________________");
+            Console.WriteLine("Output:");
+            Console.WriteLine();
+
             var scanner = new Scanner();
-            scanner.SetSource(reader.ReadToEnd(), 0);
+            scanner.SetSource(content, 0);
             var parser = new Parser(scanner);
 
+            Console.ForegroundColor = ConsoleColor.Red;
             parser.Parse();
+            Console.ForegroundColor = ConsoleColor.White;
+
             file.Close();
+            Console.WriteLine();
+        }
+    }
+
+    public class Compiler
+    {
+        public static int CurrentLine { get; set; } = 1;
+        public static int Errors { get; set; } = 0;
+
+        public static void Reset()
+        {
+            CurrentLine = 1;
+            Errors = 0;
         }
     }
 }

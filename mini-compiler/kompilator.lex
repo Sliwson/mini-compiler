@@ -1,4 +1,4 @@
-﻿%namespace GardensPoint
+﻿%namespace mini_compiler
 %visibility public
 
 %{
@@ -87,7 +87,8 @@ Whitespace		\s
 ";"					{ return (int)Tokens.Semicolon; }
 ","					{ return (int)Tokens.Comma; }
 
-"//"				{ return (int)Tokens.BeginComment; }
+"//.*"				{ }
+"\n"				{ Compiler.CurrentLine = yyline + 1; }
 {Whitespace}		{ }
 
 {Identifier}		{ 

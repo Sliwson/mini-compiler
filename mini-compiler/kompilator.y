@@ -1,5 +1,5 @@
 ﻿%output=Parser.cs
-%namespace GardensPoint
+%namespace mini_compiler
 
 %union {
 	public int Integer;
@@ -65,16 +65,35 @@
 %token Semicolon
 %token Comma
 
-%token BeginComment
-
 // non-terminals
 %type <type> declarations
 
 %%
-start	: Program OpenCurl declarations CloseCurl EOF { Console.WriteLine("Wszystko git!"); }
-		;
+start : Program OpenCurl declarations CloseCurl EOF { }
+	  ;
 
-declarations : 
+declarations : statements { }
+			 | declaration declarations { }
+			 ;
+
+declaration : Integer declarationInt { }
+			| Double declarationDouble { }
+			| Bool declarationBool { }
+			;
+
+declarationInt : Identifier Semicolon { Console.WriteLine("Line {0}: Integer {1}", Compiler.CurrentLine, $1); }
+			   | Identifier Comma declarationInt { Console.WriteLine("Line {0}: Integer {1}", Compiler.CurrentLine, $1); }
+			   ;
+
+declarationDouble : Identifier Semicolon { }
+				  | Identifier Comma declarationDouble
+				  ;
+
+declarationBool : Identifier Semicolon { }
+				| Identifier Comma declarationBool
+				;
+
+statements :
 		;
 %% 
 
