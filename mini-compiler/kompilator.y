@@ -22,6 +22,8 @@
 %token Double 
 %token Bool
 
+%token Hex
+
 // Operators
 %token Assign 
 %token Or
@@ -61,12 +63,18 @@
 %token OpenCurl
 %token CloseCurl
 %token Semicolon
+%token Comma
 
-%token Eof
-%token Whitespace
+%token BeginComment
+
+// non-terminals
+%type <type> declarations
 
 %%
-start	:  
+start	: Program OpenCurl declarations CloseCurl EOF { Console.WriteLine("Wszystko git!"); }
+		;
+
+declarations : 
 		;
 %% 
 

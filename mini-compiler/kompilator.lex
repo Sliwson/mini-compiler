@@ -4,7 +4,7 @@
 %{
 public override void yyerror(string format, params object[] args)
 {
-	System.Console.WriteLine("Syntax error: line {0} - " + format, yyline);
+	System.Console.WriteLine("Line {0} - " + format, yyline);
 }
 %}
 
@@ -48,6 +48,8 @@ Whitespace		\s
 "double"			{ return (int)Tokens.Double; }
 "bool"				{ return (int)Tokens.Double; }
 
+"hex"				{ return (int)Tokens.Hex; }
+
 "="					{ return (int)Tokens.Assign; }
 "||"				{ return (int)Tokens.Or; }
 "&&"				{ return (int)Tokens.And; }
@@ -83,9 +85,10 @@ Whitespace		\s
 "{"					{ return (int)Tokens.OpenCurl; }
 "}"					{ return (int)Tokens.CloseCurl; }
 ";"					{ return (int)Tokens.Semicolon; }
+","					{ return (int)Tokens.Comma; }
 
-<<EOF>>				{ return (int)Tokens.Eof; }
-{Whitespace}		{ return (int)Tokens.Whitespace; }
+"//"				{ return (int)Tokens.BeginComment; }
+{Whitespace}		{ }
 
 {Identifier}		{ 
 						yylval.String = yytext;

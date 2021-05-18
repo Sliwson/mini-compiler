@@ -13,8 +13,9 @@ namespace mini_compiler
         static void Main(string[] args)
         {
             FileStream file = new FileStream(args[0], FileMode.Open);
+            var reader = new StreamReader(file);
             var scanner = new Scanner();
-            scanner.SetSource(file.ToString(), 0);
+            scanner.SetSource(reader.ReadToEnd(), 0);
             var parser = new Parser(scanner);
 
             parser.Parse();

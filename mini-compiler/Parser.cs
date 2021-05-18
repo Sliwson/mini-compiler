@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-9QSNDR4
-// DateTime: 18/05/2021 17:06:06
+// DateTime: 18/05/2021 17:37:16
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 18/05/2021 16:46:25>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 18/05/2021 17:37:13>
 
 // options: lines gplex
 
@@ -21,12 +21,12 @@ namespace GardensPoint
 {
 public enum Tokens {error=2,EOF=3,Program=4,Identifier=5,IntegerLiteral=6,
     DoubleLiteral=7,BoolLiteral=8,StringLiteral=9,Integer=10,Double=11,Bool=12,
-    Assign=13,Or=14,And=15,BitwiseOr=16,BitwiseAnd=17,Equals=18,
-    NotEquals=19,GreaterThan=20,GreaterOrEqual=21,LessThan=22,LessOrEqual=23,Plus=24,
-    Minus=25,Multiply=26,Divide=27,Negate=28,BitwiseNegate=29,IntConversion=30,
-    DoubleConversion=31,If=32,Else=33,While=34,Read=35,Write=36,
-    Return=37,OpenBracket=38,CloseBracket=39,OpenCurl=40,CloseCurl=41,Semicolon=42,
-    Eof=43,Whitespace=44};
+    Hex=13,Assign=14,Or=15,And=16,BitwiseOr=17,BitwiseAnd=18,
+    Equals=19,NotEquals=20,GreaterThan=21,GreaterOrEqual=22,LessThan=23,LessOrEqual=24,
+    Plus=25,Minus=26,Multiply=27,Divide=28,Negate=29,BitwiseNegate=30,
+    IntConversion=31,DoubleConversion=32,If=33,Else=34,While=35,Read=36,
+    Write=37,Return=38,OpenBracket=39,CloseBracket=40,OpenCurl=41,CloseCurl=42,
+    Semicolon=43,Comma=44,BeginComment=45};
 
 public struct ValueType
 #line 4 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
@@ -62,20 +62,26 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
 #pragma warning disable 649
   private static Dictionary<int, string> aliases;
 #pragma warning restore 649
-  private static Rule[] rules = new Rule[3];
-  private static State[] states = new State[3];
+  private static Rule[] rules = new Rule[4];
+  private static State[] states = new State[8];
   private static string[] nonTerms = new string[] {
-      "start", "$accept", };
+      "declarations", "start", "$accept", };
 
   static Parser() {
-    states[0] = new State(-2,new int[]{-1,1});
+    states[0] = new State(new int[]{4,3},new int[]{-2,1});
     states[1] = new State(new int[]{3,2});
     states[2] = new State(-1);
+    states[3] = new State(new int[]{41,4});
+    states[4] = new State(-3,new int[]{-1,5});
+    states[5] = new State(new int[]{42,6});
+    states[6] = new State(new int[]{3,7});
+    states[7] = new State(-2);
 
     for (int sNo = 0; sNo < states.Length; sNo++) states[sNo].number = sNo;
 
-    rules[1] = new Rule(-2, new int[]{-1,3});
-    rules[2] = new Rule(-1, new int[]{});
+    rules[1] = new Rule(-3, new int[]{-2,3});
+    rules[2] = new Rule(-2, new int[]{4,41,-1,42,3});
+    rules[3] = new Rule(-1, new int[]{});
   }
 
   protected override void Initialize() {
@@ -90,6 +96,11 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
 #pragma warning disable 162, 1522
     switch (action)
     {
+      case 2: // start -> Program, OpenCurl, declarations, CloseCurl, EOF
+#line 74 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                                    { Console.WriteLine("Wszystko git!"); }
+#line default
+        break;
     }
 #pragma warning restore 162, 1522
   }
@@ -104,7 +115,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         return CharToString((char)terminal);
   }
 
-#line 72 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 80 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
 
 public Parser(Scanner scnr) : base(scnr) { }
 #line default
