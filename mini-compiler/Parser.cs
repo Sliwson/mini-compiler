@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-9QSNDR4
-// DateTime: 18/05/2021 20:09:54
+// DateTime: 20/05/2021 19:26:59
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 18/05/2021 20:09:53>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 20/05/2021 19:26:57>
 
 // options: lines gplex
 
@@ -62,59 +62,119 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
 #pragma warning disable 649
   private static Dictionary<int, string> aliases;
 #pragma warning restore 649
-  private static Rule[] rules = new Rule[15];
-  private static State[] states = new State[29];
+  private static Rule[] rules = new Rule[35];
+  private static State[] states = new State[67];
   private static string[] nonTerms = new string[] {
-      "declarations", "start", "$accept", "statements", "declaration", "declarationInt", 
-      "declarationDouble", "declarationBool", };
+      "start", "$accept", "declarations", "instructions", "declaration", "declarationInt", 
+      "declarationDouble", "declarationBool", "instruction", "blockInstruction", 
+      "expression", "ifInstruction", "whileInstruction", "inputInstruction", 
+      "outputInstruction", "ifBody", "whileBody", };
 
   static Parser() {
-    states[0] = new State(new int[]{4,3},new int[]{-2,1});
+    states[0] = new State(new int[]{4,3},new int[]{-1,1});
     states[1] = new State(new int[]{3,2});
     states[2] = new State(-1);
     states[3] = new State(new int[]{41,4});
-    states[4] = new State(new int[]{10,11,11,17,12,23,42,-14},new int[]{-1,5,-4,8,-5,9});
+    states[4] = new State(new int[]{10,49,11,55,12,61,41,-15,43,-15,33,-15,35,-15,36,-15,37,-15,42,-15},new int[]{-3,5,-4,8,-5,47});
     states[5] = new State(new int[]{42,6});
     states[6] = new State(new int[]{3,7});
     states[7] = new State(-2);
-    states[8] = new State(-3);
-    states[9] = new State(new int[]{10,11,11,17,12,23,42,-14},new int[]{-1,10,-4,8,-5,9});
-    states[10] = new State(-4);
-    states[11] = new State(new int[]{5,13},new int[]{-6,12});
-    states[12] = new State(-5);
-    states[13] = new State(new int[]{44,14,43,16});
-    states[14] = new State(new int[]{5,13},new int[]{-6,15});
-    states[15] = new State(-8);
-    states[16] = new State(-9);
-    states[17] = new State(new int[]{5,19},new int[]{-7,18});
-    states[18] = new State(-6);
-    states[19] = new State(new int[]{43,20,44,21});
-    states[20] = new State(-10);
-    states[21] = new State(new int[]{5,19},new int[]{-7,22});
-    states[22] = new State(-11);
-    states[23] = new State(new int[]{5,25},new int[]{-8,24});
-    states[24] = new State(-7);
-    states[25] = new State(new int[]{43,26,44,27});
-    states[26] = new State(-12);
-    states[27] = new State(new int[]{5,25},new int[]{-8,28});
-    states[28] = new State(-13);
+    states[8] = new State(new int[]{41,11,43,15,33,17,35,26,36,34,37,40,42,-3},new int[]{-9,9,-10,10,-11,14,-12,16,-13,25,-14,33,-15,39});
+    states[9] = new State(-14);
+    states[10] = new State(-16);
+    states[11] = new State(-15,new int[]{-4,12});
+    states[12] = new State(new int[]{42,13,41,11,43,15,33,17,35,26,36,34,37,40},new int[]{-9,9,-10,10,-11,14,-12,16,-13,25,-14,33,-15,39});
+    states[13] = new State(-22);
+    states[14] = new State(-17);
+    states[15] = new State(-23);
+    states[16] = new State(-18);
+    states[17] = new State(new int[]{39,18});
+    states[18] = new State(new int[]{43,15},new int[]{-11,19});
+    states[19] = new State(new int[]{40,20});
+    states[20] = new State(new int[]{40,21});
+    states[21] = new State(new int[]{41,11,43,15},new int[]{-16,22,-10,23,-11,24});
+    states[22] = new State(-24);
+    states[23] = new State(-25);
+    states[24] = new State(-26);
+    states[25] = new State(-19);
+    states[26] = new State(new int[]{39,27});
+    states[27] = new State(new int[]{43,15},new int[]{-11,28});
+    states[28] = new State(new int[]{40,29});
+    states[29] = new State(new int[]{41,11,43,15},new int[]{-17,30,-10,31,-11,32});
+    states[30] = new State(-27);
+    states[31] = new State(-28);
+    states[32] = new State(-29);
+    states[33] = new State(-20);
+    states[34] = new State(new int[]{5,35});
+    states[35] = new State(new int[]{44,36,13,37});
+    states[36] = new State(-30);
+    states[37] = new State(new int[]{44,38});
+    states[38] = new State(-31);
+    states[39] = new State(-21);
+    states[40] = new State(new int[]{9,45,43,15},new int[]{-11,41});
+    states[41] = new State(new int[]{44,42,13,43});
+    states[42] = new State(-32);
+    states[43] = new State(new int[]{44,44});
+    states[44] = new State(-33);
+    states[45] = new State(new int[]{44,46});
+    states[46] = new State(-34);
+    states[47] = new State(new int[]{10,49,11,55,12,61,41,-15,43,-15,33,-15,35,-15,36,-15,37,-15,42,-15},new int[]{-3,48,-4,8,-5,47});
+    states[48] = new State(-4);
+    states[49] = new State(new int[]{5,51},new int[]{-6,50});
+    states[50] = new State(-5);
+    states[51] = new State(new int[]{43,52,44,53});
+    states[52] = new State(-8);
+    states[53] = new State(new int[]{5,51},new int[]{-6,54});
+    states[54] = new State(-9);
+    states[55] = new State(new int[]{5,57},new int[]{-7,56});
+    states[56] = new State(-6);
+    states[57] = new State(new int[]{43,58,44,59});
+    states[58] = new State(-10);
+    states[59] = new State(new int[]{5,57},new int[]{-7,60});
+    states[60] = new State(-11);
+    states[61] = new State(new int[]{5,63},new int[]{-8,62});
+    states[62] = new State(-7);
+    states[63] = new State(new int[]{43,64,44,65});
+    states[64] = new State(-12);
+    states[65] = new State(new int[]{5,63},new int[]{-8,66});
+    states[66] = new State(-13);
 
     for (int sNo = 0; sNo < states.Length; sNo++) states[sNo].number = sNo;
 
-    rules[1] = new Rule(-3, new int[]{-2,3});
-    rules[2] = new Rule(-2, new int[]{4,41,-1,42,3});
-    rules[3] = new Rule(-1, new int[]{-4});
-    rules[4] = new Rule(-1, new int[]{-5,-1});
+    rules[1] = new Rule(-2, new int[]{-1,3});
+    rules[2] = new Rule(-1, new int[]{4,41,-3,42,3});
+    rules[3] = new Rule(-3, new int[]{-4});
+    rules[4] = new Rule(-3, new int[]{-5,-3});
     rules[5] = new Rule(-5, new int[]{10,-6});
     rules[6] = new Rule(-5, new int[]{11,-7});
     rules[7] = new Rule(-5, new int[]{12,-8});
-    rules[8] = new Rule(-6, new int[]{5,44,-6});
-    rules[9] = new Rule(-6, new int[]{5,43});
+    rules[8] = new Rule(-6, new int[]{5,43});
+    rules[9] = new Rule(-6, new int[]{5,44,-6});
     rules[10] = new Rule(-7, new int[]{5,43});
     rules[11] = new Rule(-7, new int[]{5,44,-7});
     rules[12] = new Rule(-8, new int[]{5,43});
     rules[13] = new Rule(-8, new int[]{5,44,-8});
-    rules[14] = new Rule(-4, new int[]{});
+    rules[14] = new Rule(-4, new int[]{-4,-9});
+    rules[15] = new Rule(-4, new int[]{});
+    rules[16] = new Rule(-9, new int[]{-10});
+    rules[17] = new Rule(-9, new int[]{-11});
+    rules[18] = new Rule(-9, new int[]{-12});
+    rules[19] = new Rule(-9, new int[]{-13});
+    rules[20] = new Rule(-9, new int[]{-14});
+    rules[21] = new Rule(-9, new int[]{-15});
+    rules[22] = new Rule(-10, new int[]{41,-4,42});
+    rules[23] = new Rule(-11, new int[]{43});
+    rules[24] = new Rule(-12, new int[]{33,39,-11,40,40,-16});
+    rules[25] = new Rule(-16, new int[]{-10});
+    rules[26] = new Rule(-16, new int[]{-11});
+    rules[27] = new Rule(-13, new int[]{35,39,-11,40,-17});
+    rules[28] = new Rule(-17, new int[]{-10});
+    rules[29] = new Rule(-17, new int[]{-11});
+    rules[30] = new Rule(-14, new int[]{36,5,44});
+    rules[31] = new Rule(-14, new int[]{36,5,13,44});
+    rules[32] = new Rule(-15, new int[]{37,-11,44});
+    rules[33] = new Rule(-15, new int[]{37,-11,13,44});
+    rules[34] = new Rule(-15, new int[]{37,9,44});
   }
 
   protected override void Initialize() {
@@ -130,53 +190,154 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
     switch (action)
     {
       case 2: // start -> Program, OpenCurl, declarations, CloseCurl, EOF
-#line 72 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 71 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                     { }
 #line default
         break;
-      case 3: // declarations -> statements
-#line 75 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                          { }
+      case 3: // declarations -> instructions
+#line 74 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                            { }
 #line default
         break;
       case 4: // declarations -> declaration, declarations
-#line 76 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 75 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                { }
 #line default
         break;
       case 5: // declaration -> Integer, declarationInt
-#line 79 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 78 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                      { }
 #line default
         break;
       case 6: // declaration -> Double, declarationDouble
-#line 80 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 79 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                               { }
 #line default
         break;
       case 7: // declaration -> Bool, declarationBool
-#line 81 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 80 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                           { }
 #line default
         break;
-      case 8: // declarationInt -> Identifier, Comma, declarationInt
-#line 85 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                       { Console.WriteLine("Line {0}: Integer {1}", Compiler.CurrentLine, ValueStack[ValueStack.Depth-3].String); }
+      case 8: // declarationInt -> Identifier, Semicolon
+#line 83 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                      { }
 #line default
         break;
-      case 9: // declarationInt -> Identifier, Semicolon
-#line 86 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                       { Console.WriteLine("Line {0}: Integer {1}", Compiler.CurrentLine, ValueStack[ValueStack.Depth-2].String); }
+      case 9: // declarationInt -> Identifier, Comma, declarationInt
+#line 84 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                        { }
 #line default
         break;
       case 10: // declarationDouble -> Identifier, Semicolon
-#line 89 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 87 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                          { }
 #line default
         break;
       case 12: // declarationBool -> Identifier, Semicolon
-#line 93 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 91 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                        { }
+#line default
+        break;
+      case 14: // instructions -> instructions, instruction
+#line 95 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                        { }
+#line default
+        break;
+      case 16: // instruction -> blockInstruction
+#line 99 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                               { }
+#line default
+        break;
+      case 17: // instruction -> expression
+#line 100 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                { }
+#line default
+        break;
+      case 18: // instruction -> ifInstruction
+#line 101 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                   { }
+#line default
+        break;
+      case 19: // instruction -> whileInstruction
+#line 102 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                      { }
+#line default
+        break;
+      case 20: // instruction -> inputInstruction
+#line 103 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                      { }
+#line default
+        break;
+      case 21: // instruction -> outputInstruction
+#line 104 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                       { }
+#line default
+        break;
+      case 22: // blockInstruction -> OpenCurl, instructions, CloseCurl
+#line 107 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                                   { }
+#line default
+        break;
+      case 23: // expression -> Semicolon
+#line 110 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                       { }
+#line default
+        break;
+      case 24: // ifInstruction -> If, OpenBracket, expression, CloseBracket, CloseBracket, 
+               //                  ifBody
+#line 113 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                                                           { }
+#line default
+        break;
+      case 25: // ifBody -> blockInstruction
+#line 116 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                          { }
+#line default
+        break;
+      case 26: // ifBody -> expression
+#line 117 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                 { }
+#line default
+        break;
+      case 27: // whileInstruction -> While, OpenBracket, expression, CloseBracket, whileBody
+#line 120 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                                                       { }
+#line default
+        break;
+      case 28: // whileBody -> blockInstruction
+#line 123 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                             { }
+#line default
+        break;
+      case 29: // whileBody -> expression
+#line 124 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                 { }
+#line default
+        break;
+      case 30: // inputInstruction -> Read, Identifier, Comma
+#line 127 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                         { }
+#line default
+        break;
+      case 31: // inputInstruction -> Read, Identifier, Hex, Comma
+#line 128 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                 { }
+#line default
+        break;
+      case 32: // outputInstruction -> Write, expression, Comma
+#line 131 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                           { }
+#line default
+        break;
+      case 33: // outputInstruction -> Write, expression, Hex, Comma
+#line 132 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                   { }
+#line default
+        break;
+      case 34: // outputInstruction -> Write, StringLiteral, Comma
+#line 133 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                  { }
 #line default
         break;
     }
@@ -193,7 +354,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         return CharToString((char)terminal);
   }
 
-#line 100 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 138 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
 
 public Parser(Scanner scnr) : base(scnr) { }
 #line default

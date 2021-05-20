@@ -66,13 +66,12 @@
 %token Comma
 
 // non-terminals
-%type <type> declarations
 
 %%
 start : Program OpenCurl declarations CloseCurl EOF { }
 	  ;
 
-declarations : statements { }
+declarations : instructions { }
 			 | declaration declarations { }
 			 ;
 
@@ -81,8 +80,8 @@ declaration : Integer declarationInt { }
 			| Bool declarationBool { }
 			;
 
-declarationInt : Identifier Semicolon { Console.WriteLine("Line {0}: Integer {1}", Compiler.CurrentLine, $1); }
-			   | Identifier Comma declarationInt { Console.WriteLine("Line {0}: Integer {1}", Compiler.CurrentLine, $1); }
+declarationInt : Identifier Semicolon { }
+			   | Identifier Comma declarationInt { }
 			   ;
 
 declarationDouble : Identifier Semicolon { }
@@ -93,8 +92,48 @@ declarationBool : Identifier Semicolon { }
 				| Identifier Comma declarationBool
 				;
 
-statements :
-		;
+instructions : instructions instruction { }
+			 | 
+			 ;
+
+instruction : blockInstruction { }
+			| expression { }
+			| ifInstruction { }
+			| whileInstruction { }
+			| inputInstruction { }
+			| outputInstruction { }
+			;
+
+blockInstruction : OpenCurl instructions CloseCurl { }
+				 ;
+
+expression : Semicolon { } // TODO: fix
+		   ;
+
+ifInstruction : If OpenBracket expression CloseBracket CloseBracket ifBody { }
+			  ;
+
+ifBody : blockInstruction { }
+	   | expression { }
+	   ;
+
+whileInstruction : While OpenBracket expression CloseBracket whileBody { }
+				 ;
+
+whileBody : blockInstruction { }
+		  | expression { }
+		  ;
+
+inputInstruction : Read Identifier Comma { }
+				 | Read Identifier Hex Comma { }
+				 ;
+
+outputInstruction : Write expression Comma { }
+				  | Write expression Hex Comma { }
+				  | Write StringLiteral Comma { }
+				  ;
+
+
 %% 
 
 public Parser(Scanner scnr) : base(scnr) { }
