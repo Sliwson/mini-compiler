@@ -30,9 +30,16 @@ namespace mini_compiler
 
             FileStream file = new FileStream(filename, FileMode.Open);
             var reader = new StreamReader(file);
+
             var content = reader.ReadToEnd();
 
-            Console.Write(content);
+            int lineno = 1;
+            foreach (var line in content.Split('\n'))
+            {
+                Console.WriteLine($"{lineno, -3} {line}");
+                lineno++;
+            }
+
             Console.WriteLine();
 
             Console.WriteLine("______________________________________________________________________________");
@@ -43,7 +50,7 @@ namespace mini_compiler
             scanner.SetSource(content, 0);
             var parser = new Parser(scanner);
 
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Green;
             parser.Parse();
             Console.ForegroundColor = ConsoleColor.White;
 

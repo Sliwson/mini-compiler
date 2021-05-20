@@ -4,7 +4,9 @@
 %{
 public override void yyerror(string format, params object[] args)
 {
+	Console.ForegroundColor = ConsoleColor.Red;
 	System.Console.WriteLine("Line {0} - " + format, yyline);
+	Console.ForegroundColor = ConsoleColor.White;
 }
 %}
 
@@ -46,7 +48,7 @@ Whitespace		\s
 
 "int"				{ return (int)Tokens.Integer; }
 "double"			{ return (int)Tokens.Double; }
-"bool"				{ return (int)Tokens.Double; }
+"bool"				{ return (int)Tokens.Bool; }
 
 "hex"				{ return (int)Tokens.Hex; }
 

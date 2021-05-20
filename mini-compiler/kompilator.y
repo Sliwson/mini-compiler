@@ -80,16 +80,16 @@ declaration : Integer declarationInt { }
 			| Bool declarationBool { }
 			;
 
-declarationInt : Identifier Semicolon { }
-			   | Identifier Comma declarationInt { }
+declarationInt : Identifier Semicolon { Console.WriteLine("Line {0}: Integer {1}", Compiler.CurrentLine, $1); }
+			   | Identifier Comma declarationInt { Console.WriteLine("Line {0}: Integer {1}", Compiler.CurrentLine, $1); }
 			   ;
 
-declarationDouble : Identifier Semicolon { }
-				  | Identifier Comma declarationDouble
+declarationDouble : Identifier Semicolon { Console.WriteLine("Line {0}: Double {1}", Compiler.CurrentLine, $1); }
+				  | Identifier Comma declarationDouble { Console.WriteLine("Line {0}: Double {1}", Compiler.CurrentLine, $1); }
 				  ;
 
-declarationBool : Identifier Semicolon { }
-				| Identifier Comma declarationBool
+declarationBool : Identifier Semicolon { Console.WriteLine("Line {0}: Bool {1}", Compiler.CurrentLine, $1); }
+				| Identifier Comma declarationBool { Console.WriteLine("Line {0}: Bool {1}", Compiler.CurrentLine, $1); }
 				;
 
 instructions : instructions instruction { }
@@ -97,7 +97,7 @@ instructions : instructions instruction { }
 			 ;
 
 instruction : blockInstruction { }
-			| expression { }
+			| expression Semicolon { }
 			| ifInstruction { }
 			| whileInstruction { }
 			| inputInstruction { }
@@ -107,30 +107,24 @@ instruction : blockInstruction { }
 blockInstruction : OpenCurl instructions CloseCurl { }
 				 ;
 
-expression : Semicolon { } // TODO: fix
-		   ;
+expression : Identifier GreaterThan Identifier { } // TODO: extend
+		   | Identifier Assign Identifier { }
+		   ; 
 
-ifInstruction : If OpenBracket expression CloseBracket CloseBracket ifBody { }
+ifInstruction : If OpenBracket expression CloseBracket instruction { Console.WriteLine("Line {0}: If", Compiler.CurrentLine); }
+			  | If OpenBracket expression CloseBracket instruction Else instruction { Console.WriteLine("Line {0}: If Else", Compiler.CurrentLine); }
 			  ;
 
-ifBody : blockInstruction { }
-	   | expression { }
-	   ;
-
-whileInstruction : While OpenBracket expression CloseBracket whileBody { }
+whileInstruction : While OpenBracket expression CloseBracket instruction {Console.WriteLine("Line {0}: While", Compiler.CurrentLine); }
 				 ;
 
-whileBody : blockInstruction { }
-		  | expression { }
-		  ;
-
-inputInstruction : Read Identifier Comma { }
-				 | Read Identifier Hex Comma { }
+inputInstruction : Read Identifier Semicolon { Console.WriteLine("Line {0}: Read {1}", Compiler.CurrentLine, $2); }
+				 | Read Identifier Hex Semicolon { Console.WriteLine("Line {0}: Read hex {1}", Compiler.CurrentLine, $2); }
 				 ;
 
-outputInstruction : Write expression Comma { }
-				  | Write expression Hex Comma { }
-				  | Write StringLiteral Comma { }
+outputInstruction : Write expression Semicolon { Console.WriteLine("Line {0}: Write expression: \"{1}\"", Compiler.CurrentLine, $2); }
+				  | Write expression Hex Semicolon { Console.WriteLine("Line {0}: Write hex: \"{1}\"", Compiler.CurrentLine, $2); }
+				  | Write StringLiteral Semicolon { Console.WriteLine("Line {0}: Write string: \"{1}\"", Compiler.CurrentLine, $2); }
 				  ;
 
 

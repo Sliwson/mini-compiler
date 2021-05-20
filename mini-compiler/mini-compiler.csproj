@@ -53,6 +53,9 @@
   <ItemGroup>
     <None Include="kompilator.lex" />
     <None Include="kompilator.y" />
+    <None Include="Sources\declarations-and-statements.mini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Sources\empty.mini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -63,6 +66,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Sources\single-declarations.mini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sources\simple-statements.mini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

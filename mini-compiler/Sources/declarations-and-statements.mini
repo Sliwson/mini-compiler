@@ -1,0 +1,32 @@
+﻿program
+{
+	int n;
+	int i, j, k;
+	double wynik;
+	double x, y;
+	bool isOK;
+	bool b1, b2, b3; 
+
+	write "dupa";
+	read n;
+	read n hex;
+	while (a > b)
+	{
+		if (a > c)
+		{
+		}
+		else
+		{
+			while (a > c)
+				if (b > c)
+					if (b > c)
+						dupa = dupa;
+		}
+
+		if (b > c)
+			a = b;
+	}
+
+	while (a > b)
+		a = b;
+}
