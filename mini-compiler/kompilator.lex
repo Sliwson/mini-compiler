@@ -23,12 +23,12 @@ Whitespace		\s
 "program"			{ return (int)Tokens.Program; }
 
 {IntegerLiteral}	{ 
-						Int32.TryParse (yytext, NumberStyles.Integer, CultureInfo.CurrentCulture, out yylval.Integer);
+						Int32.TryParse (yytext, NumberStyles.Integer, CultureInfo.InvariantCulture, out yylval.Integer);
 						return (int)Tokens.IntegerLiteral; 
 					}
 
 {DoubleLiteral}		{
-						double.TryParse (yytext, NumberStyles.Float, CultureInfo.CurrentCulture, out yylval.Double); 
+						double.TryParse (yytext, NumberStyles.Float, CultureInfo.InvariantCulture, out yylval.Double); 
 						return (int)Tokens.DoubleLiteral; 
 					}
 

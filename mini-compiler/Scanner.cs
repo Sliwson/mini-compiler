@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  DESKTOP-9QSNDR4
-//  DateTime: 21/05/2021 22:17:51
+//  DateTime: 21/05/2021 22:23:54
 //  UserName: Mateusz
-//  GPLEX input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.lex - 21/05/2021 22:17:41>
+//  GPLEX input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.lex - 21/05/2021 22:23:52>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: parser, minimize
@@ -1014,7 +1014,7 @@ return (int)Tokens.Divide;
             break;
         case 11:
         case 12:
-Int32.TryParse (yytext, NumberStyles.Integer, CultureInfo.CurrentCulture, out yylval.Integer);
+Int32.TryParse (yytext, NumberStyles.Integer, CultureInfo.InvariantCulture, out yylval.Integer);
 						return (int)Tokens.IntegerLiteral;
             break;
         case 13:
@@ -1138,7 +1138,7 @@ return (int)Tokens.Equals;
 return (int)Tokens.LessOrEqual;
             break;
         case 79:
-double.TryParse (yytext, NumberStyles.Float, CultureInfo.CurrentCulture, out yylval.Double); 
+double.TryParse (yytext, NumberStyles.Float, CultureInfo.InvariantCulture, out yylval.Double); 
 						return (int)Tokens.DoubleLiteral;
             break;
         case 80:
