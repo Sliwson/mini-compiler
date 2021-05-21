@@ -7,9 +7,10 @@
 	bool isOK;
 	bool b1, b2, b3; 
 
+	wynik = 12.123;
 	write "dupa";
 	read n;
-	read n hex;
+	read n, hex;
 	while (a > b)
 	{
 		if (a > c)
@@ -29,4 +30,6 @@
 
 	while (a > b)
 		a = b;
+
+	return;
 }

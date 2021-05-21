@@ -102,14 +102,62 @@ instruction : blockInstruction { }
 			| whileInstruction { }
 			| inputInstruction { }
 			| outputInstruction { }
+			| returnInstruction { }
 			;
 
 blockInstruction : OpenCurl instructions CloseCurl { }
 				 ;
 
-expression : Identifier GreaterThan Identifier { } // TODO: extend
-		   | Identifier Assign Identifier { }
+expression : unaryExpression { }
 		   ; 
+
+unaryExpression : Minus unaryExpression { }
+				| BitwiseNegate unaryExpression { }
+				| Negate unaryExpression { }
+				| IntConversion unaryExpression { }
+				| DoubleConversion unaryExpression { }
+				| bitExpression { }
+				;
+
+bitExpression : bitExpression BitwiseOr mulExpression { }
+			  | bitExpression BitwiseAnd mulExpression { }
+			  | mulExpression { }
+			  ;
+
+mulExpression : mulExpression Multiply addExpression { }
+			  | mulExpression Divide addExpression { }
+			  | addExpression { }
+			  ;
+
+addExpression : addExpression Plus relationExpression { }
+			  | addExpression Minus relationExpression { }
+			  | relationExpression { }
+			  ;
+
+relationExpression : relationExpression Equals logicalExpression { }
+				   | relationExpression NotEquals logicalExpression { }
+				   | relationExpression GreaterThan logicalExpression { }
+				   | relationExpression GreaterOrEqual logicalExpression { }
+				   | relationExpression LessThan logicalExpression { }
+				   | relationExpression LessOrEqual logicalExpression { }
+				   | logicalExpression { }
+				   ;
+
+logicalExpression : logicalExpression Or assignExpression { }
+				  | logicalExpression And assignExpression { }
+				  | assignExpression { }
+				  ;
+
+assignExpression : Identifier Assign assignExpression { }
+				 | factorExpression { }
+				 ;
+
+factorExpression : OpenBracket expression CloseBracket { }
+			     | IntegerLiteral { Console.WriteLine("Line {0}: Factor integer {1}", Compiler.CurrentLine, $1); }
+			     | BoolLiteral { Console.WriteLine("Line {0}: Factor bool {1}", Compiler.CurrentLine, $1); }
+			     | DoubleLiteral { Console.WriteLine("Line {0}: Factor double {1}", Compiler.CurrentLine, $1); }
+				 | Identifier { Console.WriteLine("Line {0}: Factor identifier {1}", Compiler.CurrentLine, $1); }
+			     ;
 
 ifInstruction : If OpenBracket expression CloseBracket instruction { Console.WriteLine("Line {0}: If", Compiler.CurrentLine); }
 			  | If OpenBracket expression CloseBracket instruction Else instruction { Console.WriteLine("Line {0}: If Else", Compiler.CurrentLine); }
@@ -119,12 +167,15 @@ whileInstruction : While OpenBracket expression CloseBracket instruction {Consol
 				 ;
 
 inputInstruction : Read Identifier Semicolon { Console.WriteLine("Line {0}: Read {1}", Compiler.CurrentLine, $2); }
-				 | Read Identifier Hex Semicolon { Console.WriteLine("Line {0}: Read hex {1}", Compiler.CurrentLine, $2); }
+				 | Read Identifier Comma Hex Semicolon { Console.WriteLine("Line {0}: Read hex {1}", Compiler.CurrentLine, $2); }
 				 ;
 
 outputInstruction : Write expression Semicolon { Console.WriteLine("Line {0}: Write expression: \"{1}\"", Compiler.CurrentLine, $2); }
-				  | Write expression Hex Semicolon { Console.WriteLine("Line {0}: Write hex: \"{1}\"", Compiler.CurrentLine, $2); }
+				  | Write expression Comma Hex Semicolon { Console.WriteLine("Line {0}: Write hex: \"{1}\"", Compiler.CurrentLine, $2); }
 				  | Write StringLiteral Semicolon { Console.WriteLine("Line {0}: Write string: \"{1}\"", Compiler.CurrentLine, $2); }
+				  ;
+
+returnInstruction : Return Semicolon { Console.WriteLine("Line {0}: Return", Compiler.CurrentLine); }
 				  ;
 
 
