@@ -148,7 +148,7 @@ logicalExpression : logicalExpression Or assignExpression { }
 				  | assignExpression { }
 				  ;
 
-assignExpression : Identifier Assign assignExpression { }
+assignExpression : Identifier Assign assignExpression { Console.WriteLine("Line {0}: Assign", Compiler.CurrentLine); }
 				 | factorExpression { }
 				 ;
 

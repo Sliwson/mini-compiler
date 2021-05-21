@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-9QSNDR4
-// DateTime: 21/05/2021 22:23:54
+// DateTime: 21/05/2021 22:33:57
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 21/05/2021 22:17:49>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 21/05/2021 22:27:57>
 
 // options: lines gplex
 
@@ -516,7 +516,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 50: // assignExpression -> Identifier, Assign, assignExpression
 #line 151 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                      { }
+                                                      { Console.WriteLine("Line {0}: Assign", Compiler.CurrentLine); }
 #line default
         break;
       case 51: // assignExpression -> factorExpression
