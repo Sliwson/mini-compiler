@@ -4,9 +4,7 @@
 %{
 public override void yyerror(string format, params object[] args)
 {
-	Console.ForegroundColor = ConsoleColor.Red;
-	System.Console.WriteLine("Line {0} - " + format, yyline);
-	Console.ForegroundColor = ConsoleColor.White;
+	Compiler.Errors.Add(new Error{ Line = yyline, Text = string.Format(format, args) });
 }
 %}
 

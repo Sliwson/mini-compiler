@@ -57,6 +57,7 @@ namespace mini_compiler
             file.Close();
 
             Compiler.GenerateCode();
+            Compiler.PrintErrors();
 
             Console.WriteLine();
 
@@ -64,10 +65,16 @@ namespace mini_compiler
         }
     }
 
+    public class Error
+    {
+        public int Line { get; set; }
+        public string Text { get; set; }
+    }
+
     public class Compiler
     {
         public static int CurrentLine { get; set; } = 1;
-        public static int Errors { get; set; } = 0;
+        public static List<Error> Errors { get; set; }
         public static List<SyntaxNode> Nodes { get; set; }
 
         private static StreamWriter stream = null;
@@ -75,7 +82,7 @@ namespace mini_compiler
         public static void Reset(string filename)
         {
             CurrentLine = 1;
-            Errors = 0;
+            Errors = new List<Error>();
             Nodes = new List<SyntaxNode>();
 
             stream = new StreamWriter(filename);
@@ -90,7 +97,17 @@ namespace mini_compiler
             Write("}");
             stream.Close();
 
-            return 0;
+            return Errors.Count;
+        }
+
+        public static void PrintErrors()
+        {
+            foreach (var error in Errors)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Line {error.Line}: {error.Text}");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
         }
 
         public static void Write(string code)
@@ -101,6 +118,7 @@ namespace mini_compiler
 
     public abstract class SyntaxNode
     {
-
+        public int Line { get; set; }
+        public abstract string GenerateCode();
     }
 }

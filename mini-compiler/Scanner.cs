@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  DESKTOP-9QSNDR4
-//  DateTime: 23/05/2021 13:59:53
+//  DateTime: 23/05/2021 14:07:08
 //  UserName: Mateusz
-//  GPLEX input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.lex - 21/05/2021 22:23:52>
+//  GPLEX input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.lex - 23/05/2021 14:06:40>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: parser, minimize
@@ -133,9 +133,7 @@ namespace mini_compiler
 #region user code
 public override void yyerror(string format, params object[] args)
 {
-	Console.ForegroundColor = ConsoleColor.Red;
-	System.Console.WriteLine("Line {0} - " + format, yyline);
-	Console.ForegroundColor = ConsoleColor.White;
+	Compiler.Errors.Add(new Error{ Line = yyline, Text = string.Format(format, args) });
 }
 #endregion user code
 
