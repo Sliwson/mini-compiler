@@ -80,16 +80,16 @@ declaration : Integer declarationInt { }
 			| Bool declarationBool { }
 			;
 
-declarationInt : Identifier Semicolon { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Integer, $1)); }
-			   | Identifier Comma declarationInt { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Integer, $1)); }
+declarationInt : Identifier Semicolon { Compiler.PushNode(new DeclarationNode(ExpressionType.Integer, $1)); }
+			   | Identifier Comma declarationInt { Compiler.PushNode(new DeclarationNode(ExpressionType.Integer, $1)); }
 			   ;
 
-declarationDouble : Identifier Semicolon { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Double, $1)); }
-				  | Identifier Comma declarationDouble { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Double, $1)); }
+declarationDouble : Identifier Semicolon { Compiler.PushNode(new DeclarationNode(ExpressionType.Double, $1)); }
+				  | Identifier Comma declarationDouble { Compiler.PushNode(new DeclarationNode(ExpressionType.Double, $1)); }
 				  ;
 
-declarationBool : Identifier Semicolon { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Bool, $1)); }
-				| Identifier Comma declarationBool { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Bool, $1)); }
+declarationBool : Identifier Semicolon { Compiler.PushNode(new DeclarationNode(ExpressionType.Bool, $1)); }
+				| Identifier Comma declarationBool { Compiler.PushNode(new DeclarationNode(ExpressionType.Bool, $1)); }
 				;
 
 instructions : instructions instruction { }
@@ -148,15 +148,15 @@ logicalExpression : logicalExpression Or assignExpression { }
 				  | assignExpression { }
 				  ;
 
-assignExpression : Identifier Assign assignExpression { Console.WriteLine("Line {0}: Assign", Compiler.CurrentLine); }
+assignExpression : Identifier Assign assignExpression { Compiler.PushNode(new AssignNode($1)); }
 				 | factorExpression { }
 				 ;
 
 factorExpression : OpenBracket expression CloseBracket { }
-			     | IntegerLiteral { Console.WriteLine("Line {0}: Factor integer {1}", Compiler.CurrentLine, $1); }
-			     | BoolLiteral { Console.WriteLine("Line {0}: Factor bool {1}", Compiler.CurrentLine, $1); }
-			     | DoubleLiteral { Console.WriteLine("Line {0}: Factor double {1}", Compiler.CurrentLine, $1); }
-				 | Identifier { Console.WriteLine("Line {0}: Factor identifier {1}", Compiler.CurrentLine, $1); }
+			     | IntegerLiteral { Compiler.PushNode(new IntegerFactorNode($1)); }
+			     | BoolLiteral { Compiler.PushNode(new BoolFactorNode($1)); }
+			     | DoubleLiteral { Compiler.PushNode(new DoubleFactorNode($1)); }
+				 | Identifier { Compiler.PushNode(new IdentifierNode($1)); }
 			     ;
 
 ifInstruction : If OpenBracket expression CloseBracket instruction { Console.WriteLine("Line {0}: If", Compiler.CurrentLine); }

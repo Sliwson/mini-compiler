@@ -1,4 +1,5 @@
 ﻿program
 {
-	write "dupa";
+	int a;
+	a = 5;
 }

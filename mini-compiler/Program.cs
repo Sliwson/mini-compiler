@@ -143,20 +143,59 @@ namespace mini_compiler
     {
         public int Line { get; set; }
         public abstract string GenerateCode();
+        public virtual ExpressionType GetExpressionType()
+        {
+            return ExpressionType.None;
+        }
+    }
+
+    public enum ExpressionType
+    {
+        None,
+        Integer, 
+        Double,
+        Bool 
+    }
+
+    static class Extensions
+    {
+        public static string ToLLVM(this ExpressionType type)
+        {
+            switch (type)
+            {
+                case ExpressionType.Bool:
+                    return "i1";
+                case ExpressionType.Integer:
+                    return "i32";
+                case ExpressionType.Double:
+                    return "double";
+                default:
+                    throw new ArgumentException("Exprsesion type None cannot be converted to llvm type");
+            }
+        }
+
+        public static T Pop<T>(this List<T> list)
+        {
+            if (list.Count <= 0)
+                return default(T);
+
+            var last = list.Last();
+            list.RemoveAt(list.Count - 1);
+            return last;
+        }
     }
 
     public class DeclarationNode : SyntaxNode
     {
-        private Type type;
-        private string identifier;
+        public string Identifier { get; private set; }
+        private ExpressionType type;
 
-        public enum Type { Integer, Double, Bool }
-
-        public DeclarationNode(Type type, string identifier)
+        public DeclarationNode(ExpressionType type, string identifier)
         {
             Line = Compiler.CurrentLine;
+            Identifier = identifier;
+
             this.type = type;
-            this.identifier = identifier;
         }
 
         public override string GenerateCode()
@@ -166,29 +205,34 @@ namespace mini_compiler
                 .Where(n => n is DeclarationNode)
                 .Select(n => n as DeclarationNode);
 
-            if (previousDeclarations.FirstOrDefault(n => n.identifier == identifier) != null)
+            if (previousDeclarations.FirstOrDefault(n => n.Identifier == Identifier) != null)
             {
-                Compiler.Errors.Add(new Error { Line = Line, Text = $"Variable {identifier} already declared" });
+                Compiler.Errors.Add(new Error { Line = Line, Text = $"Variable {Identifier} already declared" });
                 return "";
             }
 
             switch (type)
             {
-                case Type.Integer:
-                    Compiler.Write($"%{identifier} = alloca i32");
-                    Compiler.Write($"store i32 0, i32* %{identifier}");
+                case ExpressionType.Integer:
+                    Compiler.Write($"%{Identifier} = alloca i32");
+                    Compiler.Write($"store i32 0, i32* %{Identifier}");
                     break;
-                case Type.Double:
-                    Compiler.Write($"%{identifier} = alloca double");
-                    Compiler.Write($"store double 0.0, double* %{identifier}");
+                case ExpressionType.Double:
+                    Compiler.Write($"%{Identifier} = alloca double");
+                    Compiler.Write($"store double 0.0, double* %{Identifier}");
                     break;
-                case Type.Bool:
-                    Compiler.Write($"%{identifier} = alloca i1");
-                    Compiler.Write($"store i1 0, i1* %{identifier}");
+                case ExpressionType.Bool:
+                    Compiler.Write($"%{Identifier} = alloca i1");
+                    Compiler.Write($"store i1 0, i1* %{Identifier}");
                     break;
             }
 
             return "";
+        }
+
+        public override ExpressionType GetExpressionType()
+        {
+            return type;
         }
     }
 
@@ -256,6 +300,147 @@ namespace mini_compiler
         {
             Compiler.Write("ret void");
             return "";
+        }
+    }
+
+    public class IdentifierNode : SyntaxNode
+    {
+        private readonly string identifier;
+
+        public IdentifierNode(string identifier)
+        {
+            Line = Compiler.CurrentLine;
+            this.identifier = identifier;
+        }
+
+        public override string GenerateCode()
+        {
+            var node = Compiler.Nodes.FirstOrDefault(n => (n as DeclarationNode)?.Identifier == identifier);
+            if (node == null)
+            {
+                // TODO: error
+                return "";
+            }
+
+            // TODO
+            return "";
+        }
+
+        public override ExpressionType GetExpressionType()
+        {
+            var node = Compiler.Nodes.FirstOrDefault(n => (n as DeclarationNode)?.Identifier == identifier);
+            if (node == null)
+                return ExpressionType.None;
+            else
+                return node.GetExpressionType();
+        }
+    }
+
+    public class AssignNode : SyntaxNode
+    {
+        private readonly string identifier;
+        private readonly SyntaxNode rhs;
+
+        public AssignNode(string identifier)
+        {
+            Line = Compiler.CurrentLine;
+            this.identifier = identifier;
+
+            if (Compiler.Nodes.Count > 0)
+            {
+                rhs = Compiler.Nodes.Pop();
+            }
+            else
+            {
+                // TODO: error
+            }
+        }
+
+        public override string GenerateCode()
+        {
+            var lhs = new IdentifierNode(identifier);
+            var lhsType = lhs.GetExpressionType();
+            var rhsType = rhs.GetExpressionType();
+            if (lhsType == rhsType && lhsType != ExpressionType.None)
+            {
+                var et = rhs.GenerateCode();
+                string llvmType = rhsType.ToLLVM();
+                Compiler.Write($"store {llvmType} {et}, {llvmType}* %{identifier}");
+            }
+            else
+            {
+                // TODO: error
+            }
+
+            return "";
+        }
+
+        public override ExpressionType GetExpressionType()
+        {
+            return ExpressionType.None;
+        }
+    }
+
+    public class BoolFactorNode : SyntaxNode
+    {
+        public bool Value { get; private set; }
+
+        public BoolFactorNode(bool value)
+        {
+            Line = Compiler.CurrentLine;
+            Value = value;
+        }
+
+        public override string GenerateCode()
+        {
+            return Value ? "1" : "0";
+        }
+
+        public override ExpressionType GetExpressionType()
+        {
+            return ExpressionType.Bool;
+        }
+    }
+
+    public class IntegerFactorNode : SyntaxNode
+    {
+        public int Value { get; private set; }
+
+        public IntegerFactorNode(int value)
+        {
+            Line = Compiler.CurrentLine;
+            Value = value;
+        }
+
+        public override string GenerateCode()
+        {
+            return Value.ToString();
+        }
+
+        public override ExpressionType GetExpressionType()
+        {
+            return ExpressionType.Integer;
+        }
+    }
+
+    public class DoubleFactorNode : SyntaxNode
+    {
+        public double Value { get; private set; }
+
+        public DoubleFactorNode(double value)
+        {
+            Line = Compiler.CurrentLine;
+            Value = value;
+        }
+
+        public override string GenerateCode()
+        {
+            return Value.ToString();
+        }
+
+        public override ExpressionType GetExpressionType()
+        {
+            return ExpressionType.Double;
         }
     }
 }

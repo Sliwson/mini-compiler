@@ -41,7 +41,7 @@ Whitespace		\s
 
 {BoolLiteral}		{ 
 						bool.TryParse(yytext, out yylval.Bool);
-					   return (int)Tokens.BoolLiteral; 
+					    return (int)Tokens.BoolLiteral; 
 					}
 
 "int"				{ return (int)Tokens.Integer; }

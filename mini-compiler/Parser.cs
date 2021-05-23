@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-9QSNDR4
-// DateTime: 23/05/2021 18:57:07
+// DateTime: 23/05/2021 21:32:19
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 23/05/2021 18:57:02>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 23/05/2021 21:17:42>
 
 // options: lines gplex
 
@@ -311,32 +311,32 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 8: // declarationInt -> Identifier, Semicolon
 #line 83 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                      { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Integer, ValueStack[ValueStack.Depth-2].String)); }
+                                      { Compiler.PushNode(new DeclarationNode(ExpressionType.Integer, ValueStack[ValueStack.Depth-2].String)); }
 #line default
         break;
       case 9: // declarationInt -> Identifier, Comma, declarationInt
 #line 84 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                        { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Integer, ValueStack[ValueStack.Depth-3].String)); }
+                                        { Compiler.PushNode(new DeclarationNode(ExpressionType.Integer, ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
       case 10: // declarationDouble -> Identifier, Semicolon
 #line 87 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                         { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Double, ValueStack[ValueStack.Depth-2].String)); }
+                                         { Compiler.PushNode(new DeclarationNode(ExpressionType.Double, ValueStack[ValueStack.Depth-2].String)); }
 #line default
         break;
       case 11: // declarationDouble -> Identifier, Comma, declarationDouble
 #line 88 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                           { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Double, ValueStack[ValueStack.Depth-3].String)); }
+                                           { Compiler.PushNode(new DeclarationNode(ExpressionType.Double, ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
       case 12: // declarationBool -> Identifier, Semicolon
 #line 91 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                       { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Bool, ValueStack[ValueStack.Depth-2].String)); }
+                                       { Compiler.PushNode(new DeclarationNode(ExpressionType.Bool, ValueStack[ValueStack.Depth-2].String)); }
 #line default
         break;
       case 13: // declarationBool -> Identifier, Comma, declarationBool
 #line 92 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                       { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Bool, ValueStack[ValueStack.Depth-3].String)); }
+                                       { Compiler.PushNode(new DeclarationNode(ExpressionType.Bool, ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
       case 14: // instructions -> instructions, instruction
@@ -516,7 +516,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 50: // assignExpression -> Identifier, Assign, assignExpression
 #line 151 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                      { Console.WriteLine("Line {0}: Assign", Compiler.CurrentLine); }
+                                                      { Compiler.PushNode(new AssignNode(ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
       case 51: // assignExpression -> factorExpression
@@ -531,22 +531,22 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 53: // factorExpression -> IntegerLiteral
 #line 156 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                         { Console.WriteLine("Line {0}: Factor integer {1}", Compiler.CurrentLine, ValueStack[ValueStack.Depth-1].Integer); }
+                         { Compiler.PushNode(new IntegerFactorNode(ValueStack[ValueStack.Depth-1].Integer)); }
 #line default
         break;
       case 54: // factorExpression -> BoolLiteral
 #line 157 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                      { Console.WriteLine("Line {0}: Factor bool {1}", Compiler.CurrentLine, ValueStack[ValueStack.Depth-1].Bool); }
+                      { Compiler.PushNode(new BoolFactorNode(ValueStack[ValueStack.Depth-1].Bool)); }
 #line default
         break;
       case 55: // factorExpression -> DoubleLiteral
 #line 158 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                        { Console.WriteLine("Line {0}: Factor double {1}", Compiler.CurrentLine, ValueStack[ValueStack.Depth-1].Double); }
+                        { Compiler.PushNode(new DoubleFactorNode(ValueStack[ValueStack.Depth-1].Double)); }
 #line default
         break;
       case 56: // factorExpression -> Identifier
 #line 159 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                  { Console.WriteLine("Line {0}: Factor identifier {1}", Compiler.CurrentLine, ValueStack[ValueStack.Depth-1].String); }
+                  { Compiler.PushNode(new IdentifierNode(ValueStack[ValueStack.Depth-1].String)); }
 #line default
         break;
       case 57: // ifInstruction -> If, OpenBracket, expression, CloseBracket, instruction
