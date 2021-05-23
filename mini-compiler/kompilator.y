@@ -170,8 +170,11 @@ inputInstruction : Read Identifier Semicolon { Console.WriteLine("Line {0}: Read
 				 | Read Identifier Comma Hex Semicolon { Console.WriteLine("Line {0}: Read hex {1}", Compiler.CurrentLine, $2); }
 				 ;
 
-outputInstruction : Write expression Semicolon { Console.WriteLine("Line {0}: Write expression: \"{1}\"", Compiler.CurrentLine, $2); }
-				  | Write expression Comma Hex Semicolon { Console.WriteLine("Line {0}: Write hex: \"{1}\"", Compiler.CurrentLine, $2); }
+outputInstruction : Write expression Semicolon 
+				  { 
+				      Compiler.PushNode(new WriteExpressionNode());
+				  }
+				  | Write expression Comma Hex Semicolon { }
 				  | Write StringLiteral Semicolon 
 				  {
 					  var declaration = new DeclareStringNode($2);

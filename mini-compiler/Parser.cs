@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-9QSNDR4
-// DateTime: 23/05/2021 21:35:17
+// DateTime: 23/05/2021 22:11:25
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 23/05/2021 21:17:42>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 23/05/2021 21:57:37>
 
 // options: lines gplex
 
@@ -576,17 +576,19 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
 #line default
         break;
       case 62: // outputInstruction -> Write, expression, Semicolon
-#line 173 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                               { Console.WriteLine("Line {0}: Write expression: \"{1}\"", Compiler.CurrentLine, ValueStack[ValueStack.Depth-2]); }
+#line 174 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      { 
+				      Compiler.PushNode(new WriteExpressionNode());
+				  }
 #line default
         break;
       case 63: // outputInstruction -> Write, expression, Comma, Hex, Semicolon
-#line 174 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                             { Console.WriteLine("Line {0}: Write hex: \"{1}\"", Compiler.CurrentLine, ValueStack[ValueStack.Depth-4]); }
+#line 177 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                             { }
 #line default
         break;
       case 64: // outputInstruction -> Write, StringLiteral, Semicolon
-#line 176 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 179 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
       {
 					  var declaration = new DeclareStringNode(ValueStack[ValueStack.Depth-2].String);
 					  Compiler.PushNodeFront(declaration);
@@ -595,7 +597,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
 #line default
         break;
       case 65: // returnInstruction -> Return, Semicolon
-#line 183 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 186 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                      { Compiler.PushNode(new ReturnNode()); }
 #line default
         break;
@@ -613,7 +615,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         return CharToString((char)terminal);
   }
 
-#line 188 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 191 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
 
 public Parser(Scanner scnr) : base(scnr) { }
 #line default

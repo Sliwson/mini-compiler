@@ -100,8 +100,14 @@ namespace mini_compiler
             foreach (var node in FrontNodes)
                 node.GenerateCode();
 
+            Write("@.str_int = constant [3 x i8] c\"%d\\00\"");
+            Write("@.str_double = constant [3 x i8] c\"%f\\00\"");
+            Write("@.str_true = constant [5 x i8] c\"true\\00\"");
+            Write("@.str_false = constant [6 x i8] c\"false\\00\"");
+
             Write("declare i32 @printf(i8*, ...)");
             Write("declare i32 @puts(i8*)");
+
             Write("define void @main()");
             Write("{");
 
@@ -142,9 +148,14 @@ namespace mini_compiler
 
         public static string GetNextId()
         {
-            var id = $"%{currentId}";
+            var id = $"{currentId}";
             currentId++;
             return id;
+        }
+
+        public static DeclarationNode GetDeclaration(string identifier)
+        {
+            return Nodes.FirstOrDefault(n => (n as DeclarationNode)?.Identifier == identifier) as DeclarationNode;
         }
     }
 
@@ -289,10 +300,54 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
+            var returnEt = Compiler.GetNextId();
             if (newline)
-                Compiler.Write($"call i32 (i8*) @puts(i8* bitcast ([{length} x i8]* @{guid} to i8*))");
+                Compiler.Write($"%{returnEt} = call i32 (i8*) @puts(i8* bitcast ([{length} x i8]* @{guid} to i8*))");
             else
-                Compiler.Write($"call i32 (i8*, ...) @printf(i8* bitcast ([{length} x i8]* @{guid} to i8*))");
+                Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([{length} x i8]* @{guid} to i8*))");
+
+            return "";
+        }
+    }
+
+    public class WriteExpressionNode : SyntaxNode
+    {
+        private readonly SyntaxNode exp;
+
+        public WriteExpressionNode()
+        {
+            Line = Compiler.CurrentLine;
+
+            if (Compiler.Nodes.Count > 0)
+            {
+                exp = Compiler.Nodes.Pop();
+            }
+            else
+            {
+                // TODO: error
+            }
+
+        }
+
+        public override string GenerateCode()
+        {
+            if (exp == null)
+                return "";
+
+            var et = exp.GenerateCode();
+            var returnEt = Compiler.GetNextId();
+            switch (exp.GetExpressionType())
+            {
+                case ExpressionType.Integer:
+                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([3 x i8]* @.str_int to i8*), i32 %{et})");
+                    break;
+                case ExpressionType.Double:
+                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([3 x i8]* @.str_double to i8*), double %{et})");
+                    break;
+                case ExpressionType.Bool:
+                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([3 x i8]* @.str_int to i8*), i1 %{et})");
+                    break;
+            }
 
             return "";
         }
@@ -324,20 +379,22 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
-            var node = Compiler.Nodes.FirstOrDefault(n => (n as DeclarationNode)?.Identifier == identifier);
+            var node = Compiler.GetDeclaration(identifier);
             if (node == null)
             {
                 // TODO: error
                 return "";
             }
 
-            // TODO
-            return "";
+            var id = Compiler.GetNextId();
+            var llvmType = node.GetExpressionType().ToLLVM();
+            Compiler.Write($"%{id} = load {llvmType}, {llvmType}* %{identifier}");
+            return id;
         }
 
         public override ExpressionType GetExpressionType()
         {
-            var node = Compiler.Nodes.FirstOrDefault(n => (n as DeclarationNode)?.Identifier == identifier);
+            var node = Compiler.GetDeclaration(identifier);
             if (node == null)
                 return ExpressionType.None;
             else
@@ -367,6 +424,9 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
+            if (rhs == null)
+                return "";
+
             var lhs = new IdentifierNode(identifier);
             var lhsType = lhs.GetExpressionType();
             var rhsType = rhs.GetExpressionType();

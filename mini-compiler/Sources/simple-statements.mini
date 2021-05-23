@@ -7,4 +7,11 @@
 	a = 5;
 	b = 5.123123;
 	c = true;
+
+	write a;
+	write "\n";
+	write b;
+	write "\n";
+	write c;
+	write "\n";
 }
