@@ -152,7 +152,7 @@ namespace mini_compiler
         {
             var previousDeclarations = Compiler.Nodes
                 .TakeWhile(n => n != this)
-                .Where(n => n.Line <= Line && n is DeclarationNode)
+                .Where(n => n is DeclarationNode)
                 .Select(n => n as DeclarationNode);
 
             if (previousDeclarations.FirstOrDefault(n => n.identifier == identifier) != null)
