@@ -68,6 +68,9 @@
     <None Include="Sources\only-program.mini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Sources\write.mini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Sources\sample.mini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

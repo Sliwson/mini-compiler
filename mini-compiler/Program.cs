@@ -78,6 +78,7 @@ namespace mini_compiler
     {
         public static int CurrentLine { get; set; } = 1;
         public static List<Error> Errors { get; set; }
+        public static List<SyntaxNode> FrontNodes { get; set; }
         public static List<SyntaxNode> Nodes { get; set; }
 
         private static StreamWriter stream = null;
@@ -87,13 +88,18 @@ namespace mini_compiler
             CurrentLine = 1;
             Errors = new List<Error>();
             Nodes = new List<SyntaxNode>();
+            FrontNodes = new List<SyntaxNode>();
 
             stream = new StreamWriter(filename);
         }
 
         public static int GenerateCode()
         {
+            foreach (var node in FrontNodes)
+                node.GenerateCode();
+
             Write("declare i32 @printf(i8*, ...)");
+            Write("declare i32 @puts(i8*)");
             Write("define void @main()");
             Write("{");
 
@@ -125,6 +131,11 @@ namespace mini_compiler
         public static void PushNode(SyntaxNode node)
         {
             Nodes.Add(node);
+        }
+
+        public static void PushNodeFront(SyntaxNode node)
+        {
+            FrontNodes.Add(node);
         }
     }
 
@@ -176,6 +187,57 @@ namespace mini_compiler
                     Compiler.Write($"store i1 0, i1* %{identifier}");
                     break;
             }
+
+            return "";
+        }
+    }
+
+    public class DeclareStringNode : SyntaxNode
+    {
+        public string Guid { get; private set; }
+
+        public string Text { get; private set; }
+        public int Length => Text.Length - 2;
+        public bool NewLine { get; private set; }
+
+        public DeclareStringNode(string text)
+        {
+            NewLine = text.EndsWith("\\n");
+
+            if (NewLine)
+                text = text.Substring(0, text.Length - 2);
+
+            Text = text + "\\00";
+            var guid = System.Guid.NewGuid().ToString().Replace("-", "");
+            Guid = "a" + guid.ToString();
+        }
+
+        public override string GenerateCode()
+        {
+            Compiler.Write($"@{Guid} = constant [{Length} x i8] c\"{Text}\"");
+            return "";
+        }
+    }
+
+    public class WriteStringNode : SyntaxNode
+    {
+        private string guid;
+        private int length;
+        private bool newline;
+
+        public WriteStringNode(string guid, int length, bool newline)
+        {
+            this.guid = guid;
+            this.length = length;
+            this.newline = newline;
+        }
+
+        public override string GenerateCode()
+        {
+            if (newline)
+                Compiler.Write($"call i32 (i8*) @puts(i8* bitcast ([{length} x i8]* @{guid} to i8*))");
+            else
+                Compiler.Write($"call i32 (i8*, ...) @printf(i8* bitcast ([{length} x i8]* @{guid} to i8*))");
 
             return "";
         }

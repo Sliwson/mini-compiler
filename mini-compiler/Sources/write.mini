@@ -1,0 +1,8 @@
+﻿program
+{
+	write "test";
+	write "\n";
+	write "halo halo";
+	write " halo";
+	write "\n";
+}
