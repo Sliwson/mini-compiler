@@ -16,10 +16,10 @@ namespace mini_compiler
                 ParseFile(file);
         }
 
-        private static void ParseFile(string filename)
+        private static int ParseFile(string filename)
         {
             // reset compiler
-            Compiler.Reset();
+            Compiler.Reset(filename + ".ll");
 
             // read and parse file
             Console.WriteLine("==============================================================================");
@@ -55,7 +55,12 @@ namespace mini_compiler
             Console.ForegroundColor = ConsoleColor.White;
 
             file.Close();
+
+            Compiler.GenerateCode();
+
             Console.WriteLine();
+
+            return 0;
         }
     }
 
@@ -63,11 +68,39 @@ namespace mini_compiler
     {
         public static int CurrentLine { get; set; } = 1;
         public static int Errors { get; set; } = 0;
+        public static List<SyntaxNode> Nodes { get; set; }
 
-        public static void Reset()
+        private static StreamWriter stream = null;
+
+        public static void Reset(string filename)
         {
             CurrentLine = 1;
             Errors = 0;
+            Nodes = new List<SyntaxNode>();
+
+            stream = new StreamWriter(filename);
         }
+
+        public static int GenerateCode()
+        {
+            Write("declare i32 @printf(i8*, ...)");
+            Write("define void @main()");
+            Write("{");
+            Write("ret void");
+            Write("}");
+            stream.Close();
+
+            return 0;
+        }
+
+        public static void Write(string code)
+        {
+            stream.WriteLine(code);
+        }
+    }
+
+    public abstract class SyntaxNode
+    {
+
     }
 }
