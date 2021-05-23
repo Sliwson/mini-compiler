@@ -82,6 +82,7 @@ namespace mini_compiler
         public static List<SyntaxNode> Nodes { get; set; }
 
         private static StreamWriter stream = null;
+        private static int currentId = 0; 
 
         public static void Reset(string filename)
         {
@@ -91,6 +92,7 @@ namespace mini_compiler
             FrontNodes = new List<SyntaxNode>();
 
             stream = new StreamWriter(filename);
+            currentId = 1;
         }
 
         public static int GenerateCode()
@@ -136,6 +138,13 @@ namespace mini_compiler
         public static void PushNodeFront(SyntaxNode node)
         {
             FrontNodes.Add(node);
+        }
+
+        public static string GetNextId()
+        {
+            var id = $"%{currentId}";
+            currentId++;
+            return id;
         }
     }
 
@@ -435,7 +444,7 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
-            return Value.ToString();
+            return Value.ToString().Replace(',','.');
         }
 
         public override ExpressionType GetExpressionType()
