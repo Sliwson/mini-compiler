@@ -202,6 +202,7 @@ namespace mini_compiler
 
         public DeclareStringNode(string text)
         {
+            Line = Compiler.CurrentLine;
             NewLine = text.EndsWith("\\n");
 
             if (NewLine)
@@ -221,12 +222,13 @@ namespace mini_compiler
 
     public class WriteStringNode : SyntaxNode
     {
-        private string guid;
-        private int length;
-        private bool newline;
+        private readonly string guid;
+        private readonly int length;
+        private readonly bool newline;
 
         public WriteStringNode(string guid, int length, bool newline)
         {
+            Line = Compiler.CurrentLine;
             this.guid = guid;
             this.length = length;
             this.newline = newline;
@@ -239,6 +241,20 @@ namespace mini_compiler
             else
                 Compiler.Write($"call i32 (i8*, ...) @printf(i8* bitcast ([{length} x i8]* @{guid} to i8*))");
 
+            return "";
+        }
+    }
+
+    public class ReturnNode : SyntaxNode
+    {
+        public ReturnNode()
+        {
+            Line = Compiler.CurrentLine;
+        }
+
+        public override string GenerateCode()
+        {
+            Compiler.Write("ret void");
             return "";
         }
     }

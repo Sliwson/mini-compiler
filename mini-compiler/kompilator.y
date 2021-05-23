@@ -180,7 +180,7 @@ outputInstruction : Write expression Semicolon { Console.WriteLine("Line {0}: Wr
 				  }
 				  ;
 
-returnInstruction : Return Semicolon { Console.WriteLine("Line {0}: Return", Compiler.CurrentLine); }
+returnInstruction : Return Semicolon { Compiler.PushNode(new ReturnNode()); }
 				  ;
 
 

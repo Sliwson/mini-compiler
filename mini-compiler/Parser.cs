@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-9QSNDR4
-// DateTime: 23/05/2021 18:48:28
+// DateTime: 23/05/2021 18:57:07
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 23/05/2021 18:44:51>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 23/05/2021 18:57:02>
 
 // options: lines gplex
 
@@ -596,7 +596,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 65: // returnInstruction -> Return, Semicolon
 #line 183 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                     { Console.WriteLine("Line {0}: Return", Compiler.CurrentLine); }
+                                     { Compiler.PushNode(new ReturnNode()); }
 #line default
         break;
     }
