@@ -24,7 +24,7 @@ namespace mini_compiler
             // read and parse file
             Console.WriteLine("==============================================================================");
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"{filename}");
+            Console.WriteLine(filename);
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine();
 
@@ -56,12 +56,15 @@ namespace mini_compiler
 
             file.Close();
 
-            Compiler.GenerateCode();
+            var errors = Compiler.GenerateCode();
             Compiler.PrintErrors();
 
             Console.WriteLine();
 
-            return 0;
+            if (errors > 0)
+                File.Delete("filename");
+
+            return errors;
         }
     }
 
@@ -93,6 +96,10 @@ namespace mini_compiler
             Write("declare i32 @printf(i8*, ...)");
             Write("define void @main()");
             Write("{");
+
+            foreach (var node in Nodes)
+                node.GenerateCode();
+
             Write("ret void");
             Write("}");
             stream.Close();
@@ -114,11 +121,63 @@ namespace mini_compiler
         {
             stream.WriteLine(code);
         }
+
+        public static void PushNode(SyntaxNode node)
+        {
+            Nodes.Add(node);
+        }
     }
 
     public abstract class SyntaxNode
     {
         public int Line { get; set; }
         public abstract string GenerateCode();
+    }
+
+    public class DeclarationNode : SyntaxNode
+    {
+        private Type type;
+        private string identifier;
+
+        public enum Type { Integer, Double, Bool }
+
+        public DeclarationNode(Type type, string identifier)
+        {
+            Line = Compiler.CurrentLine;
+            this.type = type;
+            this.identifier = identifier;
+        }
+
+        public override string GenerateCode()
+        {
+            var previousDeclarations = Compiler.Nodes
+                .TakeWhile(n => n != this)
+                .Where(n => n.Line <= Line && n is DeclarationNode)
+                .Select(n => n as DeclarationNode);
+
+            if (previousDeclarations.FirstOrDefault(n => n.identifier == identifier) != null)
+            {
+                Compiler.Errors.Add(new Error { Line = Line, Text = $"Variable {identifier} already declared" });
+                return "";
+            }
+
+            switch (type)
+            {
+                case Type.Integer:
+                    Compiler.Write($"%{identifier} = alloca i32");
+                    Compiler.Write($"store i32 0, i32* %{identifier}");
+                    break;
+                case Type.Double:
+                    Compiler.Write($"%{identifier} = alloca double");
+                    Compiler.Write($"store double 0.0, double* %{identifier}");
+                    break;
+                case Type.Bool:
+                    Compiler.Write($"%{identifier} = alloca i1");
+                    Compiler.Write($"store i1 0, i1* %{identifier}");
+                    break;
+            }
+
+            return "";
+        }
     }
 }

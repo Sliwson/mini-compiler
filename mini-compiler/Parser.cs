@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-9QSNDR4
-// DateTime: 23/05/2021 14:07:09
+// DateTime: 23/05/2021 14:47:14
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 21/05/2021 22:27:57>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 23/05/2021 14:32:11>
 
 // options: lines gplex
 
@@ -311,32 +311,32 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 8: // declarationInt -> Identifier, Semicolon
 #line 83 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                      { Console.WriteLine("Line {0}: Integer {1}", Compiler.CurrentLine, ValueStack[ValueStack.Depth-2].String); }
+                                      { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Integer, ValueStack[ValueStack.Depth-2].String)); }
 #line default
         break;
       case 9: // declarationInt -> Identifier, Comma, declarationInt
 #line 84 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                        { Console.WriteLine("Line {0}: Integer {1}", Compiler.CurrentLine, ValueStack[ValueStack.Depth-3].String); }
+                                        { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Integer, ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
       case 10: // declarationDouble -> Identifier, Semicolon
 #line 87 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                         { Console.WriteLine("Line {0}: Double {1}", Compiler.CurrentLine, ValueStack[ValueStack.Depth-2].String); }
+                                         { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Double, ValueStack[ValueStack.Depth-2].String)); }
 #line default
         break;
       case 11: // declarationDouble -> Identifier, Comma, declarationDouble
 #line 88 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                           { Console.WriteLine("Line {0}: Double {1}", Compiler.CurrentLine, ValueStack[ValueStack.Depth-3].String); }
+                                           { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Double, ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
       case 12: // declarationBool -> Identifier, Semicolon
 #line 91 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                       { Console.WriteLine("Line {0}: Bool {1}", Compiler.CurrentLine, ValueStack[ValueStack.Depth-2].String); }
+                                       { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Bool, ValueStack[ValueStack.Depth-2].String)); }
 #line default
         break;
       case 13: // declarationBool -> Identifier, Comma, declarationBool
 #line 92 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                       { Console.WriteLine("Line {0}: Bool {1}", Compiler.CurrentLine, ValueStack[ValueStack.Depth-3].String); }
+                                       { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Bool, ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
       case 14: // instructions -> instructions, instruction

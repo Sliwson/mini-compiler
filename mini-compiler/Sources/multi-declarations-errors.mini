@@ -1,0 +1,10 @@
+﻿program
+{
+	int n;
+	int i, j, k;
+	double wynik;
+	double x, y;
+	bool isOK, isOK;
+	int i, j, k;
+	double x, y;
+}

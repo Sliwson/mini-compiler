@@ -59,6 +59,9 @@
     <None Include="Sources\empty.mini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Sources\multi-declarations-errors.mini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Sources\multi-declarations.mini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

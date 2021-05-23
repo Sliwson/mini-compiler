@@ -80,16 +80,16 @@ declaration : Integer declarationInt { }
 			| Bool declarationBool { }
 			;
 
-declarationInt : Identifier Semicolon { Console.WriteLine("Line {0}: Integer {1}", Compiler.CurrentLine, $1); }
-			   | Identifier Comma declarationInt { Console.WriteLine("Line {0}: Integer {1}", Compiler.CurrentLine, $1); }
+declarationInt : Identifier Semicolon { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Integer, $1)); }
+			   | Identifier Comma declarationInt { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Integer, $1)); }
 			   ;
 
-declarationDouble : Identifier Semicolon { Console.WriteLine("Line {0}: Double {1}", Compiler.CurrentLine, $1); }
-				  | Identifier Comma declarationDouble { Console.WriteLine("Line {0}: Double {1}", Compiler.CurrentLine, $1); }
+declarationDouble : Identifier Semicolon { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Double, $1)); }
+				  | Identifier Comma declarationDouble { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Double, $1)); }
 				  ;
 
-declarationBool : Identifier Semicolon { Console.WriteLine("Line {0}: Bool {1}", Compiler.CurrentLine, $1); }
-				| Identifier Comma declarationBool { Console.WriteLine("Line {0}: Bool {1}", Compiler.CurrentLine, $1); }
+declarationBool : Identifier Semicolon { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Bool, $1)); }
+				| Identifier Comma declarationBool { Compiler.PushNode(new DeclarationNode(DeclarationNode.Type.Bool, $1)); }
 				;
 
 instructions : instructions instruction { }
