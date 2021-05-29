@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  DESKTOP-9QSNDR4
-//  DateTime: 29/05/2021 15:42:53
+//  DateTime: 29/05/2021 17:00:26
 //  UserName: Mateusz
-//  GPLEX input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.lex - 29/05/2021 15:15:27>
+//  GPLEX input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.lex - 29/05/2021 16:53:24>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: parser, minimize
@@ -168,18 +168,18 @@ public override void yyerror(string format, params object[] args)
 
     static int[] startState = new int[] {86, 0};
 
-    static Table[] NxS = new Table[100] {
+    static Table[] NxS = new Table[98] {
 /* NxS[   0] */ new Table(0, 0, 0, null),
 /* NxS[   1] */ new Table(0, 0, -1, null),
 /* NxS[   2] */ new Table(61, 1, -1, new sbyte[] {85}),
 /* NxS[   3] */ new Table(38, 1, -1, new sbyte[] {83}),
-/* NxS[   4] */ new Table(100, 6, -1, new sbyte[] {91, -1, -1, -1, -1, 92}),
+/* NxS[   4] */ new Table(100, 6, -1, new sbyte[] {89, -1, -1, -1, -1, 90}),
 /* NxS[   5] */ new Table(0, 0, -1, null),
 /* NxS[   6] */ new Table(0, 0, -1, null),
 /* NxS[   7] */ new Table(0, 0, -1, null),
 /* NxS[   8] */ new Table(0, 0, -1, null),
 /* NxS[   9] */ new Table(0, 0, -1, null),
-/* NxS[  10] */ new Table(47, 1, -1, new sbyte[] {89}),
+/* NxS[  10] */ new Table(47, 1, -1, new sbyte[] {80}),
 /* NxS[  11] */ new Table(0, 0, -1, null),
 /* NxS[  12] */ new Table(46, 12, -1, new sbyte[] {88, -1, 12, 12, 12, 12, 
           12, 12, 12, 12, 12, 12}),
@@ -521,7 +521,7 @@ public override void yyerror(string format, params object[] args)
 /* NxS[  78] */ new Table(0, 0, -1, null),
 /* NxS[  79] */ new Table(48, 10, -1, new sbyte[] {79, 79, 79, 79, 79, 79, 
           79, 79, 79, 79}),
-/* NxS[  80] */ new Table(0, 0, -1, null),
+/* NxS[  80] */ new Table(10, 1, 80, new sbyte[] {-1}),
 /* NxS[  81] */ new Table(0, 0, -1, null),
 /* NxS[  82] */ new Table(0, 0, -1, null),
 /* NxS[  83] */ new Table(0, 0, -1, null),
@@ -542,17 +542,15 @@ public override void yyerror(string format, params object[] args)
           87, 87, 84}),
 /* NxS[  88] */ new Table(48, 10, -1, new sbyte[] {79, 79, 79, 79, 79, 79, 
           79, 79, 79, 79}),
-/* NxS[  89] */ new Table(46, 1, -1, new sbyte[] {90}),
-/* NxS[  90] */ new Table(42, 1, -1, new sbyte[] {80}),
-/* NxS[  91] */ new Table(111, 1, -1, new sbyte[] {95}),
-/* NxS[  92] */ new Table(110, 1, -1, new sbyte[] {93}),
-/* NxS[  93] */ new Table(116, 1, -1, new sbyte[] {94}),
-/* NxS[  94] */ new Table(41, 1, -1, new sbyte[] {81}),
-/* NxS[  95] */ new Table(117, 1, -1, new sbyte[] {96}),
-/* NxS[  96] */ new Table(98, 1, -1, new sbyte[] {97}),
-/* NxS[  97] */ new Table(108, 1, -1, new sbyte[] {98}),
-/* NxS[  98] */ new Table(101, 1, -1, new sbyte[] {99}),
-/* NxS[  99] */ new Table(41, 1, -1, new sbyte[] {82}),
+/* NxS[  89] */ new Table(111, 1, -1, new sbyte[] {93}),
+/* NxS[  90] */ new Table(110, 1, -1, new sbyte[] {91}),
+/* NxS[  91] */ new Table(116, 1, -1, new sbyte[] {92}),
+/* NxS[  92] */ new Table(41, 1, -1, new sbyte[] {81}),
+/* NxS[  93] */ new Table(117, 1, -1, new sbyte[] {94}),
+/* NxS[  94] */ new Table(98, 1, -1, new sbyte[] {95}),
+/* NxS[  95] */ new Table(108, 1, -1, new sbyte[] {96}),
+/* NxS[  96] */ new Table(101, 1, -1, new sbyte[] {97}),
+/* NxS[  97] */ new Table(41, 1, -1, new sbyte[] {82}),
     };
 
 int NextState() {

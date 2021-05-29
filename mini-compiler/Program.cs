@@ -296,8 +296,8 @@ namespace mini_compiler
             this.type = type;
             if (Compiler.Nodes.Count > 1)
             {
-                lhs = Compiler.Nodes.Pop();
                 rhs = Compiler.Nodes.Pop();
+                lhs = Compiler.Nodes.Pop();
             }
             else
             {
@@ -347,8 +347,8 @@ namespace mini_compiler
             this.type = type;
             if (Compiler.Nodes.Count > 1)
             {
-                lhs = Compiler.Nodes.Pop();
                 rhs = Compiler.Nodes.Pop();
+                lhs = Compiler.Nodes.Pop();
             }
             else
             {
@@ -358,12 +358,16 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
-            // TODO: check types
             var etl = lhs.GenerateCode();
             var etr = rhs.GenerateCode();
             var et = Compiler.GetNextId();
 
-            // TODO: implement
+            var operand = GetOperand();
+            var lhType = lhs.GetExpressionType();
+            var rhType = rhs.GetExpressionType();
+
+            // TODO: check types
+            Compiler.Write($"%{et} = icmp {operand} {lhType.ToLLVM()} {etl}, {etr}");
 
             return $"%{et}";
         }
@@ -371,6 +375,27 @@ namespace mini_compiler
         public override ExpressionType GetExpressionType()
         {
             return ExpressionType.Bool;
+        }
+
+        private string GetOperand()
+        {
+            switch (type)
+            {
+                case Type.Equals:
+                    return "eq";
+                case Type.NotEquals:
+                    return "ne";
+                case Type.GreaterThan:
+                    return "sgt";
+                case Type.GreaterOrEqual:
+                    return "sge";
+                case Type.LessThan:
+                    return "slt";
+                case Type.LessOrEqual:
+                    return "sle";
+                default:
+                    throw new ArgumentException();
+            }
         }
     }
 
@@ -391,8 +416,8 @@ namespace mini_compiler
             this.type = type;
             if (Compiler.Nodes.Count > 1)
             {
-                lhs = Compiler.Nodes.Pop();
                 rhs = Compiler.Nodes.Pop();
+                lhs = Compiler.Nodes.Pop();
             }
             else
             {
@@ -402,20 +427,36 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
-            // TODO: check types
             var etl = lhs.GenerateCode();
             var etr = rhs.GenerateCode();
             var et = Compiler.GetNextId();
+            var operand = GetOperand();
+            var lhsType = lhs.GetExpressionType();
 
-            // TODO: implement
+            // TODO: check types
+            Compiler.Write($"%{et} = {operand} nsw {lhsType.ToLLVM()} {etl}, {etr}");
 
             return $"%{et}";
         }
 
         public override ExpressionType GetExpressionType()
         {
-            // TODO: return
-            return ExpressionType.Integer;
+            // TODO: return correct
+            var lhsType = lhs.GetExpressionType();
+            return lhsType;
+        }
+
+        private string GetOperand()
+        {
+            switch (type)
+            {
+                case Type.Plus:
+                    return "add";
+                case Type.Minus:
+                    return "sub";
+                default:
+                    throw new ArgumentException();
+            }
         }
     }
 
@@ -436,8 +477,8 @@ namespace mini_compiler
             this.type = type;
             if (Compiler.Nodes.Count > 1)
             {
-                lhs = Compiler.Nodes.Pop();
                 rhs = Compiler.Nodes.Pop();
+                lhs = Compiler.Nodes.Pop();
             }
             else
             {
@@ -453,6 +494,11 @@ namespace mini_compiler
             var et = Compiler.GetNextId();
 
             // TODO: implement
+            var operand = GetOperand();
+            var lhsType = lhs.GetExpressionType();
+
+            // TODO: check types
+            Compiler.Write($"%{et} = {operand} {lhsType.ToLLVM()} {etl}, {etr}");
 
             return $"%{et}";
         }
@@ -461,6 +507,19 @@ namespace mini_compiler
         {
             // TODO: return
             return ExpressionType.Integer;
+        }
+
+        private string GetOperand()
+        {
+            switch (type)
+            {
+                case Type.Multiply:
+                    return "mul";
+                case Type.Divide:
+                    return "sdiv";
+                default:
+                    throw new ArgumentException();
+            }
         }
     }
     public class BitExpressionNode : SyntaxNode
@@ -480,8 +539,8 @@ namespace mini_compiler
             this.type = type;
             if (Compiler.Nodes.Count > 1)
             {
-                lhs = Compiler.Nodes.Pop();
                 rhs = Compiler.Nodes.Pop();
+                lhs = Compiler.Nodes.Pop();
             }
             else
             {
@@ -491,12 +550,15 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
-            // TODO: check types
             var etl = lhs.GenerateCode();
             var etr = rhs.GenerateCode();
             var et = Compiler.GetNextId();
 
-            // TODO: implement
+            var operand = GetOperand();
+            var lhsType = lhs.GetExpressionType();
+
+            // TODO: check types
+            Compiler.Write($"%{et} = {operand} {lhsType.ToLLVM()} {etl}, {etr}");
 
             return $"%{et}";
         }
@@ -504,8 +566,22 @@ namespace mini_compiler
         public override ExpressionType GetExpressionType()
         {
             // TODO: return
-            return ExpressionType.Integer;
+            return lhs.GetExpressionType();
         }
+
+        private string GetOperand()
+        {
+            switch (type)
+            {
+                case Type.Or:
+                    return "or";
+                case Type.And:
+                    return "and";
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
     }
 
     public class UnaryExpressionNode : SyntaxNode
@@ -538,18 +614,50 @@ namespace mini_compiler
         public override string GenerateCode()
         {
             // TODO: check types
-            var ete = rhs.GenerateCode();
+            var etr = rhs.GenerateCode();
             var et = Compiler.GetNextId();
 
-            // TODO: implement
+            var rhsType = rhs.GetExpressionType();
+            switch (type)
+            {
+                case Type.Minus:
+                    Compiler.Write($"%{et} = sub {rhsType.ToLLVM()} 0, {etr}");
+                    break;
+                case Type.BitwiseNegate:
+                    Compiler.Write($"%{et} = xor {rhsType.ToLLVM()} {etr}, -1");
+                    break;
+                case Type.Negate:
+                    Compiler.Write($"%{et} = icmp ne {rhsType.ToLLVM()} {etr}, 0");
+                    var oldEt = et;
+                    et = Compiler.GetNextId();
+                    Compiler.Write($"%{et} = xor i1 {oldEt}, 1");
+                    oldEt = et;
+                    et = Compiler.GetNextId();
+                    Compiler.Write($"%{et} = zext i1 {oldEt} to {rhsType.ToLLVM()}");
+                    break;
+                case Type.IntConversion:
+                    // TODO: implement
+                    break;
+                case Type.DoubleConversion:
+                    // TODO: implement
+                    break;
+            }
 
             return $"%{et}";
         }
 
         public override ExpressionType GetExpressionType()
         {
-            // TODO: return
-            return ExpressionType.Integer;
+            // TODO: return correct
+            switch (type)
+            {
+                case Type.IntConversion:
+                    return ExpressionType.Integer;
+                case Type.DoubleConversion:
+                    return ExpressionType.Double;
+            }
+
+            return rhs.GetExpressionType();
         }
     }
 
@@ -641,13 +749,13 @@ namespace mini_compiler
             switch (exp.GetExpressionType())
             {
                 case ExpressionType.Integer:
-                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([3 x i8]* @.str_int to i8*), i32 %{et})");
+                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([3 x i8]* @.str_int to i8*), i32 {et})");
                     break;
                 case ExpressionType.Double:
-                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([3 x i8]* @.str_double to i8*), double %{et})");
+                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([3 x i8]* @.str_double to i8*), double {et})");
                     break;
                 case ExpressionType.Bool:
-                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([3 x i8]* @.str_int to i8*), i1 %{et})");
+                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([3 x i8]* @.str_int to i8*), i1 {et})");
                     break;
             }
 
@@ -734,7 +842,7 @@ namespace mini_compiler
             var id = Compiler.GetNextId();
             var llvmType = node.GetExpressionType().ToLLVM();
             Compiler.Write($"%{id} = load {llvmType}, {llvmType}* %{identifier}");
-            return id;
+            return $"%{id}";
         }
 
         public override ExpressionType GetExpressionType()

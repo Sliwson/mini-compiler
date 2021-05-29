@@ -15,8 +15,11 @@ DoubleLiteral	[1-9][0-9]*\.[0-9]+
 BoolLiteral		(true|false)
 StringLiteral	\".*\"
 Whitespace		\s	
+Comment			"//".*
 
 %% 
+
+{Comment}           { }
 
 "program"			{ return (int)Tokens.Program; }
 
@@ -87,13 +90,14 @@ Whitespace		\s
 ";"					{ return (int)Tokens.Semicolon; }
 ","					{ return (int)Tokens.Comma; }
 
-"//.*"				{ }
 "\n"				{ Compiler.CurrentLine = yyline + 1; }
+
 {Whitespace}		{ }
 
 {Identifier}		{ 
 						yylval.String = yytext;
 						return (int) Tokens.Identifier;
 					}
+
 
 %% 
