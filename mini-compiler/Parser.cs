@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-9QSNDR4
-// DateTime: 29/05/2021 15:20:30
+// DateTime: 29/05/2021 15:42:53
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 29/05/2021 15:05:46>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 29/05/2021 15:42:52>
 
 // options: lines gplex
 
@@ -417,32 +417,32 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 30: // relationExpression -> relationExpression, Equals, addExpression
 #line 123 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                             { }
+                                                             { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.Equals)); }
 #line default
         break;
       case 31: // relationExpression -> relationExpression, NotEquals, addExpression
 #line 124 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                    { }
+                                                    { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.NotEquals)); }
 #line default
         break;
       case 32: // relationExpression -> relationExpression, GreaterThan, addExpression
 #line 125 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                      { }
+                                                      { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.GreaterThan )); }
 #line default
         break;
       case 33: // relationExpression -> relationExpression, GreaterOrEqual, addExpression
 #line 126 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                         { }
+                                                         { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.GreaterOrEqual)); }
 #line default
         break;
       case 34: // relationExpression -> relationExpression, LessThan, addExpression
 #line 127 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                   { }
+                                                   { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.LessThan)); }
 #line default
         break;
       case 35: // relationExpression -> relationExpression, LessOrEqual, addExpression
 #line 128 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                      { }
+                                                      { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.LessOrEqual)); }
 #line default
         break;
       case 36: // relationExpression -> addExpression
@@ -452,12 +452,12 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 37: // addExpression -> addExpression, Plus, mulExpression
 #line 132 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                 { }
+                                                 { Compiler.PushNode(new AddExpressionNode(AddExpressionNode.Type.Plus)); }
 #line default
         break;
       case 38: // addExpression -> addExpression, Minus, mulExpression
 #line 133 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                         { }
+                                         { Compiler.PushNode(new AddExpressionNode(AddExpressionNode.Type.Minus)); }
 #line default
         break;
       case 39: // addExpression -> mulExpression
@@ -467,12 +467,12 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 40: // mulExpression -> mulExpression, Multiply, bitExpression
 #line 138 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                     { }
+                                                     { Compiler.PushNode(new MulExpressionNode(MulExpressionNode.Type.Multiply)); }
 #line default
         break;
       case 41: // mulExpression -> mulExpression, Divide, bitExpression
 #line 139 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                          { }
+                                          { Compiler.PushNode(new MulExpressionNode(MulExpressionNode.Type.Divide)); }
 #line default
         break;
       case 42: // mulExpression -> bitExpression
@@ -482,12 +482,12 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 43: // bitExpression -> bitExpression, BitwiseOr, unaryExpression
 #line 144 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                        { }
+                                                        { Compiler.PushNode(new BitExpressionNode(BitExpressionNode.Type.Or)); }
 #line default
         break;
       case 44: // bitExpression -> bitExpression, BitwiseAnd, unaryExpression
 #line 145 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                { }
+                                                { Compiler.PushNode(new BitExpressionNode(BitExpressionNode.Type.And)); }
 #line default
         break;
       case 45: // bitExpression -> unaryExpression
@@ -497,27 +497,27 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 46: // unaryExpression -> Minus, unaryExpression
 #line 149 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                        { }
+                                        { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.Minus)); }
 #line default
         break;
       case 47: // unaryExpression -> BitwiseNegate, unaryExpression
 #line 150 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                    { }
+                                    { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.BitwiseNegate)); }
 #line default
         break;
       case 48: // unaryExpression -> Negate, unaryExpression
 #line 151 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                             { }
+                             { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.Negate)); }
 #line default
         break;
       case 49: // unaryExpression -> IntConversion, unaryExpression
 #line 152 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                    { }
+                                    { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.IntConversion)); }
 #line default
         break;
       case 50: // unaryExpression -> DoubleConversion, unaryExpression
 #line 153 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                       { }
+                                       { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.DoubleConversion)); }
 #line default
         break;
       case 51: // unaryExpression -> factorExpression

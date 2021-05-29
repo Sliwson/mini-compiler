@@ -120,37 +120,37 @@ logicalExpression : logicalExpression Or relationExpression { Compiler.PushNode(
 				  | relationExpression { }
 				  ;
 
-relationExpression : relationExpression Equals addExpression { }
-				   | relationExpression NotEquals addExpression { }
-				   | relationExpression GreaterThan addExpression { }
-				   | relationExpression GreaterOrEqual addExpression { }
-				   | relationExpression LessThan addExpression { }
-				   | relationExpression LessOrEqual addExpression { }
+relationExpression : relationExpression Equals addExpression { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.Equals)); }
+				   | relationExpression NotEquals addExpression { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.NotEquals)); }
+				   | relationExpression GreaterThan addExpression { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.GreaterThan )); }
+				   | relationExpression GreaterOrEqual addExpression { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.GreaterOrEqual)); }
+				   | relationExpression LessThan addExpression { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.LessThan)); }
+				   | relationExpression LessOrEqual addExpression { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.LessOrEqual)); }
 				   | addExpression { }
 				   ;
 
-addExpression : addExpression Plus mulExpression { }
-			  | addExpression Minus mulExpression { }
+addExpression : addExpression Plus mulExpression { Compiler.PushNode(new AddExpressionNode(AddExpressionNode.Type.Plus)); }
+			  | addExpression Minus mulExpression { Compiler.PushNode(new AddExpressionNode(AddExpressionNode.Type.Minus)); }
 			  | mulExpression { }
 			  ;
 
 
-mulExpression : mulExpression Multiply bitExpression { }
-			  | mulExpression Divide bitExpression { }
+mulExpression : mulExpression Multiply bitExpression { Compiler.PushNode(new MulExpressionNode(MulExpressionNode.Type.Multiply)); }
+			  | mulExpression Divide bitExpression { Compiler.PushNode(new MulExpressionNode(MulExpressionNode.Type.Divide)); }
 			  | bitExpression { }
 			  ;
 
 
-bitExpression : bitExpression BitwiseOr unaryExpression { }
-			  | bitExpression BitwiseAnd unaryExpression { }
+bitExpression : bitExpression BitwiseOr unaryExpression { Compiler.PushNode(new BitExpressionNode(BitExpressionNode.Type.Or)); }
+			  | bitExpression BitwiseAnd unaryExpression { Compiler.PushNode(new BitExpressionNode(BitExpressionNode.Type.And)); }
 			  | unaryExpression { }
 			  ;
 
-unaryExpression : Minus unaryExpression { }
-				| BitwiseNegate unaryExpression { }
-				| Negate unaryExpression { }
-				| IntConversion unaryExpression { }
-				| DoubleConversion unaryExpression { }
+unaryExpression : Minus unaryExpression { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.Minus)); }
+				| BitwiseNegate unaryExpression { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.BitwiseNegate)); }
+				| Negate unaryExpression { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.Negate)); }
+				| IntConversion unaryExpression { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.IntConversion)); }
+				| DoubleConversion unaryExpression { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.DoubleConversion)); }
 				| factorExpression { }
 				;
 

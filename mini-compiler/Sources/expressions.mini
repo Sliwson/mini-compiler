@@ -15,4 +15,20 @@
 	b = true && true;
 	write b;
 	write "\n";
+
+	b = false && false;
+	write b;
+	write "\n";
+
+	b = true || false;
+	write b;
+	write "\n";
+	
+	b = true || false;
+	write b;
+	write "\n";
+
+	b = false || false;
+	write b;
+	write "\n";
 } 

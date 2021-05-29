@@ -312,13 +312,244 @@ namespace mini_compiler
             var etr = rhs.GenerateCode();
             var et = Compiler.GetNextId();
 
-            Compiler.Write($"%{et} = and i1 {etl}, {etr}");
+            if (type == Type.And)
+                Compiler.Write($"%{et} = and i1 {etl}, {etr}");
+            else
+                Compiler.Write($"%{et} = or i1 {etl}, {etr}");
+
             return $"%{et}";
         }
 
         public override ExpressionType GetExpressionType()
         {
             return ExpressionType.Bool;
+        }
+    }
+
+    public class RelationExpressionNode : SyntaxNode
+    {
+        public enum Type
+        {
+            Equals,
+            NotEquals,
+            GreaterThan,
+            GreaterOrEqual,
+            LessThan,
+            LessOrEqual
+        }
+
+        private readonly Type type;
+        private readonly SyntaxNode lhs;
+        private readonly SyntaxNode rhs;
+
+        public RelationExpressionNode(Type type)
+        {
+            this.type = type;
+            if (Compiler.Nodes.Count > 1)
+            {
+                lhs = Compiler.Nodes.Pop();
+                rhs = Compiler.Nodes.Pop();
+            }
+            else
+            {
+                // TODO: error
+            }
+        }
+
+        public override string GenerateCode()
+        {
+            // TODO: check types
+            var etl = lhs.GenerateCode();
+            var etr = rhs.GenerateCode();
+            var et = Compiler.GetNextId();
+
+            // TODO: implement
+
+            return $"%{et}";
+        }
+
+        public override ExpressionType GetExpressionType()
+        {
+            return ExpressionType.Bool;
+        }
+    }
+
+    public class AddExpressionNode : SyntaxNode
+    {
+        public enum Type
+        {
+            Plus,
+            Minus
+        }
+
+        private readonly Type type;
+        private readonly SyntaxNode lhs;
+        private readonly SyntaxNode rhs;
+
+        public AddExpressionNode(Type type)
+        {
+            this.type = type;
+            if (Compiler.Nodes.Count > 1)
+            {
+                lhs = Compiler.Nodes.Pop();
+                rhs = Compiler.Nodes.Pop();
+            }
+            else
+            {
+                // TODO: error
+            }
+        }
+
+        public override string GenerateCode()
+        {
+            // TODO: check types
+            var etl = lhs.GenerateCode();
+            var etr = rhs.GenerateCode();
+            var et = Compiler.GetNextId();
+
+            // TODO: implement
+
+            return $"%{et}";
+        }
+
+        public override ExpressionType GetExpressionType()
+        {
+            // TODO: return
+            return ExpressionType.Integer;
+        }
+    }
+
+    public class MulExpressionNode : SyntaxNode
+    {
+        public enum Type
+        {
+            Multiply,
+            Divide
+        }
+
+        private readonly Type type;
+        private readonly SyntaxNode lhs;
+        private readonly SyntaxNode rhs;
+
+        public MulExpressionNode(Type type)
+        {
+            this.type = type;
+            if (Compiler.Nodes.Count > 1)
+            {
+                lhs = Compiler.Nodes.Pop();
+                rhs = Compiler.Nodes.Pop();
+            }
+            else
+            {
+                // TODO: error
+            }
+        }
+
+        public override string GenerateCode()
+        {
+            // TODO: check types
+            var etl = lhs.GenerateCode();
+            var etr = rhs.GenerateCode();
+            var et = Compiler.GetNextId();
+
+            // TODO: implement
+
+            return $"%{et}";
+        }
+
+        public override ExpressionType GetExpressionType()
+        {
+            // TODO: return
+            return ExpressionType.Integer;
+        }
+    }
+    public class BitExpressionNode : SyntaxNode
+    {
+        public enum Type
+        {
+            Or,
+            And
+        }
+
+        private readonly Type type;
+        private readonly SyntaxNode lhs;
+        private readonly SyntaxNode rhs;
+
+        public BitExpressionNode(Type type)
+        {
+            this.type = type;
+            if (Compiler.Nodes.Count > 1)
+            {
+                lhs = Compiler.Nodes.Pop();
+                rhs = Compiler.Nodes.Pop();
+            }
+            else
+            {
+                // TODO: error
+            }
+        }
+
+        public override string GenerateCode()
+        {
+            // TODO: check types
+            var etl = lhs.GenerateCode();
+            var etr = rhs.GenerateCode();
+            var et = Compiler.GetNextId();
+
+            // TODO: implement
+
+            return $"%{et}";
+        }
+
+        public override ExpressionType GetExpressionType()
+        {
+            // TODO: return
+            return ExpressionType.Integer;
+        }
+    }
+
+    public class UnaryExpressionNode : SyntaxNode
+    {
+        public enum Type
+        {
+            Minus,
+            BitwiseNegate,
+            Negate,
+            IntConversion,
+            DoubleConversion
+        }
+
+        private readonly Type type;
+        private readonly SyntaxNode rhs;
+
+        public UnaryExpressionNode(Type type)
+        {
+            this.type = type;
+            if (Compiler.Nodes.Count > 0)
+            {
+                rhs = Compiler.Nodes.Pop();
+            }
+            else
+            {
+                // TODO: error
+            }
+        }
+
+        public override string GenerateCode()
+        {
+            // TODO: check types
+            var ete = rhs.GenerateCode();
+            var et = Compiler.GetNextId();
+
+            // TODO: implement
+
+            return $"%{et}";
+        }
+
+        public override ExpressionType GetExpressionType()
+        {
+            // TODO: return
+            return ExpressionType.Integer;
         }
     }
 
