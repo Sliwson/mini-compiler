@@ -102,10 +102,12 @@ namespace mini_compiler
 
             Write("@.str_int = constant [3 x i8] c\"%d\\00\"");
             Write("@.str_double = constant [3 x i8] c\"%f\\00\"");
+            Write("@.str_read_double = constant [4 x i8] c\"%lf\\00\"");
             Write("@.str_true = constant [5 x i8] c\"true\\00\"");
             Write("@.str_false = constant [6 x i8] c\"false\\00\"");
 
             Write("declare i32 @printf(i8*, ...)");
+            Write("declare i32 @scanf(i8*, ...)");
             Write("declare i32 @puts(i8*)");
 
             Write("define void @main()");
@@ -235,15 +237,12 @@ namespace mini_compiler
             {
                 case ExpressionType.Integer:
                     Compiler.Write($"%{Identifier} = alloca i32");
-                    Compiler.Write($"store i32 0, i32* %{Identifier}");
                     break;
                 case ExpressionType.Double:
                     Compiler.Write($"%{Identifier} = alloca double");
-                    Compiler.Write($"store double 0.0, double* %{Identifier}");
                     break;
                 case ExpressionType.Bool:
                     Compiler.Write($"%{Identifier} = alloca i1");
-                    Compiler.Write($"store i1 0, i1* %{Identifier}");
                     break;
             }
 
@@ -300,6 +299,7 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
+            // TODO: fix multiple newlines
             var returnEt = Compiler.GetNextId();
             if (newline)
                 Compiler.Write($"%{returnEt} = call i32 (i8*) @puts(i8* bitcast ([{length} x i8]* @{guid} to i8*))");
@@ -313,9 +313,11 @@ namespace mini_compiler
     public class WriteExpressionNode : SyntaxNode
     {
         private readonly SyntaxNode exp;
+        private readonly bool hex;
 
-        public WriteExpressionNode()
+        public WriteExpressionNode(bool hex = false)
         {
+            this.hex = hex;
             Line = Compiler.CurrentLine;
 
             if (Compiler.Nodes.Count > 0)
@@ -331,6 +333,7 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
+            // TODO: implement hex
             if (exp == null)
                 return "";
 
@@ -353,6 +356,48 @@ namespace mini_compiler
         }
     }
 
+    public class ReadNode : SyntaxNode
+    {
+        private readonly string identifier;
+        private readonly bool hex;
+
+        public ReadNode(string identifier, bool hex)
+        {
+            this.identifier = identifier;
+            this.hex = hex;
+        }
+
+        public override string GenerateCode()
+        {
+            // TODO: implement hex
+
+            var declaration = Compiler.GetDeclaration(identifier);
+            if (declaration == null)
+            {
+                // TODO: error
+                return "";
+            }
+
+            var type = declaration.GetExpressionType();
+            if (type == ExpressionType.Double)
+            {
+                var returnEt = Compiler.GetNextId();
+                Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @scanf(i8* bitcast ([4 x i8]* @.str_read_double to i8*), double* %{identifier})");
+            }
+            else if (type == ExpressionType.Integer)
+            {
+                var returnEt = Compiler.GetNextId();
+                Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @scanf(i8* bitcast ([3 x i8]* @.str_int to i8*), i32* %{identifier})");
+            }
+            else
+            {
+                // TODO: error
+            }
+
+            return "";
+        }
+    }
+
     public class ReturnNode : SyntaxNode
     {
         public ReturnNode()
@@ -362,6 +407,7 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
+            Compiler.GetNextId();
             Compiler.Write("ret void");
             return "";
         }
@@ -504,7 +550,11 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
-            return Value.ToString().Replace(',','.');
+            var str = Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            if (!str.Contains('.'))
+                str += ".0";
+
+            return str;
         }
 
         public override ExpressionType GetExpressionType()

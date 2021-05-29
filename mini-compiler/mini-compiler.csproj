@@ -55,17 +55,16 @@
     <None Include="kompilator.y" />
     <None Include="Sources\declarations-and-statements.mini" />
     <None Include="Sources\empty.mini" />
-    <None Include="Sources\multi-declarations-errors.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="Sources\multi-declarations-errors.mini" />
     <None Include="Sources\multi-declarations.mini" />
     <None Include="Sources\only-program.mini" />
+    <None Include="Sources\read-write.mini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Sources\write.mini" />
     <None Include="Sources\sample.mini" />
     <None Include="Sources\single-declarations.mini" />
-    <None Include="Sources\simple-statements.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="Sources\simple-statements.mini" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

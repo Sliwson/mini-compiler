@@ -166,15 +166,12 @@ ifInstruction : If OpenBracket expression CloseBracket instruction { Console.Wri
 whileInstruction : While OpenBracket expression CloseBracket instruction {Console.WriteLine("Line {0}: While", Compiler.CurrentLine); }
 				 ;
 
-inputInstruction : Read Identifier Semicolon { Console.WriteLine("Line {0}: Read {1}", Compiler.CurrentLine, $2); }
-				 | Read Identifier Comma Hex Semicolon { Console.WriteLine("Line {0}: Read hex {1}", Compiler.CurrentLine, $2); }
+inputInstruction : Read Identifier Semicolon { Compiler.PushNode(new ReadNode($2, false)); }
+				 | Read Identifier Comma Hex Semicolon { Compiler.PushNode(new ReadNode($2, true)); }
 				 ;
 
-outputInstruction : Write expression Semicolon 
-				  { 
-				      Compiler.PushNode(new WriteExpressionNode());
-				  }
-				  | Write expression Comma Hex Semicolon { }
+outputInstruction : Write expression Semicolon { Compiler.PushNode(new WriteExpressionNode(false)); }
+				  | Write expression Comma Hex Semicolon { Compiler.PushNode(new WriteExpressionNode(true)); }
 				  | Write StringLiteral Semicolon 
 				  {
 					  var declaration = new DeclareStringNode($2);
