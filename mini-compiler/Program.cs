@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,8 @@ namespace mini_compiler
         private static int ParseFile(string filename)
         {
             // reset compiler
-            Compiler.Reset(filename + ".ll");
+            var llFilename = filename + ".ll"; 
+            Compiler.Reset(llFilename);
 
             // read and parse file
             Console.WriteLine("==============================================================================");
@@ -43,7 +45,7 @@ namespace mini_compiler
             Console.WriteLine();
 
             Console.WriteLine("______________________________________________________________________________");
-            Console.WriteLine("Output:");
+            Console.WriteLine("Compiler output:");
             Console.WriteLine();
 
             var scanner = new Scanner();
@@ -62,7 +64,25 @@ namespace mini_compiler
             Console.WriteLine();
 
             if (errors > 0)
-                File.Delete("filename");
+            {
+                File.Delete(llFilename);
+                return errors;
+            }
+
+            Console.WriteLine("______________________________________________________________________________");
+            Console.WriteLine("Lli output:");
+            Console.WriteLine();
+
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.CreateNoWindow = false;
+            startInfo.UseShellExecute = false;
+            startInfo.FileName = "Sources\\lli.exe";
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.Arguments = llFilename;
+            using (Process exeProcess = Process.Start(startInfo))
+            {
+                exeProcess.WaitForExit();
+            }
 
             return errors;
         }
@@ -673,6 +693,8 @@ namespace mini_compiler
 
         public static void CreateWriteStringNodes(string literal)
         {
+            var backNodes = new List<SyntaxNode>();
+
             // split by newlines
             var pos = 0;
             while (pos >= 0)
@@ -690,15 +712,28 @@ namespace mini_compiler
 
                     var declaration = new DeclareStringNode(line, newline);
                     Compiler.PushNodeFront(declaration);
-                    Compiler.PushNode(new WriteStringNode(declaration.Guid, declaration.Length, declaration.NewLine));
+                    backNodes.Add(new WriteStringNode(declaration.Guid, declaration.Length, declaration.NewLine));
                 }
                 else
                 { 
                     // write everything
                     var declaration = new DeclareStringNode(literal, newline);
                     Compiler.PushNodeFront(declaration);
-                    Compiler.PushNode(new WriteStringNode(declaration.Guid, declaration.Length, declaration.NewLine));
+                    backNodes.Add(new WriteStringNode(declaration.Guid, declaration.Length, declaration.NewLine));
                 }
+            }
+
+            if (backNodes.Count > 1)
+            {
+                var block = new BlockInstructionNode();
+                foreach (var node in backNodes)
+                    block.PushNode(node);
+
+                Compiler.PushNode(block);
+            }
+            else if (backNodes.Count > 0)
+            {
+                Compiler.PushNode(backNodes.First());
             }
         }
         public WriteStringNode(string guid, int length, bool newline)
@@ -1025,6 +1060,11 @@ namespace mini_compiler
     public class BlockInstructionNode : SyntaxNode
     {
         List<SyntaxNode> instructions = new List<SyntaxNode>();
+
+        public void PushNode(SyntaxNode node)
+        {
+            instructions.Add(node);
+        }
 
         public static void InsertInstructionToTopBlock()
         {
