@@ -258,18 +258,14 @@ namespace mini_compiler
     public class DeclareStringNode : SyntaxNode
     {
         public string Guid { get; private set; }
-
         public string Text { get; private set; }
-        public int Length => Text.Length - 2;
         public bool NewLine { get; private set; }
+        public int Length => Text.Length - 2;
 
-        public DeclareStringNode(string text)
+        public DeclareStringNode(string text, bool newline)
         {
             Line = Compiler.CurrentLine;
-            NewLine = text.EndsWith("\\n");
-
-            if (NewLine)
-                text = text.Substring(0, text.Length - 2);
+            NewLine = newline;
 
             Text = text + "\\00";
             var guid = System.Guid.NewGuid().ToString().Replace("-", "");
@@ -289,6 +285,33 @@ namespace mini_compiler
         private readonly int length;
         private readonly bool newline;
 
+        public static void CreateWriteStringNodes(string literal)
+        {
+            // split by newlines
+            var pos = 0;
+            while (pos >= 0)
+            {
+                pos = literal.IndexOf("\\n");
+                var newline = pos >= 0;
+
+                if (newline)
+                {
+                    var line = literal.Substring(0, pos);
+                    literal = literal.Substring(pos + 2);
+
+                    var declaration = new DeclareStringNode(line, newline);
+                    Compiler.PushNodeFront(declaration);
+                    Compiler.PushNode(new WriteStringNode(declaration.Guid, declaration.Length, declaration.NewLine));
+                }
+                else
+                { 
+                    // write everything
+                    var declaration = new DeclareStringNode(literal, newline);
+                    Compiler.PushNodeFront(declaration);
+                    Compiler.PushNode(new WriteStringNode(declaration.Guid, declaration.Length, declaration.NewLine));
+                }
+            }
+        }
         public WriteStringNode(string guid, int length, bool newline)
         {
             Line = Compiler.CurrentLine;
@@ -299,7 +322,6 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
-            // TODO: fix multiple newlines
             var returnEt = Compiler.GetNextId();
             if (newline)
                 Compiler.Write($"%{returnEt} = call i32 (i8*) @puts(i8* bitcast ([{length} x i8]* @{guid} to i8*))");

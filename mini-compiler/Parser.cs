@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-9QSNDR4
-// DateTime: 29/05/2021 14:16:26
+// DateTime: 29/05/2021 14:44:50
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 29/05/2021 13:35:28>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 29/05/2021 14:32:10>
 
 // options: lines gplex
 
@@ -586,16 +586,12 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
 #line default
         break;
       case 64: // outputInstruction -> Write, StringLiteral, Semicolon
-#line 176 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-      {
-					  var declaration = new DeclareStringNode(ValueStack[ValueStack.Depth-2].String);
-					  Compiler.PushNodeFront(declaration);
-					  Compiler.PushNode(new WriteStringNode(declaration.Guid, declaration.Length, declaration.NewLine));
-				  }
+#line 175 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                                      { WriteStringNode.CreateWriteStringNodes(ValueStack[ValueStack.Depth-2].String); }
 #line default
         break;
       case 65: // returnInstruction -> Return, Semicolon
-#line 183 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 178 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                      { Compiler.PushNode(new ReturnNode()); }
 #line default
         break;
@@ -613,7 +609,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         return CharToString((char)terminal);
   }
 
-#line 188 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 183 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
 
 public Parser(Scanner scnr) : base(scnr) { }
 #line default

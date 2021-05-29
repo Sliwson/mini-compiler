@@ -61,7 +61,9 @@
     <None Include="Sources\read-write.mini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Sources\write.mini" />
+    <None Include="Sources\write.mini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Sources\sample.mini" />
     <None Include="Sources\single-declarations.mini" />
     <None Include="Sources\simple-statements.mini" />

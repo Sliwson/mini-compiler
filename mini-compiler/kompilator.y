@@ -172,12 +172,7 @@ inputInstruction : Read Identifier Semicolon { Compiler.PushNode(new ReadNode($2
 
 outputInstruction : Write expression Semicolon { Compiler.PushNode(new WriteExpressionNode(false)); }
 				  | Write expression Comma Hex Semicolon { Compiler.PushNode(new WriteExpressionNode(true)); }
-				  | Write StringLiteral Semicolon 
-				  {
-					  var declaration = new DeclareStringNode($2);
-					  Compiler.PushNodeFront(declaration);
-					  Compiler.PushNode(new WriteStringNode(declaration.Guid, declaration.Length, declaration.NewLine));
-				  }
+				  | Write StringLiteral Semicolon { WriteStringNode.CreateWriteStringNodes($2); }
 				  ;
 
 returnInstruction : Return Semicolon { Compiler.PushNode(new ReturnNode()); }

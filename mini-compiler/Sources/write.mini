@@ -2,12 +2,9 @@
 {
 	write "test";
 	write "\n";
-	write "halo halo";
+	write "halo \n halo halo \n \n halohalo";
 	write " halo";
 	write "\n";
-
-	return;
-
 	write " halo";
 	write "\n";
 }
