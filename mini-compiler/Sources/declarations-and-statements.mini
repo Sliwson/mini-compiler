@@ -1,16 +1,18 @@
 ﻿program
 {
-	int n;
+	int a, b, c;
 	int i, j, k;
 	double wynik;
 	double x, y;
 	bool isOK;
 	bool b1, b2, b3; 
 
+	a = 1;
+	b = 2;
+	c = 3;
 	wynik = 12.123;
 	write "dupa";
-	read n;
-	read n, hex;
+
 	while (a > b)
 	{
 		if (a > c)
@@ -21,7 +23,7 @@
 			while (a > c)
 				if (b > c)
 					if (b > c)
-						dupa = dupa;
+						a = c;
 		}
 
 		if (b > c)

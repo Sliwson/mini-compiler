@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-9QSNDR4
-// DateTime: 29/05/2021 17:00:27
+// DateTime: 29/05/2021 17:52:21
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 29/05/2021 16:47:56>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 29/05/2021 17:50:04>
 
 // options: lines gplex
 
@@ -342,7 +342,12 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 14: // instructions -> instructions, instruction
 #line 95 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                        { }
+                                        { BlockInstructionNode.InsertInstructionToTopBlock(); }
+#line default
+        break;
+      case 15: // instructions -> /* empty */
+#line 96 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      { Compiler.PushNode(new BlockInstructionNode()); }
 #line default
         break;
       case 16: // instruction -> blockInstruction
@@ -382,7 +387,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 23: // blockInstruction -> OpenCurl, instructions, CloseCurl
 #line 108 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                   { }
+                                                   {  }
 #line default
         break;
       case 24: // expression -> assignExpression
@@ -552,18 +557,18 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 57: // ifInstruction -> If, OpenBracket, expression, CloseBracket, instruction
 #line 164 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                                   { Console.WriteLine("Line {0}: If", Compiler.CurrentLine); }
+                                                                   { Compiler.PushNode(new IfNode(false)); }
 #line default
         break;
       case 58: // ifInstruction -> If, OpenBracket, expression, CloseBracket, instruction, Else, 
                //                  instruction
 #line 165 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                                           { Console.WriteLine("Line {0}: If Else", Compiler.CurrentLine); }
+                                                                           { Compiler.PushNode(new IfNode(true)); }
 #line default
         break;
       case 59: // whileInstruction -> While, OpenBracket, expression, CloseBracket, instruction
 #line 168 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                                                                         {Console.WriteLine("Line {0}: While", Compiler.CurrentLine); }
+                                                                         { Compiler.PushNode(new WhileNode()); }
 #line default
         break;
       case 60: // inputInstruction -> Read, Identifier, Semicolon

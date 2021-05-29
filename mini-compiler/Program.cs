@@ -163,6 +163,11 @@ namespace mini_compiler
 
     public abstract class SyntaxNode
     {
+        public SyntaxNode()
+        {
+            Line = Compiler.CurrentLine;
+        }
+
         public int Line { get; set; }
         public abstract string GenerateCode();
         public virtual ExpressionType GetExpressionType()
@@ -214,7 +219,6 @@ namespace mini_compiler
 
         public DeclarationNode(ExpressionType type, string identifier)
         {
-            Line = Compiler.CurrentLine;
             Identifier = identifier;
 
             this.type = type;
@@ -264,7 +268,6 @@ namespace mini_compiler
 
         public DeclareStringNode(string text, bool newline)
         {
-            Line = Compiler.CurrentLine;
             NewLine = newline;
 
             Text = text + "\\00";
@@ -522,6 +525,7 @@ namespace mini_compiler
             }
         }
     }
+
     public class BitExpressionNode : SyntaxNode
     {
         public enum Type
@@ -699,7 +703,6 @@ namespace mini_compiler
         }
         public WriteStringNode(string guid, int length, bool newline)
         {
-            Line = Compiler.CurrentLine;
             this.guid = guid;
             this.length = length;
             this.newline = newline;
@@ -725,7 +728,6 @@ namespace mini_compiler
         public WriteExpressionNode(bool hex = false)
         {
             this.hex = hex;
-            Line = Compiler.CurrentLine;
 
             if (Compiler.Nodes.Count > 0)
             {
@@ -809,7 +811,6 @@ namespace mini_compiler
     {
         public ReturnNode()
         {
-            Line = Compiler.CurrentLine;
         }
 
         public override string GenerateCode()
@@ -826,7 +827,6 @@ namespace mini_compiler
 
         public IdentifierNode(string identifier)
         {
-            Line = Compiler.CurrentLine;
             this.identifier = identifier;
         }
 
@@ -862,7 +862,6 @@ namespace mini_compiler
 
         public AssignNode(string identifier)
         {
-            Line = Compiler.CurrentLine;
             this.identifier = identifier;
 
             if (Compiler.Nodes.Count > 0)
@@ -909,7 +908,6 @@ namespace mini_compiler
 
         public BoolFactorNode(bool value)
         {
-            Line = Compiler.CurrentLine;
             Value = value;
         }
 
@@ -930,7 +928,6 @@ namespace mini_compiler
 
         public IntegerFactorNode(int value)
         {
-            Line = Compiler.CurrentLine;
             Value = value;
         }
 
@@ -951,7 +948,6 @@ namespace mini_compiler
 
         public DoubleFactorNode(double value)
         {
-            Line = Compiler.CurrentLine;
             Value = value;
         }
 
@@ -967,6 +963,82 @@ namespace mini_compiler
         public override ExpressionType GetExpressionType()
         {
             return ExpressionType.Double;
+        }
+    }
+
+    public class IfNode : SyntaxNode
+    {
+        SyntaxNode condition;
+        SyntaxNode ifBlock;
+        SyntaxNode elseBlock = null;
+
+        public IfNode(bool withElse)
+        {
+            if (withElse)
+            {
+                elseBlock = Compiler.Nodes.Pop();
+            }
+
+            ifBlock = Compiler.Nodes.Pop();
+            condition = Compiler.Nodes.Pop();
+        }
+
+        public override string GenerateCode()
+        {
+            var condEt = condition.GenerateCode();
+            var condType = condition.GetExpressionType();
+            // TODO : implement
+            /*
+            if (elseBlock != null)
+            {
+                Compiler.Write($"br {condType.ToLLVM()} {condEt}, label {ifLabel}, {elseLabel}");
+            }
+            else
+            {
+                Compiler.Write($"br {condType.ToLLVM()} {condEt}, label {ifLabel}, {elseLabel}");
+            }
+            */
+
+
+            return "";
+        }
+    }
+
+    public class WhileNode : SyntaxNode
+    {
+
+        SyntaxNode condition;
+        SyntaxNode instruction;
+
+        public WhileNode()
+        {
+            instruction = Compiler.Nodes.Pop();
+            condition = Compiler.Nodes.Pop();
+        }
+
+        public override string GenerateCode()
+        {
+            return "";
+        }
+    }
+
+    public class BlockInstructionNode : SyntaxNode
+    {
+        List<SyntaxNode> instructions = new List<SyntaxNode>();
+
+        public static void InsertInstructionToTopBlock()
+        {
+            var instruction = Compiler.Nodes.Pop();
+            var block = Compiler.Nodes.Last() as BlockInstructionNode;
+            block.instructions.Add(instruction);
+        }
+
+        public override string GenerateCode()
+        {
+            foreach (var node in instructions)
+                node.GenerateCode();
+
+            return "";
         }
     }
 }

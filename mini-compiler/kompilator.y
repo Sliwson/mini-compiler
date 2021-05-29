@@ -92,8 +92,8 @@ declarationBool : Identifier Semicolon { Compiler.PushNode(new DeclarationNode(E
 				| Identifier Comma declarationBool { Compiler.PushNode(new DeclarationNode(ExpressionType.Bool, $1)); }
 				;
 
-instructions : instructions instruction { }
-			 | 
+instructions : instructions instruction { BlockInstructionNode.InsertInstructionToTopBlock(); }
+			 | { Compiler.PushNode(new BlockInstructionNode()); }
 			 ;
 
 instruction : blockInstruction { }
@@ -105,7 +105,7 @@ instruction : blockInstruction { }
 			| returnInstruction { }
 			;
 
-blockInstruction : OpenCurl instructions CloseCurl { }
+blockInstruction : OpenCurl instructions CloseCurl {  }
 				 ;
 
 expression : assignExpression { }
@@ -161,11 +161,11 @@ factorExpression : OpenBracket expression CloseBracket { }
 				 | Identifier { Compiler.PushNode(new IdentifierNode($1)); }
 			     ;
 
-ifInstruction : If OpenBracket expression CloseBracket instruction { Console.WriteLine("Line {0}: If", Compiler.CurrentLine); }
-			  | If OpenBracket expression CloseBracket instruction Else instruction { Console.WriteLine("Line {0}: If Else", Compiler.CurrentLine); }
+ifInstruction : If OpenBracket expression CloseBracket instruction { Compiler.PushNode(new IfNode(false)); }
+			  | If OpenBracket expression CloseBracket instruction Else instruction { Compiler.PushNode(new IfNode(true)); }
 			  ;
 
-whileInstruction : While OpenBracket expression CloseBracket instruction {Console.WriteLine("Line {0}: While", Compiler.CurrentLine); }
+whileInstruction : While OpenBracket expression CloseBracket instruction { Compiler.PushNode(new WhileNode()); }
 				 ;
 
 inputInstruction : Read Identifier Semicolon { Compiler.PushNode(new ReadNode($2, false)); }
