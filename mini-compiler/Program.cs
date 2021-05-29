@@ -279,6 +279,49 @@ namespace mini_compiler
         }
     }
 
+    public class LogicalExpressionNode : SyntaxNode
+    {
+        public enum Type
+        {
+            Or,
+            And
+        }
+
+        private readonly Type type;
+        private readonly SyntaxNode lhs;
+        private readonly SyntaxNode rhs;
+
+        public LogicalExpressionNode(Type type)
+        {
+            this.type = type;
+            if (Compiler.Nodes.Count > 1)
+            {
+                lhs = Compiler.Nodes.Pop();
+                rhs = Compiler.Nodes.Pop();
+            }
+            else
+            {
+                // TODO: error
+            }
+        }
+
+        public override string GenerateCode()
+        {
+            // TODO: check types
+            var etl = lhs.GenerateCode();
+            var etr = rhs.GenerateCode();
+            var et = Compiler.GetNextId();
+
+            Compiler.Write($"%{et} = and i1 {etl}, {etr}");
+            return $"%{et}";
+        }
+
+        public override ExpressionType GetExpressionType()
+        {
+            return ExpressionType.Bool;
+        }
+    }
+
     public class WriteStringNode : SyntaxNode
     {
         private readonly string guid;
@@ -293,6 +336,9 @@ namespace mini_compiler
             {
                 pos = literal.IndexOf("\\n");
                 var newline = pos >= 0;
+
+                if (pos < 0 && literal.Length == 0)
+                    break;
 
                 if (newline)
                 {

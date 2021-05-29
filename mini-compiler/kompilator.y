@@ -108,49 +108,51 @@ instruction : blockInstruction { }
 blockInstruction : OpenCurl instructions CloseCurl { }
 				 ;
 
-expression : unaryExpression { }
+expression : assignExpression { }
 		   ; 
+
+assignExpression : Identifier Assign assignExpression { Compiler.PushNode(new AssignNode($1)); }
+				 | logicalExpression { }
+				 ;
+
+logicalExpression : logicalExpression Or relationExpression { Compiler.PushNode(new LogicalExpressionNode(LogicalExpressionNode.Type.Or)); }
+				  | logicalExpression And relationExpression { Compiler.PushNode(new LogicalExpressionNode(LogicalExpressionNode.Type.And)); }
+				  | relationExpression { }
+				  ;
+
+relationExpression : relationExpression Equals addExpression { }
+				   | relationExpression NotEquals addExpression { }
+				   | relationExpression GreaterThan addExpression { }
+				   | relationExpression GreaterOrEqual addExpression { }
+				   | relationExpression LessThan addExpression { }
+				   | relationExpression LessOrEqual addExpression { }
+				   | addExpression { }
+				   ;
+
+addExpression : addExpression Plus mulExpression { }
+			  | addExpression Minus mulExpression { }
+			  | mulExpression { }
+			  ;
+
+
+mulExpression : mulExpression Multiply bitExpression { }
+			  | mulExpression Divide bitExpression { }
+			  | bitExpression { }
+			  ;
+
+
+bitExpression : bitExpression BitwiseOr unaryExpression { }
+			  | bitExpression BitwiseAnd unaryExpression { }
+			  | unaryExpression { }
+			  ;
 
 unaryExpression : Minus unaryExpression { }
 				| BitwiseNegate unaryExpression { }
 				| Negate unaryExpression { }
 				| IntConversion unaryExpression { }
 				| DoubleConversion unaryExpression { }
-				| bitExpression { }
+				| factorExpression { }
 				;
-
-bitExpression : bitExpression BitwiseOr mulExpression { }
-			  | bitExpression BitwiseAnd mulExpression { }
-			  | mulExpression { }
-			  ;
-
-mulExpression : mulExpression Multiply addExpression { }
-			  | mulExpression Divide addExpression { }
-			  | addExpression { }
-			  ;
-
-addExpression : addExpression Plus relationExpression { }
-			  | addExpression Minus relationExpression { }
-			  | relationExpression { }
-			  ;
-
-relationExpression : relationExpression Equals logicalExpression { }
-				   | relationExpression NotEquals logicalExpression { }
-				   | relationExpression GreaterThan logicalExpression { }
-				   | relationExpression GreaterOrEqual logicalExpression { }
-				   | relationExpression LessThan logicalExpression { }
-				   | relationExpression LessOrEqual logicalExpression { }
-				   | logicalExpression { }
-				   ;
-
-logicalExpression : logicalExpression Or assignExpression { }
-				  | logicalExpression And assignExpression { }
-				  | assignExpression { }
-				  ;
-
-assignExpression : Identifier Assign assignExpression { Compiler.PushNode(new AssignNode($1)); }
-				 | factorExpression { }
-				 ;
 
 factorExpression : OpenBracket expression CloseBracket { }
 			     | IntegerLiteral { Compiler.PushNode(new IntegerFactorNode($1)); }

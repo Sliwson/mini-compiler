@@ -1,0 +1,18 @@
+﻿program
+{
+	int i;
+	double d;
+	bool b;
+
+	b = true && false;
+	write b;
+	write "\n";
+	
+	b = true && false;
+	write b;
+	write "\n";
+
+	b = true && true;
+	write b;
+	write "\n";
+} 

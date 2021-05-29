@@ -58,12 +58,11 @@
     <None Include="Sources\multi-declarations-errors.mini" />
     <None Include="Sources\multi-declarations.mini" />
     <None Include="Sources\only-program.mini" />
-    <None Include="Sources\read-write.mini">
+    <None Include="Sources\read-write.mini" />
+    <None Include="Sources\expressions.mini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Sources\write.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="Sources\write.mini" />
     <None Include="Sources\sample.mini" />
     <None Include="Sources\single-declarations.mini" />
     <None Include="Sources\simple-statements.mini" />
