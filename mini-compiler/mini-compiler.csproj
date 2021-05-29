@@ -91,8 +91,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Sources\lli.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Lli\lli.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

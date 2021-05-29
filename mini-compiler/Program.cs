@@ -76,7 +76,7 @@ namespace mini_compiler
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.CreateNoWindow = false;
             startInfo.UseShellExecute = false;
-            startInfo.FileName = "Sources\\lli.exe";
+            startInfo.FileName = "Lli\\lli.exe";
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.Arguments = llFilename;
             using (Process exeProcess = Process.Start(startInfo))
