@@ -1078,6 +1078,22 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
+            var conditionLabel = Compiler.GetNextLabel();
+            Compiler.Write($"br label %{conditionLabel}");
+            Compiler.Write($"{conditionLabel}:");
+
+            var condEt = condition.GenerateCode();
+            var condType = condition.GetExpressionType();
+            // TODO: check cond type
+
+            var beginLabel = Compiler.GetNextLabel();
+            var endLabel = Compiler.GetNextLabel();
+            
+            Compiler.Write($"br {condType.ToLLVM()} {condEt}, label %{beginLabel}, label %{endLabel}");
+            Compiler.Write($"{beginLabel}:");
+            instruction.GenerateCode();
+            Compiler.Write($"br label %{conditionLabel}");
+            Compiler.Write($"{endLabel}:");
             return "";
         }
     }

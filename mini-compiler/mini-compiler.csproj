@@ -54,10 +54,11 @@
     <None Include="kompilator.lex" />
     <None Include="kompilator.y" />
     <Content Include="Sources\declarations-and-statements.mini" />
-    <None Include="Sources\if.mini" />
-    <None Include="Sources\block.mini">
+    <None Include="Sources\while.mini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Sources\block.mini" />
+    <None Include="Sources\if.mini" />
     <Content Include="Sources\empty.mini" />
     <Content Include="Sources\multi-declarations-errors.mini" />
     <Content Include="Sources\multi-declarations.mini" />

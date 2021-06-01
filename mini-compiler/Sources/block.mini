@@ -3,17 +3,19 @@
 	int a;
 	int b;
 
-	read a;
-	read b;
+	{
+		a = b;	
+		a = b;
+		a = b;
 
-	if (a > b)
-	{
-		write "a > b";
-		write "\n";
+		if (a = b)
+		{
+			a = b;
+		}
 	}
-	else
+
 	{
-		write "a <= b";
-		write "\n";
+		if (a = b)
+			a = b;
 	}
 }
