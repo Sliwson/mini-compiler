@@ -103,6 +103,7 @@ namespace mini_compiler
 
         private static StreamWriter stream = null;
         private static int currentId = 0; 
+        private static int currentLabelId = 0;
 
         public static void Reset(string filename)
         {
@@ -113,6 +114,7 @@ namespace mini_compiler
 
             stream = new StreamWriter(filename);
             currentId = 1;
+            currentLabelId = 0;
         }
 
         public static int GenerateCode()
@@ -172,6 +174,13 @@ namespace mini_compiler
         {
             var id = $"{currentId}";
             currentId++;
+            return id;
+        }
+
+        public static string GetNextLabel()
+        {
+            var id = $"LABEL_{currentLabelId}";
+            currentLabelId++;
             return id;
         }
 
@@ -1022,19 +1031,35 @@ namespace mini_compiler
         {
             var condEt = condition.GenerateCode();
             var condType = condition.GetExpressionType();
-            // TODO : implement
-            /*
+
+            var ifLabel = Compiler.GetNextLabel();
+            var endLabel = Compiler.GetNextLabel();
+            var elseLabel = Compiler.GetNextLabel();
+
+            // TODO: check cond type
+                
             if (elseBlock != null)
             {
-                Compiler.Write($"br {condType.ToLLVM()} {condEt}, label {ifLabel}, {elseLabel}");
+                Compiler.Write($"br {condType.ToLLVM()} {condEt}, label %{ifLabel}, label %{elseLabel}");
             }
             else
             {
-                Compiler.Write($"br {condType.ToLLVM()} {condEt}, label {ifLabel}, {elseLabel}");
+                Compiler.Write($"br {condType.ToLLVM()} {condEt}, label %{ifLabel}, label %{endLabel}");
             }
-            */
 
+            // if body
+            Compiler.Write($"{ifLabel}:");
+            ifBlock.GenerateCode();
 
+            if (elseBlock != null)
+            {
+                Compiler.Write($"br label %{endLabel}");
+                Compiler.Write($"{elseLabel}:");
+                elseBlock.GenerateCode();
+                Compiler.Write($"br label %{endLabel}");
+            }
+
+            Compiler.Write($"{endLabel}:");
             return "";
         }
     }
