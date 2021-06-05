@@ -1,10 +1,4 @@
 ﻿program
 {
-	write "test";
-	write "\n";
-	write "halo \n halo halo \n \n halohalo";
-	write " halo";
-	write "\n";
-	write " halo";
-	write "\n";
+	write "\\\n\"text\"\x\n";
 }

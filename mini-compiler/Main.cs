@@ -132,7 +132,6 @@ namespace mini_compiler
 
             Write("declare i32 @printf(i8*, ...)");
             Write("declare i32 @scanf(i8*, ...)");
-            Write("declare i32 @puts(i8*)");
 
             Write("define i32 @main()");
             Write("{");
@@ -294,16 +293,51 @@ namespace mini_compiler
     {
         public string Guid { get; private set; }
         public string Text { get; private set; }
-        public bool NewLine { get; private set; }
-        public int Length => Text.Length - 2;
+        public int Length { get; private set; }
 
-        public DeclareStringNode(string text, bool newline)
+        public DeclareStringNode(string text)
         {
-            NewLine = newline;
+            // escaping special characters
+            var length = text.Length + 1;
+            for (int i = 0; i < text.Length - 1; i++)
+            {
+                if (text[i] == '\\')
+                {
+                    var nextChar = text[i + 1];
+                    if (nextChar == '\"')
+                    {
+                        text = text.Remove(i, 2);
+                        text = text.Insert(i, "\\22");
+                        length -= 1;
+                        i += 2;
+                    }
+                    else if (nextChar == '\\')
+                    {
+                        text = text.Remove(i, 2);
+                        text = text.Insert(i, "\\5C");
+                        length -= 1;
+                        i += 2;
+                    }
+                    else if (nextChar == 'n')
+                    {
+                        text = text.Remove(i, 2);
+                        text = text.Insert(i, "\\0A");
+                        length -= 1;
+                        i += 2;
+                    }
+                    else
+                    {
+                        text = text.Remove(i, 1);
+                        i -= 1;
+                        length -= 1;
+                    }
+                }
+            }
 
             Text = text + "\\00";
-            var guid = System.Guid.NewGuid().ToString().Replace("-", "");
-            Guid = "a" + guid.ToString();
+
+            Guid = ".str." + Compiler.FrontNodes.Count;
+            Length = length;
         }
 
         public override string GenerateCode()
@@ -727,68 +761,24 @@ namespace mini_compiler
     {
         private readonly string guid;
         private readonly int length;
-        private readonly bool newline;
 
         public static void CreateWriteStringNodes(string literal)
         {
-            var backNodes = new List<SyntaxNode>();
-
-            // split by newlines
-            var pos = 0;
-            while (pos >= 0)
-            {
-                pos = literal.IndexOf("\\n");
-                var newline = pos >= 0;
-
-                if (pos < 0 && literal.Length == 0)
-                    break;
-
-                if (newline)
-                {
-                    var line = literal.Substring(0, pos);
-                    literal = literal.Substring(pos + 2);
-
-                    var declaration = new DeclareStringNode(line, newline);
-                    Compiler.PushNodeFront(declaration);
-                    backNodes.Add(new WriteStringNode(declaration.Guid, declaration.Length, declaration.NewLine));
-                }
-                else
-                { 
-                    // write everything
-                    var declaration = new DeclareStringNode(literal, newline);
-                    Compiler.PushNodeFront(declaration);
-                    backNodes.Add(new WriteStringNode(declaration.Guid, declaration.Length, declaration.NewLine));
-                }
-            }
-
-            if (backNodes.Count > 1)
-            {
-                var block = new BlockInstructionNode();
-                foreach (var node in backNodes)
-                    block.PushNode(node);
-
-                Compiler.PushNode(block);
-            }
-            else if (backNodes.Count > 0)
-            {
-                Compiler.PushNode(backNodes.First());
-            }
+            var declaration = new DeclareStringNode(literal);
+            Compiler.PushNodeFront(declaration);
+            Compiler.PushNode(new WriteStringNode(declaration.Guid, declaration.Length));
         }
-        public WriteStringNode(string guid, int length, bool newline)
+
+        public WriteStringNode(string guid, int length)
         {
             this.guid = guid;
             this.length = length;
-            this.newline = newline;
         }
 
         public override string GenerateCode()
         {
             var returnEt = Compiler.GetNextId();
-            if (newline)
-                Compiler.Write($"%{returnEt} = call i32 (i8*) @puts(i8* bitcast ([{length} x i8]* @{guid} to i8*))");
-            else
-                Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([{length} x i8]* @{guid} to i8*))");
-
+            Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([{length} x i8]* @{guid} to i8*))");
             return "";
         }
     }
