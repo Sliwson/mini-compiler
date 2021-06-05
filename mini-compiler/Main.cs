@@ -123,22 +123,24 @@ namespace mini_compiler
                 node.GenerateCode();
 
             Write("@.str_int = constant [3 x i8] c\"%d\\00\"");
+            Write("@.str_int_hex = constant [5 x i8] c\"0X%X\\00\"");
             Write("@.str_double = constant [3 x i8] c\"%f\\00\"");
             Write("@.str_read_double = constant [4 x i8] c\"%lf\\00\"");
-            Write("@.str_true = constant [5 x i8] c\"true\\00\"");
-            Write("@.str_false = constant [6 x i8] c\"false\\00\"");
+            Write("@.str_read_hex = constant [3 x i8] c\"%X\\00\"");
+            Write("@.str_true = constant [5 x i8] c\"True\\00\"");
+            Write("@.str_false = constant [6 x i8] c\"False\\00\"");
 
             Write("declare i32 @printf(i8*, ...)");
             Write("declare i32 @scanf(i8*, ...)");
             Write("declare i32 @puts(i8*)");
 
-            Write("define void @main()");
+            Write("define i32 @main()");
             Write("{");
 
             foreach (var node in Nodes)
                 node.GenerateCode();
 
-            Write("ret void");
+            Write("ret i32 0");
             Write("}");
             stream.Close();
 
@@ -786,22 +788,46 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
-            // TODO: implement hex
             if (exp == null)
                 return "";
 
+
             var et = exp.GenerateCode();
             var returnEt = Compiler.GetNextId();
+
+            if (hex && exp.GetExpressionType() != ExpressionType.Integer)
+            {
+                // TODO: error
+                return "";
+            }
+
             switch (exp.GetExpressionType())
             {
                 case ExpressionType.Integer:
-                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([3 x i8]* @.str_int to i8*), i32 {et})");
+                    if (hex)
+                        Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([5 x i8]* @.str_int_hex to i8*), i32 {et})");
+                    else
+                        Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([3 x i8]* @.str_int to i8*), i32 {et})");
                     break;
                 case ExpressionType.Double:
                     Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([3 x i8]* @.str_double to i8*), double {et})");
                     break;
                 case ExpressionType.Bool:
-                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([3 x i8]* @.str_int to i8*), i1 {et})");
+                    var ifLabel = Compiler.GetNextLabel();
+                    var elseLabel = Compiler.GetNextLabel();
+                    var endLabel = Compiler.GetNextLabel();
+
+                    Compiler.Write($"br i1 {et}, label %{ifLabel}, label %{elseLabel}");
+
+                    Compiler.Write($"{ifLabel}:");
+                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([{5} x i8]* @.str_true to i8*))");
+                    Compiler.Write($"br label %{endLabel}");
+
+                    Compiler.Write($"{elseLabel}:");
+                    returnEt = Compiler.GetNextId();
+                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @printf(i8* bitcast ([{6} x i8]* @.str_false to i8*))");
+                    Compiler.Write($"br label %{endLabel}");
+                    Compiler.Write($"{endLabel}:");
                     break;
             }
 
@@ -822,10 +848,14 @@ namespace mini_compiler
 
         public override string GenerateCode()
         {
-            // TODO: implement hex
-
             var declaration = Compiler.GetDeclaration(identifier);
             if (declaration == null)
+            {
+                // TODO: error
+                return "";
+            }
+
+            if (hex && declaration.GetExpressionType() != ExpressionType.Integer)
             {
                 // TODO: error
                 return "";
@@ -840,7 +870,10 @@ namespace mini_compiler
             else if (type == ExpressionType.Integer)
             {
                 var returnEt = Compiler.GetNextId();
-                Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @scanf(i8* bitcast ([3 x i8]* @.str_int to i8*), i32* %{identifier})");
+                if (hex)
+                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @scanf(i8* bitcast ([3 x i8]* @.str_read_hex to i8*), i32* %{identifier})");
+                else
+                    Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @scanf(i8* bitcast ([3 x i8]* @.str_int to i8*), i32* %{identifier})");
             }
             else
             {
@@ -860,7 +893,7 @@ namespace mini_compiler
         public override string GenerateCode()
         {
             Compiler.GetNextId();
-            Compiler.Write("ret void");
+            Compiler.Write("ret i32 0");
             return "";
         }
     }

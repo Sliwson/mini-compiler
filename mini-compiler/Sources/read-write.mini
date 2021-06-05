@@ -1,6 +1,12 @@
 ﻿program
 {
 	double d;
+	int i;
 	read d;
 	write d;
+	write "\n";
+	read i, hex;
+	write i, hex;
+	write "\n";
+	return;
 } 

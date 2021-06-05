@@ -63,10 +63,16 @@
     <Content Include="Sources\multi-declarations-errors.mini" />
     <Content Include="Sources\multi-declarations.mini" />
     <Content Include="Sources\only-program.mini" />
-    <Content Include="Sources\read-write.mini" />
-    <Content Include="Sources\expressions.mini" />
+    <Content Include="Sources\read-write.mini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sources\expressions.mini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Sources\write.mini" />
-    <Content Include="Sources\sample.mini" />
+    <Content Include="Sources\sample.mini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Sources\single-declarations.mini" />
     <Content Include="Sources\simple-statements.mini" />
   </ItemGroup>
