@@ -5,8 +5,7 @@
 	bool b;
 
 	// booleans
-	b = true && true;
-	b = (true && false) || (b == true);
+	b = (false && true) || (true && true);
 
 	write b;
 	write "\n";

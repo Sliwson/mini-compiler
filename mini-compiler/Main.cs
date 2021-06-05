@@ -343,13 +343,40 @@ namespace mini_compiler
         {
             // TODO: check types
             var etl = lhs.GenerateCode();
-            var etr = rhs.GenerateCode();
-            var et = Compiler.GetNextId();
+
+            var startLabel = Compiler.GetNextLabel();
+            var calculateLabel = Compiler.GetNextLabel();
+            var endLabel = Compiler.GetNextLabel();
+
+            Compiler.Write($"br label %{startLabel}");
+            Compiler.Write($"{startLabel}:");
 
             if (type == Type.And)
-                Compiler.Write($"%{et} = and i1 {etl}, {etr}");
+                Compiler.Write($"br i1 {etl}, label %{calculateLabel}, label %{endLabel}");
             else
-                Compiler.Write($"%{et} = or i1 {etl}, {etr}");
+                Compiler.Write($"br i1 {etl}, label %{endLabel}, label %{calculateLabel}");
+
+            Compiler.Write($"{calculateLabel}:");
+            var etr = rhs.GenerateCode();
+            Compiler.Write($"br label %{endLabel}");
+
+            var et = Compiler.GetNextId();
+
+            Compiler.Write($"{endLabel}:");
+            if (type == Type.And)
+            {
+                Compiler.Write($"%{et} = phi i1 [0, %{startLabel}], [{etr}, %{calculateLabel}]");
+                var newEt = Compiler.GetNextId();
+                Compiler.Write($"%{newEt} = and i1 {etl}, %{et}");
+                et = newEt;
+            }
+            else
+            {
+                Compiler.Write($"%{et} = phi i1 [1, %{startLabel}], [{etr}, %{calculateLabel}]");
+                var newEt = Compiler.GetNextId();
+                Compiler.Write($"%{newEt} = or i1 {etl}, %{et}");
+                et = newEt;
+            }
 
             return $"%{et}";
         }
