@@ -856,7 +856,7 @@ namespace mini_compiler
             }
             else
             {
-                // TODO: error
+                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing write expression"));
             }
 
         }
@@ -866,13 +866,12 @@ namespace mini_compiler
             if (exp == null)
                 return "";
 
-
             var et = exp.GenerateCode();
             var returnEt = Compiler.GetNextId();
 
             if (hex && exp.GetExpressionType() != ExpressionType.Integer)
             {
-                // TODO: error
+                Compiler.Errors.Add(new Error(Line, "Hex modifier can be used only with expression of int type"));
                 return "";
             }
 
@@ -926,13 +925,13 @@ namespace mini_compiler
             var declaration = Compiler.GetDeclaration(identifier);
             if (declaration == null)
             {
-                // TODO: error
+                Compiler.Errors.Add(new Error(Line, $"Variable {identifier} not declared"));
                 return "";
             }
 
             if (hex && declaration.GetExpressionType() != ExpressionType.Integer)
             {
-                // TODO: error
+                Compiler.Errors.Add(new Error(Line, "Hex modifier can be used only with variable of int type"));
                 return "";
             }
 
@@ -950,9 +949,9 @@ namespace mini_compiler
                 else
                     Compiler.Write($"%{returnEt} = call i32 (i8*, ...) @scanf(i8* bitcast ([3 x i8]* @.str_int to i8*), i32* %{identifier})");
             }
-            else
+            else if (type == ExpressionType.Bool)
             {
-                // TODO: error
+                Compiler.Errors.Add(new Error(Line, "Cannot read to variable of bool type"));
             }
 
             return "";
@@ -961,10 +960,6 @@ namespace mini_compiler
 
     public class ReturnNode : SyntaxNode
     {
-        public ReturnNode()
-        {
-        }
-
         public override string GenerateCode()
         {
             Compiler.GetNextId();
@@ -987,7 +982,7 @@ namespace mini_compiler
             var node = Compiler.GetDeclaration(identifier);
             if (node == null)
             {
-                // TODO: error
+                Compiler.Errors.Add(new Error(Line, $"Variable {identifier} not declared"));
                 return "";
             }
 
@@ -1001,7 +996,7 @@ namespace mini_compiler
         {
             var node = Compiler.GetDeclaration(identifier);
             if (node == null)
-                return ExpressionType.None;
+                return ExpressionType.None; // TODO: check this
             else
                 return node.GetExpressionType();
         }
@@ -1022,7 +1017,7 @@ namespace mini_compiler
             }
             else
             {
-                // TODO: error
+                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing assign expression"));
             }
         }
 
@@ -1034,7 +1029,7 @@ namespace mini_compiler
             var lhs = new IdentifierNode(identifier);
             var lhsType = lhs.GetExpressionType();
             var rhsType = rhs.GetExpressionType();
-            if (lhsType == rhsType && lhsType != ExpressionType.None)
+            if (lhsType == rhsType && lhsType != ExpressionType.None) // TODO: check this
             {
                 var et = rhs.GenerateCode();
                 string llvmType = rhsType.ToLLVM();
@@ -1042,6 +1037,7 @@ namespace mini_compiler
             }
             else
             {
+                // TODO: conversions
                 // TODO: error
             }
 
@@ -1050,6 +1046,7 @@ namespace mini_compiler
 
         public override ExpressionType GetExpressionType()
         {
+            // TODO: correct type
             return ExpressionType.None;
         }
     }
@@ -1126,6 +1123,14 @@ namespace mini_compiler
 
         public IfNode(bool withElse)
         {
+            var expectedNodes = withElse ? 3 : 2;
+
+            if (Compiler.Nodes.Count < expectedNodes)
+            {
+                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing if expression"));
+                return;
+            }
+
             if (withElse)
             {
                 elseBlock = Compiler.Nodes.Pop();
@@ -1144,7 +1149,11 @@ namespace mini_compiler
             var endLabel = Compiler.GetNextLabel();
             var elseLabel = Compiler.GetNextLabel();
 
-            // TODO: check cond type
+            if (condType != ExpressionType.Bool)
+            {
+                Compiler.Errors.Add(new Error(Line, "If condition has to be of bool type"));
+                return "";
+            }
                 
             if (elseBlock != null)
             {
@@ -1158,10 +1167,10 @@ namespace mini_compiler
             // if body
             Compiler.Write($"{ifLabel}:");
             ifBlock.GenerateCode();
+            Compiler.Write($"br label %{endLabel}");
 
             if (elseBlock != null)
             {
-                Compiler.Write($"br label %{endLabel}");
                 Compiler.Write($"{elseLabel}:");
                 elseBlock.GenerateCode();
                 Compiler.Write($"br label %{endLabel}");
@@ -1180,6 +1189,12 @@ namespace mini_compiler
 
         public WhileNode()
         {
+            if (Compiler.Nodes.Count < 2)
+            {
+                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing while expression"));
+                return;
+            }
+
             instruction = Compiler.Nodes.Pop();
             condition = Compiler.Nodes.Pop();
         }
@@ -1192,7 +1207,12 @@ namespace mini_compiler
 
             var condEt = condition.GenerateCode();
             var condType = condition.GetExpressionType();
-            // TODO: check cond type
+
+            if (condType != ExpressionType.Bool)
+            {
+                Compiler.Errors.Add(new Error(Line, "While condition has to be of bool type"));
+                return "";
+            }
 
             var beginLabel = Compiler.GetNextLabel();
             var endLabel = Compiler.GetNextLabel();
