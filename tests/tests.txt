@@ -306,7 +306,6 @@ trash_before_and_after_code
 trash_before_and_after_shit
 trash_before_code
 trash_before_shit
-comment_with_eof
 obliczenia_skrocone
 FAILstring_newline
 if_else_extensive
@@ -314,7 +313,6 @@ input_parse
 obl_skr
 operatory_kolejnosc
 operatory_lstr_pstr
-strings
 shit_inside
 lot_of_shit_inside
 lot_of_shit_inside_2
