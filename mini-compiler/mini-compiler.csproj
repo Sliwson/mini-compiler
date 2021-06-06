@@ -53,48 +53,23 @@
   <ItemGroup>
     <None Include="kompilator.lex" />
     <None Include="kompilator.y" />
-    <Content Include="Sources\declarations-and-statements.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="Sources\while.mini">
+    <Content Include="Sources\declarations-and-statements.mini" />
+    <None Include="Sources\test_dec.mini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Sources\block.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Sources\if.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Content Include="Sources\empty.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sources\multi-declarations-errors.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sources\multi-declarations.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sources\only-program.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sources\read-write.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sources\expressions.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sources\write.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sources\sample.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sources\single-declarations.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sources\simple-statements.mini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="Sources\while.mini" />
+    <None Include="Sources\block.mini" />
+    <None Include="Sources\if.mini" />
+    <Content Include="Sources\empty.mini" />
+    <Content Include="Sources\multi-declarations-errors.mini" />
+    <Content Include="Sources\multi-declarations.mini" />
+    <Content Include="Sources\only-program.mini" />
+    <Content Include="Sources\read-write.mini" />
+    <Content Include="Sources\expressions.mini" />
+    <Content Include="Sources\write.mini" />
+    <Content Include="Sources\sample.mini" />
+    <Content Include="Sources\single-declarations.mini" />
+    <Content Include="Sources\simple-statements.mini" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Lli\lli.exe">

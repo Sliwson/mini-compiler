@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define USE_SOURCE
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -10,14 +12,54 @@ namespace mini_compiler
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
+#if !USE_SOURCE
+            // final execution routine
+            if (args.Length != 1)
+            {
+                Console.WriteLine("Usage: mini-compiler.exe path_to_codefile");
+                return 1;
+            }
+
+            return ParseFile(args[0]);
+#endif
+
+            // debug execution routine
             string[] files = Directory.GetFiles("Sources", "*.mini");
             foreach (var file in files)
-                ParseFile(file);
+                ParseAndRun(file);
+
+            return 0;
+        }
+        
+        private static int ParseFile(string filename)
+        {
+            // reset compiler
+            var llFilename = filename + ".ll"; 
+            Compiler.Reset(llFilename);
+
+            FileStream file = new FileStream(filename, FileMode.Open);
+            var reader = new StreamReader(file);
+            var content = reader.ReadToEnd();
+
+            var scanner = new Scanner();
+            scanner.SetSource(content, 0);
+            var parser = new Parser(scanner);
+
+            parser.Parse();
+            file.Close();
+
+            var errors = Compiler.GenerateCode();
+            Compiler.PrintErrors();
+
+            if (errors > 0)
+                File.Delete(llFilename);
+
+            return errors;
         }
 
-        private static int ParseFile(string filename)
+        private static int ParseAndRun(string filename)
         {
             // reset compiler
             var llFilename = filename + ".ll"; 
@@ -503,14 +545,22 @@ namespace mini_compiler
             var etl = lhs.GenerateCode();
             var etr = rhs.GenerateCode();
 
-            var operand = GetOperand();
             var expType = GetCompType(lhsType, rhsType);
 
             etl = Compiler.WriteConversion(lhsType, expType, etl);
             etr = Compiler.WriteConversion(rhsType, expType, etr);
 
             var et = Compiler.GetNextId();
-            Compiler.Write($"%{et} = icmp {operand} {expType.ToLLVM()} {etl}, {etr}");
+            if (expType == ExpressionType.Double)
+            {
+                var operand = GetOperandDouble();
+                Compiler.Write($"%{et} = fcmp {operand} {expType.ToLLVM()} {etl}, {etr}");
+            }
+            else
+            {
+                var operand = GetOperandInt();
+                Compiler.Write($"%{et} = icmp {operand} {expType.ToLLVM()} {etl}, {etr}");
+            }
 
             return $"%{et}";
         }
@@ -530,7 +580,7 @@ namespace mini_compiler
             return ExpressionType.Integer;
         }
 
-        private string GetOperand()
+        private string GetOperandInt()
         {
             switch (type)
             {
@@ -546,6 +596,26 @@ namespace mini_compiler
                     return "slt";
                 case Type.LessOrEqual:
                     return "sle";
+                default:
+                    throw new ArgumentException();
+            }
+        }
+        private string GetOperandDouble() 
+        {
+            switch (type)
+            {
+                case Type.Equals:
+                    return "oeq";
+                case Type.NotEquals:
+                    return "one";
+                case Type.GreaterThan:
+                    return "ogt";
+                case Type.GreaterOrEqual:
+                    return "oge";
+                case Type.LessThan:
+                    return "olt";
+                case Type.LessOrEqual:
+                    return "ole";
                 default:
                     throw new ArgumentException();
             }

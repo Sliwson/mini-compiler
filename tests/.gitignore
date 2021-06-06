@@ -1,0 +1,7 @@
+*.il
+*.exe
+!TestPad.exe
+results/*
+errors*
+*.swp
+.DS_Store

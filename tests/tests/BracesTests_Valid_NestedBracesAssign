@@ -1,0 +1,10 @@
+// By Kuba Janaszkiewicz
+program {
+    double d;
+    {
+        {
+            d = 5;
+        }
+    }
+    {} {} {{}} {{{{{}}}}}
+}

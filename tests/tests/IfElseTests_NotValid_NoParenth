@@ -1,0 +1,14 @@
+// By Kuba Janaszkiewicz
+program {
+    
+    int k;
+    
+    if true {}
+    
+    if (1 < 2) {} ;
+    
+    if (k < 10)
+        k = k + 1;
+    else ; // no statement // TODO
+    
+}

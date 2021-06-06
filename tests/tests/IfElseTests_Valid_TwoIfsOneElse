@@ -1,0 +1,25 @@
+program {
+	if ( true ) 
+		if ( true ) 
+			write "poo\n";
+		else
+			write "boo\n";
+
+	if ( true ) 
+		if ( false ) 
+			write "too\n";
+		else 
+			write "doo\n";
+
+	if ( false ) 
+		if ( true ) 
+			write "goo\n";
+		else
+			write "koo\n";
+
+	if ( false ) 
+		if ( false ) 
+			write "woo\n";
+		else
+			write "foo\n";
+}
