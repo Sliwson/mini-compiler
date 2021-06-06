@@ -885,9 +885,6 @@ namespace mini_compiler
                     var oldEt = et;
                     et = Compiler.GetNextId();
                     Compiler.Write($"%{et} = xor i1 {oldEt}, 1");
-                    oldEt = et;
-                    et = Compiler.GetNextId();
-                    Compiler.Write($"%{et} = zext i1 {oldEt} to {rhsType.ToLLVM()}");
                     break;
                 case Type.IntConversion:
                     switch (rhsType)

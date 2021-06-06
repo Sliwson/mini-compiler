@@ -288,7 +288,6 @@ IOStream_ReadTests_Valid_ReadInWhile
 IOStream_ReadTests_Valid_ReadInWhile1
 IOStream_ReadTests_Valid_ReadInWhile2
 Operators_PriorityTests_Valid_Ultimate
-CILTests_Valid_ConfusedLabels
 t_brackets
 t_cast
 t_cast_fail
