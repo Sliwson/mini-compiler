@@ -1,4 +1,4 @@
-﻿#define USE_SOURCE
+﻿//#define USE_SOURCE
 
 using System;
 using System.Collections.Generic;
@@ -635,7 +635,7 @@ namespace mini_compiler
             var operand = GetOperand();
 
             var lhsType = lhs.GetExpressionType();
-            var rhsType = lhs.GetExpressionType();
+            var rhsType = rhs.GetExpressionType();
 
             if (lhsType == ExpressionType.Bool || rhsType == ExpressionType.Bool)
             {
@@ -741,9 +741,15 @@ namespace mini_compiler
             switch (type)
             {
                 case Type.Multiply:
-                    return "mul";
+                    if (GetExpressionType() == ExpressionType.Double)
+                        return "fmul";
+                    else
+                        return "mul";
                 case Type.Divide:
-                    return "sdiv";
+                    if (GetExpressionType() == ExpressionType.Double)
+                        return "fdiv";
+                    else
+                        return "sdiv";
                 default:
                     throw new ArgumentException();
             }
@@ -883,7 +889,7 @@ namespace mini_compiler
                     switch (rhsType)
                     {
                         case ExpressionType.Bool:
-                            Compiler.Write($"%{et} = trunc i32 {etr} to i1");
+                            Compiler.Write($"%{et} = zext i1 {etr} to i32");
                             break;
                         case ExpressionType.Integer:
                             return etr;
