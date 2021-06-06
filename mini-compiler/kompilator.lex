@@ -11,7 +11,7 @@ public override void yyerror(string format, params object[] args)
 // Literals
 Identifier [a-zA-Z]([a-zA-Z0-9])*
 IntegerLiteral	([0-9]|[1-9][0-9]*)
-DoubleLiteral	[1-9][0-9]*\.[0-9]+
+DoubleLiteral	([0-9]|[1-9][0-9]*)[.][0-9]+
 BoolLiteral		(true|false)
 StringLiteral	\".*\"
 Whitespace		\s	
@@ -23,14 +23,14 @@ Comment			"//".*
 
 "program"			{ return (int)Tokens.Program; }
 
-{IntegerLiteral}	{ 
-						Int32.TryParse (yytext, NumberStyles.Integer, CultureInfo.InvariantCulture, out yylval.Integer);
-						return (int)Tokens.IntegerLiteral; 
-					}
-
 {DoubleLiteral}		{
 						double.TryParse (yytext, NumberStyles.Float, CultureInfo.InvariantCulture, out yylval.Double); 
 						return (int)Tokens.DoubleLiteral; 
+					}
+
+{IntegerLiteral}	{ 
+						Int32.TryParse (yytext, NumberStyles.Integer, CultureInfo.InvariantCulture, out yylval.Integer);
+						return (int)Tokens.IntegerLiteral; 
 					}
 
 {StringLiteral}		{

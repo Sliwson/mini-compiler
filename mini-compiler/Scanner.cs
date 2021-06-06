@@ -6,9 +6,9 @@
 //
 //  GPLEX Version:  1.2.2
 //  Machine:  DESKTOP-9QSNDR4
-//  DateTime: 06/06/2021 18:09:23
+//  DateTime: 06/06/2021 18:25:37
 //  UserName: Mateusz
-//  GPLEX input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.lex - 06/06/2021 15:00:04>
+//  GPLEX input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.lex - 06/06/2021 18:23:24>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: parser, minimize
@@ -180,7 +180,7 @@ public override void yyerror(string format, params object[] args)
 /* NxS[   8] */ new Table(0, 0, -1, null),
 /* NxS[   9] */ new Table(0, 0, -1, null),
 /* NxS[  10] */ new Table(47, 1, -1, new sbyte[] {80}),
-/* NxS[  11] */ new Table(0, 0, -1, null),
+/* NxS[  11] */ new Table(46, 1, -1, new sbyte[] {88}),
 /* NxS[  12] */ new Table(46, 12, -1, new sbyte[] {88, -1, 12, 12, 12, 12, 
           12, 12, 12, 12, 12, 12}),
 /* NxS[  13] */ new Table(0, 0, -1, null),

@@ -1,24 +1,18 @@
-program{
-int dupa;
-double dup;
-double dup1;
-double dup2;
-double dup3;
-double dup4;
+program { 
+    int b;
+    bool myBool;
+    double d; 
 
-(dup=(dup2=(int) dup3));
+    b = 0;
+    b = 1;
+    b = 53333;
 
-write "marek powiedzial \"dupa dupa\" \\chyba tak";
+    myBool = false;
+    myBool = true;
 
-write 1.0==3;
-write 1.0!=3;
-write 1.0<3;
-write 1.0>3;
-write 3>=3;
-write 1>=3;
-write 3<=3;
-write 1.0<=3;
-
-write 1.0;
-write true;
+    d = 1;
+    d = 0;
+    d = 0.0;
+    d = 1.0;
+    d = 3.14159265;
 }
