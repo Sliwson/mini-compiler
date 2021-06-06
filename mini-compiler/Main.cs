@@ -855,7 +855,7 @@ namespace mini_compiler
             var etr = rhs.GenerateCode();
             var rhsType = rhs.GetExpressionType();
 
-            var et = Compiler.GetNextId();
+            string et = etr;
             switch (type)
             {
                 case Type.Minus:
@@ -864,7 +864,11 @@ namespace mini_compiler
                         Compiler.Errors.Add(new Error(GetLine(), "Unary minus can be applied only for int and double type"));
                         return "";
                     }
-                    Compiler.Write($"%{et} = sub {rhsType.ToLLVM()} 0, {etr}");
+                    et = Compiler.GetNextId();
+                    if (rhsType == ExpressionType.Double)
+                        Compiler.Write($"%{et} = fsub {rhsType.ToLLVM()} 0.0, {etr}");
+                    else
+                        Compiler.Write($"%{et} = sub {rhsType.ToLLVM()} 0, {etr}");
                     break;
                 case Type.BitwiseNegate:
                     if (rhsType != ExpressionType.Integer)
@@ -872,6 +876,7 @@ namespace mini_compiler
                         Compiler.Errors.Add(new Error(GetLine(), "Bitwise negation can be applied only for int type"));
                         return "";
                     }
+                    et = Compiler.GetNextId();
                     Compiler.Write($"%{et} = xor {rhsType.ToLLVM()} {etr}, -1");
                     break;
                 case Type.Negate:
@@ -881,6 +886,7 @@ namespace mini_compiler
                         return "";
                     }
 
+                    et = Compiler.GetNextId();
                     Compiler.Write($"%{et} = icmp ne {rhsType.ToLLVM()} {etr}, 0");
                     var oldEt = et;
                     et = Compiler.GetNextId();
@@ -890,11 +896,13 @@ namespace mini_compiler
                     switch (rhsType)
                     {
                         case ExpressionType.Bool:
+                            et = Compiler.GetNextId();
                             Compiler.Write($"%{et} = zext i1 {etr} to i32");
                             break;
                         case ExpressionType.Integer:
                             return etr;
                         case ExpressionType.Double:
+                            et = Compiler.GetNextId();
                             Compiler.Write($"%{et} = fptosi double {etr} to i32");
                             break;
                     }
@@ -909,6 +917,7 @@ namespace mini_compiler
                     switch (rhsType)
                     {
                         case ExpressionType.Integer:
+                            et = Compiler.GetNextId();
                             Compiler.Write($"%{et} = sitofp i32 {etr} to double");
                         break;
                         case ExpressionType.Double:

@@ -14,17 +14,10 @@ bool p;
 bool q;
 bool r;
 
-//Poczatek programu
-write a;
-write "\n";
-write X;
-write "\n";
-write p;
-write "\n";
 
 read a;
 read X;
-read p;
+p = true;
 
 {}
 {
@@ -108,7 +101,6 @@ b=1+4*(
 +21);
 //test !@#$%^&*()-=_+,.<>;':"[]{}|\`~ADAd
 write (int)true;
-write (double)true;
 write (int)-24.157127;
 write (double)-24212;
 a = 0;
