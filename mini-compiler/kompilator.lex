@@ -24,7 +24,7 @@ Comment			"//".*
 "program"			{ return (int)Tokens.Program; }
 
 {DoubleLiteral}		{
-						double.TryParse (yytext, NumberStyles.Float, CultureInfo.InvariantCulture, out yylval.Double); 
+						yylval.String = yytext;
 						return (int)Tokens.DoubleLiteral; 
 					}
 

@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-9QSNDR4
-// DateTime: 06/06/2021 18:44:50
+// DateTime: 06/06/2021 19:34:10
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 29/05/2021 17:50:04>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 06/06/2021 19:33:46>
 
 // options: lines gplex
 
@@ -547,7 +547,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         break;
       case 55: // factorExpression -> DoubleLiteral
 #line 160 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                        { Compiler.PushNode(new DoubleFactorNode(ValueStack[ValueStack.Depth-1].Double)); }
+                        { Compiler.PushNode(new DoubleFactorNode(ValueStack[ValueStack.Depth-1].String)); }
 #line default
         break;
       case 56: // factorExpression -> Identifier

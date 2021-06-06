@@ -14,7 +14,7 @@
 // Types
 %token <String> Identifier
 %token <Integer> IntegerLiteral
-%token <Double> DoubleLiteral
+%token <String> DoubleLiteral
 %token <Bool> BoolLiteral
 %token <String> StringLiteral
 

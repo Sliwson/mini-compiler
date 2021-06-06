@@ -472,16 +472,16 @@ namespace mini_compiler
             if (type == Type.And)
             {
                 Compiler.Write($"%{et} = phi i1 [0, %{startLabel}], [{etr}, %{calculateLabel}]");
-                var newEt = Compiler.GetNextId();
+                /*var newEt = Compiler.GetNextId();
                 Compiler.Write($"%{newEt} = and i1 {etl}, %{et}");
-                et = newEt;
+                et = newEt;*/
             }
             else
             {
                 Compiler.Write($"%{et} = phi i1 [1, %{startLabel}], [{etr}, %{calculateLabel}]");
-                var newEt = Compiler.GetNextId();
+                /*var newEt = Compiler.GetNextId();
                 Compiler.Write($"%{newEt} = or i1 {etl}, %{et}");
-                et = newEt;
+                et = newEt;*/
             }
 
             return $"%{et}";
@@ -648,8 +648,7 @@ namespace mini_compiler
             etr = Compiler.WriteConversion(rhsType, expType, etr);
 
             var et = Compiler.GetNextId();
-            var nsw = writeNsw ? "nsw" : "";
-            Compiler.Write($"%{et} = {operand} {nsw} {expType.ToLLVM()} {etl}, {etr}");
+            Compiler.Write($"%{et} = {operand} {expType.ToLLVM()} {etl}, {etr}");
 
             return $"%{et}";
         }
@@ -685,7 +684,6 @@ namespace mini_compiler
         public AddExpressionNode(Type type)
         {
             this.type = type;
-            this.writeNsw = true;
 
             if (Compiler.Nodes.Count > 1)
             {
@@ -703,9 +701,15 @@ namespace mini_compiler
             switch (type)
             {
                 case Type.Plus:
-                    return "add";
+                    if (GetExpressionType() == ExpressionType.Double)
+                        return "fadd";
+                    else
+                        return "add";
                 case Type.Minus:
-                    return "sub";
+                    if (GetExpressionType() == ExpressionType.Double)
+                        return "fsub";
+                    else
+                        return "sub";
                 default:
                     throw new ArgumentException();
             }
@@ -1234,20 +1238,16 @@ namespace mini_compiler
 
     public class DoubleFactorNode : SyntaxNode
     {
-        public double Value { get; private set; }
+        public string Value { get; private set; }
 
-        public DoubleFactorNode(double value)
+        public DoubleFactorNode(string value)
         {
             Value = value;
         }
 
         public override string GenerateCode()
         {
-            var str = Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            if (!str.Contains('.'))
-                str += ".0";
-
-            return str;
+            return Value;
         }
 
         public override ExpressionType GetExpressionType()

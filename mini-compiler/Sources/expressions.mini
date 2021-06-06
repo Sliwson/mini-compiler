@@ -1,18 +1,6 @@
 ﻿program
 {
-	int i;
-	double d;
-	bool b;
-
-	// booleans
-	b = (false && true) || (true && true);
-
-	write b;
-	write "\n";
-
-	// ints
-	i = 5 * 2 + 10 - 2 / 1 + (20 + 10) * 2; // this is 78
-	i = i / 2 + i;
-	write i;
-	write "\n";
+ bool b;
+ bool a;
+ a = b && 5 == 0;
 }
