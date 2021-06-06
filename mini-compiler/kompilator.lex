@@ -4,7 +4,7 @@
 %{
 public override void yyerror(string format, params object[] args)
 {
-	Compiler.Errors.Add(new Error{ Line = yyline, Text = string.Format(format, args) });
+	Compiler.Errors.Add(new Error(yyline,string.Format(format, args)));
 }
 %}
 

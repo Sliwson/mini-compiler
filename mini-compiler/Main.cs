@@ -90,6 +90,12 @@ namespace mini_compiler
 
     public class Error
     {
+        public Error(int line, string text)
+        {
+            Line = line;
+            Text = text;
+        }
+
         public int Line { get; set; }
         public string Text { get; set; }
     }
@@ -189,6 +195,20 @@ namespace mini_compiler
         {
             return Nodes.FirstOrDefault(n => (n as DeclarationNode)?.Identifier == identifier) as DeclarationNode;
         }
+
+        public static string WriteConversion(ExpressionType from, ExpressionType to, string et)
+        {
+            if (from == to)
+                return et;
+
+            var newEt = GetNextId();
+            if (from == ExpressionType.Integer && to == ExpressionType.Double)
+                Write($"%{newEt} = sitofp i32 {et} to double");
+            if (from == ExpressionType.Double && to == ExpressionType.Integer)
+                Write($"%{newEt} = fptosi double {et} to i32");
+
+            return $"%{newEt}";
+        }
     }
 
     public abstract class SyntaxNode
@@ -263,7 +283,7 @@ namespace mini_compiler
 
             if (previousDeclarations.FirstOrDefault(n => n.Identifier == Identifier) != null)
             {
-                Compiler.Errors.Add(new Error { Line = Line, Text = $"Variable {Identifier} already declared" });
+                Compiler.Errors.Add(new Error(Line, $"Variable {Identifier} already declared"));
                 return "";
             }
 
@@ -369,13 +389,18 @@ namespace mini_compiler
             }
             else
             {
-                // TODO: error
+                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing logical expression"));
             }
         }
 
         public override string GenerateCode()
         {
-            // TODO: check types
+            if (lhs.GetExpressionType() != ExpressionType.Bool || rhs.GetExpressionType() != ExpressionType.Bool)
+            {
+                Compiler.Errors.Add(new Error(Line, "Logical expression arguments have to be of bool type"));
+                return "";
+            }
+
             var etl = lhs.GenerateCode();
 
             var startLabel = Compiler.GetNextLabel();
@@ -447,22 +472,40 @@ namespace mini_compiler
             }
             else
             {
-                // TODO: error
+                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing relation expression"));
             }
         }
 
         public override string GenerateCode()
         {
+            var lhsType = lhs.GetExpressionType();
+            var rhsType = rhs.GetExpressionType();
+
+            if (lhsType != rhsType)
+            {
+                if (lhsType == ExpressionType.Bool || rhsType == ExpressionType.Bool)
+                    Compiler.Errors.Add(new Error(Line, "One of relation expression argument is bool (can be none or both for == and != operations)"));
+            }
+            else
+            {
+                if (lhsType == ExpressionType.Bool)
+                {
+                    if (type != Type.Equals && type != Type.NotEquals)
+                        Compiler.Errors.Add(new Error(Line, "Relation expression arguments can only be bool for == and != operations"));
+                }
+            }
+
             var etl = lhs.GenerateCode();
             var etr = rhs.GenerateCode();
-            var et = Compiler.GetNextId();
 
             var operand = GetOperand();
-            var lhType = lhs.GetExpressionType();
-            var rhType = rhs.GetExpressionType();
+            var expType = GetCompType(lhsType, rhsType);
 
-            // TODO: check types
-            Compiler.Write($"%{et} = icmp {operand} {lhType.ToLLVM()} {etl}, {etr}");
+            etl = Compiler.WriteConversion(lhsType, expType, etl);
+            etr = Compiler.WriteConversion(rhsType, expType, etr);
+
+            var et = Compiler.GetNextId();
+            Compiler.Write($"%{et} = icmp {operand} {expType.ToLLVM()} {etl}, {etr}");
 
             return $"%{et}";
         }
@@ -470,6 +513,16 @@ namespace mini_compiler
         public override ExpressionType GetExpressionType()
         {
             return ExpressionType.Bool;
+        }
+
+        private ExpressionType GetCompType(ExpressionType lType, ExpressionType rType)
+        {
+            if (lType == ExpressionType.Bool || rType == ExpressionType.Bool)
+                return ExpressionType.Bool;
+            else if (lType == ExpressionType.Double || rType == ExpressionType.Double)
+                return ExpressionType.Double;
+
+            return ExpressionType.Integer;
         }
 
         private string GetOperand()
@@ -494,7 +547,57 @@ namespace mini_compiler
         }
     }
 
-    public class AddExpressionNode : SyntaxNode
+    public abstract class MulAddExpressionNodeBase : SyntaxNode
+    {
+        protected SyntaxNode lhs;
+        protected SyntaxNode rhs;
+        protected bool writeNsw;
+
+        public override string GenerateCode()
+        {
+            var etl = lhs.GenerateCode();
+            var etr = rhs.GenerateCode();
+            var operand = GetOperand();
+
+            var lhsType = lhs.GetExpressionType();
+            var rhsType = lhs.GetExpressionType();
+
+            if (lhsType == ExpressionType.Bool || rhsType == ExpressionType.Bool)
+            {
+                Compiler.Errors.Add(new Error(Line, "Add/mul expression arguments have to be of integer of double type"));
+                return "";
+            }
+
+            var expType = GetCompType(lhsType, rhsType);
+            etl = Compiler.WriteConversion(lhsType, expType, etl);
+            etr = Compiler.WriteConversion(rhsType, expType, etr);
+
+            var et = Compiler.GetNextId();
+            var nsw = writeNsw ? "nsw" : "";
+            Compiler.Write($"%{et} = {operand} {nsw} {expType.ToLLVM()} {etl}, {etr}");
+
+            return $"%{et}";
+        }
+
+        protected ExpressionType GetCompType(ExpressionType lType, ExpressionType rType)
+        {
+            if (lType == ExpressionType.Double || rType == ExpressionType.Double)
+                return ExpressionType.Double;
+
+            return ExpressionType.Integer;
+        }
+
+        public override ExpressionType GetExpressionType()
+        {
+            var lhsType = lhs.GetExpressionType();
+            var rhsType = rhs.GetExpressionType();
+            return GetCompType(lhsType, rhsType);
+        }
+
+        protected abstract string GetOperand();
+    }
+
+    public class AddExpressionNode : MulAddExpressionNodeBase
     {
         public enum Type
         {
@@ -503,12 +606,12 @@ namespace mini_compiler
         }
 
         private readonly Type type;
-        private readonly SyntaxNode lhs;
-        private readonly SyntaxNode rhs;
 
         public AddExpressionNode(Type type)
         {
             this.type = type;
+            this.writeNsw = true;
+
             if (Compiler.Nodes.Count > 1)
             {
                 rhs = Compiler.Nodes.Pop();
@@ -516,32 +619,11 @@ namespace mini_compiler
             }
             else
             {
-                // TODO: error
+                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing add expression"));
             }
         }
 
-        public override string GenerateCode()
-        {
-            var etl = lhs.GenerateCode();
-            var etr = rhs.GenerateCode();
-            var et = Compiler.GetNextId();
-            var operand = GetOperand();
-            var lhsType = lhs.GetExpressionType();
-
-            // TODO: check types
-            Compiler.Write($"%{et} = {operand} nsw {lhsType.ToLLVM()} {etl}, {etr}");
-
-            return $"%{et}";
-        }
-
-        public override ExpressionType GetExpressionType()
-        {
-            // TODO: return correct
-            var lhsType = lhs.GetExpressionType();
-            return lhsType;
-        }
-
-        private string GetOperand()
+        protected override string GetOperand()
         {
             switch (type)
             {
@@ -555,7 +637,7 @@ namespace mini_compiler
         }
     }
 
-    public class MulExpressionNode : SyntaxNode
+    public class MulExpressionNode : MulAddExpressionNodeBase
     {
         public enum Type
         {
@@ -564,8 +646,6 @@ namespace mini_compiler
         }
 
         private readonly Type type;
-        private readonly SyntaxNode lhs;
-        private readonly SyntaxNode rhs;
 
         public MulExpressionNode(Type type)
         {
@@ -577,34 +657,11 @@ namespace mini_compiler
             }
             else
             {
-                // TODO: error
+                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing mul expression"));
             }
         }
 
-        public override string GenerateCode()
-        {
-            // TODO: check types
-            var etl = lhs.GenerateCode();
-            var etr = rhs.GenerateCode();
-            var et = Compiler.GetNextId();
-
-            // TODO: implement
-            var operand = GetOperand();
-            var lhsType = lhs.GetExpressionType();
-
-            // TODO: check types
-            Compiler.Write($"%{et} = {operand} {lhsType.ToLLVM()} {etl}, {etr}");
-
-            return $"%{et}";
-        }
-
-        public override ExpressionType GetExpressionType()
-        {
-            // TODO: return
-            return ExpressionType.Integer;
-        }
-
-        private string GetOperand()
+        protected override string GetOperand()
         {
             switch (type)
             {
@@ -640,7 +697,7 @@ namespace mini_compiler
             }
             else
             {
-                // TODO: error
+                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing bit expression"));
             }
         }
 
@@ -652,17 +709,19 @@ namespace mini_compiler
 
             var operand = GetOperand();
             var lhsType = lhs.GetExpressionType();
+            var rhsType = lhs.GetExpressionType();
 
-            // TODO: check types
-            Compiler.Write($"%{et} = {operand} {lhsType.ToLLVM()} {etl}, {etr}");
+            if (lhsType != ExpressionType.Integer || rhsType != ExpressionType.Integer)
+                Compiler.Errors.Add(new Error(Line, "Bit expression arguments have to be of integer type"));
+
+            Compiler.Write($"%{et} = {operand} i32 {etl}, {etr}");
 
             return $"%{et}";
         }
 
         public override ExpressionType GetExpressionType()
         {
-            // TODO: return
-            return lhs.GetExpressionType();
+            return ExpressionType.Integer;
         }
 
         private string GetOperand()
@@ -677,7 +736,6 @@ namespace mini_compiler
                     throw new ArgumentException();
             }
         }
-
     }
 
     public class UnaryExpressionNode : SyntaxNode
@@ -703,7 +761,7 @@ namespace mini_compiler
             }
             else
             {
-                // TODO: error
+                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing unary expression"));
             }
         }
 
