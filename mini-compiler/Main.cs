@@ -224,6 +224,11 @@ namespace mini_compiler
         {
             return ExpressionType.None;
         }
+
+        public virtual int GetLine()
+        {
+            return Line;
+        }
     }
 
     public enum ExpressionType
@@ -283,7 +288,7 @@ namespace mini_compiler
 
             if (previousDeclarations.FirstOrDefault(n => n.Identifier == Identifier) != null)
             {
-                Compiler.Errors.Add(new Error(Line, $"Variable {Identifier} already declared"));
+                Compiler.Errors.Add(new Error(GetLine(), $"Variable {Identifier} already declared"));
                 return "";
             }
 
@@ -389,7 +394,7 @@ namespace mini_compiler
             }
             else
             {
-                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing logical expression"));
+                Compiler.Errors.Add(new Error(GetLine(), "Compiler error when parsing logical expression"));
             }
         }
 
@@ -397,7 +402,7 @@ namespace mini_compiler
         {
             if (lhs.GetExpressionType() != ExpressionType.Bool || rhs.GetExpressionType() != ExpressionType.Bool)
             {
-                Compiler.Errors.Add(new Error(Line, "Logical expression arguments have to be of bool type"));
+                Compiler.Errors.Add(new Error(GetLine(), "Logical expression arguments have to be of bool type"));
                 return "";
             }
 
@@ -472,7 +477,7 @@ namespace mini_compiler
             }
             else
             {
-                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing relation expression"));
+                Compiler.Errors.Add(new Error(GetLine(), "Compiler error when parsing relation expression"));
             }
         }
 
@@ -484,14 +489,14 @@ namespace mini_compiler
             if (lhsType != rhsType)
             {
                 if (lhsType == ExpressionType.Bool || rhsType == ExpressionType.Bool)
-                    Compiler.Errors.Add(new Error(Line, "One of relation expression argument is bool (can be none or both for == and != operations)"));
+                    Compiler.Errors.Add(new Error(GetLine(), "One of relation expression argument is bool (can be none or both for == and != operations)"));
             }
             else
             {
                 if (lhsType == ExpressionType.Bool)
                 {
                     if (type != Type.Equals && type != Type.NotEquals)
-                        Compiler.Errors.Add(new Error(Line, "Relation expression arguments can only be bool for == and != operations"));
+                        Compiler.Errors.Add(new Error(GetLine(), "Relation expression arguments can only be bool for == and != operations"));
                 }
             }
 
@@ -564,7 +569,7 @@ namespace mini_compiler
 
             if (lhsType == ExpressionType.Bool || rhsType == ExpressionType.Bool)
             {
-                Compiler.Errors.Add(new Error(Line, "Add/mul expression arguments have to be of integer of double type"));
+                Compiler.Errors.Add(new Error(GetLine(), "Add/mul expression arguments have to be of integer of double type"));
                 return "";
             }
 
@@ -619,7 +624,7 @@ namespace mini_compiler
             }
             else
             {
-                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing add expression"));
+                Compiler.Errors.Add(new Error(GetLine(), "Compiler error when parsing add expression"));
             }
         }
 
@@ -657,7 +662,7 @@ namespace mini_compiler
             }
             else
             {
-                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing mul expression"));
+                Compiler.Errors.Add(new Error(GetLine(), "Compiler error when parsing mul expression"));
             }
         }
 
@@ -697,7 +702,7 @@ namespace mini_compiler
             }
             else
             {
-                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing bit expression"));
+                Compiler.Errors.Add(new Error(GetLine(), "Compiler error when parsing bit expression"));
             }
         }
 
@@ -712,7 +717,7 @@ namespace mini_compiler
             var rhsType = lhs.GetExpressionType();
 
             if (lhsType != ExpressionType.Integer || rhsType != ExpressionType.Integer)
-                Compiler.Errors.Add(new Error(Line, "Bit expression arguments have to be of integer type"));
+                Compiler.Errors.Add(new Error(GetLine(), "Bit expression arguments have to be of integer type"));
 
             Compiler.Write($"%{et} = {operand} i32 {etl}, {etr}");
 
@@ -761,26 +766,41 @@ namespace mini_compiler
             }
             else
             {
-                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing unary expression"));
+                Compiler.Errors.Add(new Error(GetLine(), "Compiler error when parsing unary expression"));
             }
         }
 
         public override string GenerateCode()
         {
-            // TODO: check types
             var etr = rhs.GenerateCode();
-            var et = Compiler.GetNextId();
-
             var rhsType = rhs.GetExpressionType();
+
+            var et = Compiler.GetNextId();
             switch (type)
             {
                 case Type.Minus:
+                    if (rhsType != ExpressionType.Integer && rhsType != ExpressionType.Double)
+                    {
+                        Compiler.Errors.Add(new Error(GetLine(), "Unary minus can be applied only for int and double type"));
+                        return "";
+                    }
                     Compiler.Write($"%{et} = sub {rhsType.ToLLVM()} 0, {etr}");
                     break;
                 case Type.BitwiseNegate:
+                    if (rhsType != ExpressionType.Integer)
+                    {
+                        Compiler.Errors.Add(new Error(GetLine(), "Bitwise negation can be applied only for int type"));
+                        return "";
+                    }
                     Compiler.Write($"%{et} = xor {rhsType.ToLLVM()} {etr}, -1");
                     break;
                 case Type.Negate:
+                    if (rhsType != ExpressionType.Bool)
+                    {
+                        Compiler.Errors.Add(new Error(GetLine(), "Logical negation can be applied only for bool type"));
+                        return "";
+                    }
+
                     Compiler.Write($"%{et} = icmp ne {rhsType.ToLLVM()} {etr}, 0");
                     var oldEt = et;
                     et = Compiler.GetNextId();
@@ -790,10 +810,34 @@ namespace mini_compiler
                     Compiler.Write($"%{et} = zext i1 {oldEt} to {rhsType.ToLLVM()}");
                     break;
                 case Type.IntConversion:
-                    // TODO: implement
+                    switch (rhsType)
+                    {
+                        case ExpressionType.Bool:
+                            Compiler.Write($"%{et} = trunc i32 {etr} to i1");
+                            break;
+                        case ExpressionType.Integer:
+                            return etr;
+                        case ExpressionType.Double:
+                            Compiler.Write($"%{et} = fptosi double {etr} to i32");
+                            break;
+                    }
+
                     break;
                 case Type.DoubleConversion:
-                    // TODO: implement
+                    if (rhsType != ExpressionType.Integer && rhsType != ExpressionType.Double)
+                    {
+                        Compiler.Errors.Add(new Error(GetLine(), "Conversion to double can be applied only for int and double type"));
+                        return "";
+                    }
+                    switch (rhsType)
+                    {
+                        case ExpressionType.Integer:
+                            Compiler.Write($"%{et} = sitofp i32 {etr} to double");
+                        break;
+                        case ExpressionType.Double:
+                            return etr;
+                    }
+
                     break;
             }
 
@@ -802,13 +846,17 @@ namespace mini_compiler
 
         public override ExpressionType GetExpressionType()
         {
-            // TODO: return correct
             switch (type)
             {
                 case Type.IntConversion:
+                case Type.BitwiseNegate:
                     return ExpressionType.Integer;
                 case Type.DoubleConversion:
                     return ExpressionType.Double;
+                case Type.Negate:
+                    return ExpressionType.Bool;
+                case Type.Minus:
+                    return rhs.GetExpressionType();
             }
 
             return rhs.GetExpressionType();
@@ -856,7 +904,7 @@ namespace mini_compiler
             }
             else
             {
-                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing write expression"));
+                Compiler.Errors.Add(new Error(GetLine(), "Compiler error when parsing write expression"));
             }
 
         }
@@ -871,7 +919,7 @@ namespace mini_compiler
 
             if (hex && exp.GetExpressionType() != ExpressionType.Integer)
             {
-                Compiler.Errors.Add(new Error(Line, "Hex modifier can be used only with expression of int type"));
+                Compiler.Errors.Add(new Error(GetLine(), "Hex modifier can be used only with expression of int type"));
                 return "";
             }
 
@@ -925,13 +973,13 @@ namespace mini_compiler
             var declaration = Compiler.GetDeclaration(identifier);
             if (declaration == null)
             {
-                Compiler.Errors.Add(new Error(Line, $"Variable {identifier} not declared"));
+                Compiler.Errors.Add(new Error(GetLine(), $"Variable {identifier} not declared"));
                 return "";
             }
 
             if (hex && declaration.GetExpressionType() != ExpressionType.Integer)
             {
-                Compiler.Errors.Add(new Error(Line, "Hex modifier can be used only with variable of int type"));
+                Compiler.Errors.Add(new Error(GetLine(), "Hex modifier can be used only with variable of int type"));
                 return "";
             }
 
@@ -951,7 +999,7 @@ namespace mini_compiler
             }
             else if (type == ExpressionType.Bool)
             {
-                Compiler.Errors.Add(new Error(Line, "Cannot read to variable of bool type"));
+                Compiler.Errors.Add(new Error(GetLine(), "Cannot read to variable of bool type"));
             }
 
             return "";
@@ -982,7 +1030,7 @@ namespace mini_compiler
             var node = Compiler.GetDeclaration(identifier);
             if (node == null)
             {
-                Compiler.Errors.Add(new Error(Line, $"Variable {identifier} not declared"));
+                Compiler.Errors.Add(new Error(GetLine(), $"Variable {identifier} not declared"));
                 return "";
             }
 
@@ -1017,7 +1065,7 @@ namespace mini_compiler
             }
             else
             {
-                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing assign expression"));
+                Compiler.Errors.Add(new Error(GetLine(), "Compiler error when parsing assign expression"));
             }
         }
 
@@ -1026,28 +1074,45 @@ namespace mini_compiler
             if (rhs == null)
                 return "";
 
-            var lhs = new IdentifierNode(identifier);
-            var lhsType = lhs.GetExpressionType();
-            var rhsType = rhs.GetExpressionType();
-            if (lhsType == rhsType && lhsType != ExpressionType.None) // TODO: check this
+            var node = Compiler.GetDeclaration(identifier);
+            if (node == null)
             {
-                var et = rhs.GenerateCode();
-                string llvmType = rhsType.ToLLVM();
-                Compiler.Write($"store {llvmType} {et}, {llvmType}* %{identifier}");
-            }
-            else
-            {
-                // TODO: conversions
-                // TODO: error
+                Compiler.Errors.Add(new Error(GetLine(), $"Variable {identifier} not declared"));
+                return "";
             }
 
-            return "";
+            var lhsType = node.GetExpressionType();
+            var rhsType = rhs.GetExpressionType();
+
+            var et = rhs.GenerateCode();
+            if (lhsType == ExpressionType.Double)
+            {
+                if (rhsType == ExpressionType.Bool)
+                {
+                    Compiler.Errors.Add(new Error(GetLine(), $"Cannot assign boolean to variable of type double"));
+                    return "";
+                }
+            }
+            else if (lhsType != rhsType)
+            {
+                Compiler.Errors.Add(new Error(GetLine(), $"Type mismatch in assign expression"));
+                return "";
+            }
+
+            et = Compiler.WriteConversion(rhsType, lhsType, et);
+            string llvmType = lhsType.ToLLVM();
+            Compiler.Write($"store {llvmType} {et}, {llvmType}* %{identifier}");
+
+            return et;
         }
 
         public override ExpressionType GetExpressionType()
         {
-            // TODO: correct type
-            return ExpressionType.None;
+            var node = Compiler.GetDeclaration(identifier);
+            if (node == null)
+                return rhs.GetExpressionType();
+
+            return node.GetExpressionType();
         }
     }
 
@@ -1127,7 +1192,7 @@ namespace mini_compiler
 
             if (Compiler.Nodes.Count < expectedNodes)
             {
-                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing if expression"));
+                Compiler.Errors.Add(new Error(GetLine(), "Compiler error when parsing if expression"));
                 return;
             }
 
@@ -1138,6 +1203,11 @@ namespace mini_compiler
 
             ifBlock = Compiler.Nodes.Pop();
             condition = Compiler.Nodes.Pop();
+        }
+
+        public override int GetLine()
+        {
+            return condition.GetLine();
         }
 
         public override string GenerateCode()
@@ -1151,7 +1221,7 @@ namespace mini_compiler
 
             if (condType != ExpressionType.Bool)
             {
-                Compiler.Errors.Add(new Error(Line, "If condition has to be of bool type"));
+                Compiler.Errors.Add(new Error(GetLine(), "If condition has to be of bool type"));
                 return "";
             }
                 
@@ -1191,7 +1261,7 @@ namespace mini_compiler
         {
             if (Compiler.Nodes.Count < 2)
             {
-                Compiler.Errors.Add(new Error(Line, "Compiler error when parsing while expression"));
+                Compiler.Errors.Add(new Error(GetLine(), "Compiler error when parsing while expression"));
                 return;
             }
 
@@ -1210,7 +1280,7 @@ namespace mini_compiler
 
             if (condType != ExpressionType.Bool)
             {
-                Compiler.Errors.Add(new Error(Line, "While condition has to be of bool type"));
+                Compiler.Errors.Add(new Error(GetLine(), "While condition has to be of bool type"));
                 return "";
             }
 

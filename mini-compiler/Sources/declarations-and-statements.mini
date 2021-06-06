@@ -10,8 +10,14 @@
 	a = 1;
 	b = 2;
 	c = 3;
+	a = b = c;
 	wynik = 12.123;
-	write "dupa";
+	write a;
+	write "\n";
+	write b;
+	write "\n";
+	write c;
+	write "\n";
 
 	while (a > b)
 	{
