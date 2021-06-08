@@ -5,6 +5,11 @@ program
     double dec;
     double temp;
 
+    cond = false;
+    num = 0;
+    dec = 0.0;
+    temp = 0.0;
+
     cond = num <= num == !(dec > dec); 
     if(!cond) return;
 
