@@ -366,10 +366,16 @@ namespace mini_compiler
         {
             // escaping special characters
             var length = text.Length + 1;
-            for (int i = 0; i < text.Length - 1; i++)
+            for (int i = 0; i < text.Length; i++)
             {
                 if (text[i] == '\\')
                 {
+                    if (i == text.Length - 1)
+                    {
+                        Compiler.Errors.Add(new Error(Line, "\\ not followed by any character"));
+                        continue;
+                    }
+
                     var nextChar = text[i + 1];
                     if (nextChar == '\"')
                     {
@@ -398,6 +404,15 @@ namespace mini_compiler
                         i -= 1;
                         length -= 1;
                     }
+                }
+            }
+
+            // finding errors
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (text[i] == '\"')
+                {
+                     Compiler.Errors.Add(new Error(Line, "Unescaped \" in string"));
                 }
             }
 
@@ -794,7 +809,7 @@ namespace mini_compiler
 
             var operand = GetOperand();
             var lhsType = lhs.GetExpressionType();
-            var rhsType = lhs.GetExpressionType();
+            var rhsType = rhs.GetExpressionType();
 
             if (lhsType != ExpressionType.Integer || rhsType != ExpressionType.Integer)
                 Compiler.Errors.Add(new Error(GetLine(), "Bit expression arguments have to be of integer type"));
@@ -890,7 +905,7 @@ namespace mini_compiler
                     Compiler.Write($"%{et} = icmp ne {rhsType.ToLLVM()} {etr}, 0");
                     var oldEt = et;
                     et = Compiler.GetNextId();
-                    Compiler.Write($"%{et} = xor i1 {oldEt}, 1");
+                    Compiler.Write($"%{et} = xor i1 %{oldEt}, 1");
                     break;
                 case Type.IntConversion:
                     switch (rhsType)

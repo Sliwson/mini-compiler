@@ -70,9 +70,6 @@ Comment			"//".*
 "/"					{ return (int)Tokens.Divide; }
 "!"					{ return (int)Tokens.Negate; }
 "~"					{ return (int)Tokens.BitwiseNegate; }
-"(int)"				{ return (int)Tokens.IntConversion; }
-"(double)"			{ return (int)Tokens.DoubleConversion; }
-
 
 "if"				{ return (int)Tokens.If; }
 "else"				{ return (int)Tokens.Else; }

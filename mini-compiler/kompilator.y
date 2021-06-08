@@ -42,8 +42,6 @@
 %token Divide
 %token Negate
 %token BitwiseNegate
-%token IntConversion
-%token DoubleConversion
 
 // If instruction
 %token If 
@@ -149,8 +147,8 @@ bitExpression : bitExpression BitwiseOr unaryExpression { Compiler.PushNode(new 
 unaryExpression : Minus unaryExpression { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.Minus)); }
 				| BitwiseNegate unaryExpression { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.BitwiseNegate)); }
 				| Negate unaryExpression { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.Negate)); }
-				| IntConversion unaryExpression { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.IntConversion)); }
-				| DoubleConversion unaryExpression { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.DoubleConversion)); }
+				| OpenBracket Integer CloseBracket unaryExpression { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.IntConversion)); }
+				| OpenBracket Double CloseBracket unaryExpression { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.DoubleConversion)); }
 				| factorExpression { }
 				;
 
