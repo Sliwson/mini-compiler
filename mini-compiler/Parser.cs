@@ -3,10 +3,10 @@
 // (see accompanying GPPGcopyright.rtf)
 
 // GPPG version 1.5.2
-// Machine:  DESKTOP-P1QM6GT
-// DateTime: 6/8/2021 3:12:55 PM
+// Machine:  DESKTOP-9QSNDR4
+// DateTime: 10/06/2021 18:55:23
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y - 6/8/2021 3:12:47 PM>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 10/06/2021 18:36:38>
 
 // options: lines gplex
 
@@ -28,7 +28,7 @@ public enum Tokens {error=2,EOF=3,Program=4,Identifier=5,IntegerLiteral=6,
     OpenBracket=37,CloseBracket=38,OpenCurl=39,CloseCurl=40,Semicolon=41,Comma=42};
 
 public struct ValueType
-#line 4 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 4 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
        {
 	public int Integer;
 	public string String;
@@ -282,323 +282,323 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
     switch (action)
     {
       case 2: // start -> Program, OpenCurl, declarations, CloseCurl, EOF
-#line 69 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 69 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                     { }
 #line default
         break;
       case 3: // declarations -> instructions
-#line 72 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 72 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                             { }
 #line default
         break;
       case 4: // declarations -> declaration, declarations
-#line 73 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 73 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                { }
 #line default
         break;
       case 5: // declaration -> Integer, declarationInt
-#line 76 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 76 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                      { }
 #line default
         break;
       case 6: // declaration -> Double, declarationDouble
-#line 77 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 77 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                               { }
 #line default
         break;
       case 7: // declaration -> Bool, declarationBool
-#line 78 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 78 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                           { }
 #line default
         break;
       case 8: // declarationInt -> Identifier, Semicolon
-#line 81 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 81 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                       { Compiler.PushNode(new DeclarationNode(ExpressionType.Integer, ValueStack[ValueStack.Depth-2].String)); }
 #line default
         break;
       case 9: // declarationInt -> Identifier, Comma, declarationInt
-#line 82 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 82 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                         { Compiler.PushNode(new DeclarationNode(ExpressionType.Integer, ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
       case 10: // declarationDouble -> Identifier, Semicolon
-#line 85 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 85 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                          { Compiler.PushNode(new DeclarationNode(ExpressionType.Double, ValueStack[ValueStack.Depth-2].String)); }
 #line default
         break;
       case 11: // declarationDouble -> Identifier, Comma, declarationDouble
-#line 86 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 86 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                            { Compiler.PushNode(new DeclarationNode(ExpressionType.Double, ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
       case 12: // declarationBool -> Identifier, Semicolon
-#line 89 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 89 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                        { Compiler.PushNode(new DeclarationNode(ExpressionType.Bool, ValueStack[ValueStack.Depth-2].String)); }
 #line default
         break;
       case 13: // declarationBool -> Identifier, Comma, declarationBool
-#line 90 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 90 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                        { Compiler.PushNode(new DeclarationNode(ExpressionType.Bool, ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
       case 14: // instructions -> instructions, instruction
-#line 93 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 93 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                         { BlockInstructionNode.InsertInstructionToTopBlock(); }
 #line default
         break;
       case 15: // instructions -> /* empty */
-#line 94 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 94 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
       { Compiler.PushNode(new BlockInstructionNode()); }
 #line default
         break;
       case 16: // instruction -> blockInstruction
-#line 97 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 97 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                { }
 #line default
         break;
       case 17: // instruction -> expression, Semicolon
-#line 98 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 98 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                           { }
 #line default
         break;
       case 18: // instruction -> ifInstruction
-#line 99 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 99 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                    { }
 #line default
         break;
       case 19: // instruction -> whileInstruction
-#line 100 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 100 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                       { }
 #line default
         break;
       case 20: // instruction -> inputInstruction
-#line 101 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 101 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                       { }
 #line default
         break;
       case 21: // instruction -> outputInstruction
-#line 102 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 102 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                        { }
 #line default
         break;
       case 22: // instruction -> returnInstruction
-#line 103 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 103 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                        { }
 #line default
         break;
       case 23: // blockInstruction -> OpenCurl, instructions, CloseCurl
-#line 106 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 106 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                    {  }
 #line default
         break;
       case 24: // expression -> assignExpression
-#line 109 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 109 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                               { }
 #line default
         break;
       case 25: // assignExpression -> Identifier, Assign, assignExpression
-#line 112 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 112 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                       { Compiler.PushNode(new AssignNode(ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
       case 26: // assignExpression -> logicalExpression
-#line 113 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 113 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                          { }
 #line default
         break;
       case 27: // logicalExpression -> logicalExpression, Or, relationExpression
-#line 116 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 116 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                             { Compiler.PushNode(new LogicalExpressionNode(LogicalExpressionNode.Type.Or)); }
 #line default
         break;
       case 28: // logicalExpression -> logicalExpression, And, relationExpression
-#line 117 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 117 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                  { Compiler.PushNode(new LogicalExpressionNode(LogicalExpressionNode.Type.And)); }
 #line default
         break;
       case 29: // logicalExpression -> relationExpression
-#line 118 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 118 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                            { }
 #line default
         break;
       case 30: // relationExpression -> relationExpression, Equals, addExpression
-#line 121 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 121 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                              { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.Equals)); }
 #line default
         break;
       case 31: // relationExpression -> relationExpression, NotEquals, addExpression
-#line 122 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 122 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                     { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.NotEquals)); }
 #line default
         break;
       case 32: // relationExpression -> relationExpression, GreaterThan, addExpression
-#line 123 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 123 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                       { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.GreaterThan )); }
 #line default
         break;
       case 33: // relationExpression -> relationExpression, GreaterOrEqual, addExpression
-#line 124 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 124 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                          { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.GreaterOrEqual)); }
 #line default
         break;
       case 34: // relationExpression -> relationExpression, LessThan, addExpression
-#line 125 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 125 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                    { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.LessThan)); }
 #line default
         break;
       case 35: // relationExpression -> relationExpression, LessOrEqual, addExpression
-#line 126 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 126 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                       { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.LessOrEqual)); }
 #line default
         break;
       case 36: // relationExpression -> addExpression
-#line 127 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 127 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                        { }
 #line default
         break;
       case 37: // addExpression -> addExpression, Plus, mulExpression
-#line 130 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 130 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                  { Compiler.PushNode(new AddExpressionNode(AddExpressionNode.Type.Plus)); }
 #line default
         break;
       case 38: // addExpression -> addExpression, Minus, mulExpression
-#line 131 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 131 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                          { Compiler.PushNode(new AddExpressionNode(AddExpressionNode.Type.Minus)); }
 #line default
         break;
       case 39: // addExpression -> mulExpression
-#line 132 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 132 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                      { }
 #line default
         break;
       case 40: // mulExpression -> mulExpression, Multiply, bitExpression
-#line 136 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 136 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                      { Compiler.PushNode(new MulExpressionNode(MulExpressionNode.Type.Multiply)); }
 #line default
         break;
       case 41: // mulExpression -> mulExpression, Divide, bitExpression
-#line 137 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 137 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                           { Compiler.PushNode(new MulExpressionNode(MulExpressionNode.Type.Divide)); }
 #line default
         break;
       case 42: // mulExpression -> bitExpression
-#line 138 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 138 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                      { }
 #line default
         break;
       case 43: // bitExpression -> bitExpression, BitwiseOr, unaryExpression
-#line 142 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 142 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                         { Compiler.PushNode(new BitExpressionNode(BitExpressionNode.Type.Or)); }
 #line default
         break;
       case 44: // bitExpression -> bitExpression, BitwiseAnd, unaryExpression
-#line 143 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 143 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                 { Compiler.PushNode(new BitExpressionNode(BitExpressionNode.Type.And)); }
 #line default
         break;
       case 45: // bitExpression -> unaryExpression
-#line 144 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 144 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                        { }
 #line default
         break;
       case 46: // unaryExpression -> Minus, unaryExpression
-#line 147 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 147 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                         { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.Minus)); }
 #line default
         break;
       case 47: // unaryExpression -> BitwiseNegate, unaryExpression
-#line 148 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 148 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                     { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.BitwiseNegate)); }
 #line default
         break;
       case 48: // unaryExpression -> Negate, unaryExpression
-#line 149 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 149 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                              { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.Negate)); }
 #line default
         break;
       case 49: // unaryExpression -> OpenBracket, Integer, CloseBracket, unaryExpression
-#line 150 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 150 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                        { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.IntConversion)); }
 #line default
         break;
       case 50: // unaryExpression -> OpenBracket, Double, CloseBracket, unaryExpression
-#line 151 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 151 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                       { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.DoubleConversion)); }
 #line default
         break;
       case 51: // unaryExpression -> factorExpression
-#line 152 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 152 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                        { }
 #line default
         break;
       case 52: // factorExpression -> OpenBracket, expression, CloseBracket
-#line 155 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 155 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                        { }
 #line default
         break;
       case 53: // factorExpression -> IntegerLiteral
-#line 156 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 156 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                          { Compiler.PushNode(new IntegerFactorNode(ValueStack[ValueStack.Depth-1].Integer)); }
 #line default
         break;
       case 54: // factorExpression -> BoolLiteral
-#line 157 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 157 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                       { Compiler.PushNode(new BoolFactorNode(ValueStack[ValueStack.Depth-1].Bool)); }
 #line default
         break;
       case 55: // factorExpression -> DoubleLiteral
-#line 158 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 158 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                         { Compiler.PushNode(new DoubleFactorNode(ValueStack[ValueStack.Depth-1].String)); }
 #line default
         break;
       case 56: // factorExpression -> Identifier
-#line 159 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 159 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                   { Compiler.PushNode(new IdentifierNode(ValueStack[ValueStack.Depth-1].String)); }
 #line default
         break;
       case 57: // ifInstruction -> If, OpenBracket, expression, CloseBracket, instruction
-#line 162 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 162 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                                    { Compiler.PushNode(new IfNode(false)); }
 #line default
         break;
       case 58: // ifInstruction -> If, OpenBracket, expression, CloseBracket, instruction, Else, 
                //                  instruction
-#line 163 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 163 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                                            { Compiler.PushNode(new IfNode(true)); }
 #line default
         break;
       case 59: // whileInstruction -> While, OpenBracket, expression, CloseBracket, instruction
-#line 166 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 166 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                                          { Compiler.PushNode(new WhileNode()); }
 #line default
         break;
       case 60: // inputInstruction -> Read, Identifier, Semicolon
-#line 169 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 169 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                              { Compiler.PushNode(new ReadNode(ValueStack[ValueStack.Depth-2].String, false)); }
 #line default
         break;
       case 61: // inputInstruction -> Read, Identifier, Comma, Hex, Semicolon
-#line 170 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 170 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                            { Compiler.PushNode(new ReadNode(ValueStack[ValueStack.Depth-4].String, true)); }
 #line default
         break;
       case 62: // outputInstruction -> Write, expression, Semicolon
-#line 173 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 173 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                { Compiler.PushNode(new WriteExpressionNode(false)); }
 #line default
         break;
       case 63: // outputInstruction -> Write, expression, Comma, Hex, Semicolon
-#line 174 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 174 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                              { Compiler.PushNode(new WriteExpressionNode(true)); }
 #line default
         break;
       case 64: // outputInstruction -> Write, StringLiteral, Semicolon
-#line 175 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 175 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                       { WriteStringNode.CreateWriteStringNodes(ValueStack[ValueStack.Depth-2].String); }
 #line default
         break;
       case 65: // returnInstruction -> Return, Semicolon
-#line 178 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 178 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                      { Compiler.PushNode(new ReturnNode()); }
 #line default
         break;
@@ -616,7 +616,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         return CharToString((char)terminal);
   }
 
-#line 183 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.y"
+#line 183 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
 
 public Parser(Scanner scnr) : base(scnr) { }
 #line default

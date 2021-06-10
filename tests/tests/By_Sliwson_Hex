@@ -1,0 +1,14 @@
+program
+{
+    int a, b, c;
+    a = 0x32;
+    write a, hex;
+    a = 0X32;
+    write a, hex;
+    a = 0X123450;
+    write a, hex;
+    a = 0XafAF;
+    write a, hex;
+    a = 0xabCDef0;
+    write a, hex;
+}

@@ -1,0 +1,5 @@
+program
+{
+    int a, b, c;
+    a = 0xabcdefg;
+}

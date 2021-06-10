@@ -5,10 +5,10 @@
 //  See accompanying file GPLEXcopyright.rtf.
 //
 //  GPLEX Version:  1.2.2
-//  Machine:  DESKTOP-P1QM6GT
-//  DateTime: 6/8/2021 3:12:55 PM
+//  Machine:  DESKTOP-9QSNDR4
+//  DateTime: 10/06/2021 18:55:22
 //  UserName: Mateusz
-//  GPLEX input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\kompilator.lex - 6/8/2021 3:12:15 PM>
+//  GPLEX input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.lex - 10/06/2021 18:51:35>
 //  GPLEX frame file <embedded resource>
 //
 //  Option settings: parser, minimize
@@ -124,8 +124,8 @@ namespace mini_compiler
         
         enum Result {accept, noMatch, contextFound};
 
-        const int maxAccept = 83;
-        const int initial = 84;
+        const int maxAccept = 85;
+        const int initial = 86;
         const int eofNum = 0;
         const int goStart = -1;
         const int INITIAL = 0;
@@ -166,22 +166,27 @@ public override void yyerror(string format, params object[] args)
         }
     };
 
-    static int[] startState = new int[] {84, 0};
+    static int[] startState = new int[] {86, 0};
 
-    static Table[] NxS = new Table[87] {
+    static Table[] NxS = new Table[90] {
 /* NxS[   0] */ new Table(0, 0, 0, null),
 /* NxS[   1] */ new Table(0, 0, -1, null),
-/* NxS[   2] */ new Table(61, 1, -1, new sbyte[] {83}),
-/* NxS[   3] */ new Table(38, 1, -1, new sbyte[] {81}),
+/* NxS[   2] */ new Table(61, 1, -1, new sbyte[] {85}),
+/* NxS[   3] */ new Table(38, 1, -1, new sbyte[] {83}),
 /* NxS[   4] */ new Table(0, 0, -1, null),
 /* NxS[   5] */ new Table(0, 0, -1, null),
 /* NxS[   6] */ new Table(0, 0, -1, null),
 /* NxS[   7] */ new Table(0, 0, -1, null),
 /* NxS[   8] */ new Table(0, 0, -1, null),
 /* NxS[   9] */ new Table(0, 0, -1, null),
-/* NxS[  10] */ new Table(47, 1, -1, new sbyte[] {80}),
-/* NxS[  11] */ new Table(46, 1, -1, new sbyte[] {86}),
-/* NxS[  12] */ new Table(46, 12, -1, new sbyte[] {86, -1, 12, 12, 12, 12, 
+/* NxS[  10] */ new Table(47, 1, -1, new sbyte[] {82}),
+/* NxS[  11] */ new Table(46, 75, -1, new sbyte[] {88, -1, -1, -1, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
+          -1, -1, -1, -1, 89, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
+          -1, -1, -1, -1, 89}),
+/* NxS[  12] */ new Table(46, 12, -1, new sbyte[] {88, -1, 12, 12, 12, 12, 
           12, 12, 12, 12, 12, 12}),
 /* NxS[  13] */ new Table(0, 0, -1, null),
 /* NxS[  14] */ new Table(61, 1, -1, new sbyte[] {78}),
@@ -521,25 +526,36 @@ public override void yyerror(string format, params object[] args)
 /* NxS[  78] */ new Table(0, 0, -1, null),
 /* NxS[  79] */ new Table(48, 10, -1, new sbyte[] {79, 79, 79, 79, 79, 79, 
           79, 79, 79, 79}),
-/* NxS[  80] */ new Table(10, 1, 80, new sbyte[] {-1}),
-/* NxS[  81] */ new Table(0, 0, -1, null),
-/* NxS[  82] */ new Table(10, 25, 85, new sbyte[] {-1, 85, 85, 85, 85, 85, 
-          85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 
-          85, 85, 82}),
+/* NxS[  80] */ new Table(0, 0, -1, null),
+/* NxS[  81] */ new Table(48, 55, -1, new sbyte[] {81, 81, 81, 81, 81, 81, 
+          81, 81, 81, 81, -1, -1, -1, -1, -1, -1, -1, 81, 81, 81, 81, 81, 
+          81, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 81, 81, 81, 81, 81, 
+          81}),
+/* NxS[  82] */ new Table(10, 1, 82, new sbyte[] {-1}),
 /* NxS[  83] */ new Table(0, 0, -1, null),
-/* NxS[  84] */ new Table(10, 117, -1, new sbyte[] {1, -1, -1, -1, -1, -1, 
+/* NxS[  84] */ new Table(10, 25, 87, new sbyte[] {-1, 87, 87, 87, 87, 87, 
+          87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 
+          87, 87, 84}),
+/* NxS[  85] */ new Table(0, 0, -1, null),
+/* NxS[  86] */ new Table(10, 117, -1, new sbyte[] {1, -1, -1, -1, -1, -1, 
           -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
-          -1, 2, 85, -1, -1, -1, 3, -1, 4, 5, 6, 7, 8, 9, -1, 10, 
+          -1, 2, 87, -1, -1, -1, 3, -1, 4, 5, 6, 7, 8, 9, -1, 10, 
           11, 12, 12, 12, 12, 12, 12, 12, 12, 12, -1, 13, 14, 15, 16, -1, 
           -1, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 
           17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, -1, -1, -1, -1, -1, 
           -1, 17, 18, 17, 19, 20, 21, 17, 22, 23, 17, 17, 17, 17, 17, 17, 
           24, 17, 25, 26, 27, 17, 17, 28, 17, 17, 17, 29, 30, 31, 32}),
-/* NxS[  85] */ new Table(10, 25, 85, new sbyte[] {-1, 85, 85, 85, 85, 85, 
-          85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 
-          85, 85, 82}),
-/* NxS[  86] */ new Table(48, 10, -1, new sbyte[] {79, 79, 79, 79, 79, 79, 
+/* NxS[  87] */ new Table(10, 25, 87, new sbyte[] {-1, 87, 87, 87, 87, 87, 
+          87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 87, 
+          87, 87, 84}),
+/* NxS[  88] */ new Table(48, 10, -1, new sbyte[] {79, 79, 79, 79, 79, 79, 
           79, 79, 79, 79}),
+/* NxS[  89] */ new Table(48, 55, -1, new sbyte[] {80, 81, 81, 81, 81, 81, 
+          81, 81, 81, 81, -1, -1, -1, -1, -1, -1, -1, 81, 81, 81, 81, 81, 
+          81, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
+          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 81, 81, 81, 81, 81, 
+          81}),
     };
 
 int NextState() {
@@ -1127,12 +1143,17 @@ yylval.String = yytext;
 						return (int)Tokens.DoubleLiteral;
             break;
         case 80:
-{ }
-            break;
         case 81:
-return (int)Tokens.And;
+yylval.Integer = Convert.ToInt32(yytext, 16);
+						return (int)Tokens.IntegerLiteral;
             break;
         case 82:
+{ }
+            break;
+        case 83:
+return (int)Tokens.And;
+            break;
+        case 84:
 if (yytext.Length > 2)  
 							yylval.String = yytext.Substring(1, yytext.Length - 2); 
 						else
@@ -1140,7 +1161,7 @@ if (yytext.Length > 2)
 
 						return (int)Tokens.StringLiteral;
             break;
-        case 83:
+        case 85:
 return (int)Tokens.NotEquals;
             break;
         default:
