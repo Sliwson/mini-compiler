@@ -3,6 +3,8 @@ program
     int a, b, c;
     a = 0x32;
     write a, hex;
+    a = 0x00000032;
+    write a, hex;
     a = 0X32;
     write a, hex;
     a = 0X123450;

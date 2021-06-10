@@ -11,7 +11,7 @@ public override void yyerror(string format, params object[] args)
 // Literals
 Identifier [a-zA-Z]([a-zA-Z0-9])*
 IntegerLiteral	([0-9]|[1-9][0-9]*)
-IntegerLiteralHex (0x|0X)([0-9a-fA-F]|[1-9a-fA-F][0-9a-fA-F]*)
+IntegerLiteralHex (0x|0X)([0-9a-fA-F]+)
 DoubleLiteral	([0-9]|[1-9][0-9]*)[.][0-9]+
 BoolLiteral		(true|false)
 StringLiteral	\".*\"

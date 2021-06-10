@@ -1,5 +1,5 @@
 program
 {
     int a, b, c;
-    a = 0x0322;
+    a = 0x;
 }

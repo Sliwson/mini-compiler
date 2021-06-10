@@ -4,7 +4,7 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-9QSNDR4
-// DateTime: 10/06/2021 18:55:23
+// DateTime: 10/06/2021 19:40:52
 // UserName: Mateusz
 // Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 10/06/2021 18:36:38>
 
