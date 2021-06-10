@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  DESKTOP-9QSNDR4
-// DateTime: 10/06/2021 19:40:52
+// DateTime: 10/06/2021 20:15:14
 // UserName: Mateusz
-// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 10/06/2021 18:36:38>
+// Input file <C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y - 10/06/2021 20:06:11>
 
 // options: lines gplex
 
@@ -25,7 +25,8 @@ public enum Tokens {error=2,EOF=3,Program=4,Identifier=5,IntegerLiteral=6,
     Equals=19,NotEquals=20,GreaterThan=21,GreaterOrEqual=22,LessThan=23,LessOrEqual=24,
     Plus=25,Minus=26,Multiply=27,Divide=28,Negate=29,BitwiseNegate=30,
     If=31,Else=32,While=33,Read=34,Write=35,Return=36,
-    OpenBracket=37,CloseBracket=38,OpenCurl=39,CloseCurl=40,Semicolon=41,Comma=42};
+    OpenBracket=37,CloseBracket=38,OpenCurl=39,CloseCurl=40,Semicolon=41,Comma=42,
+    Dot=43};
 
 public struct ValueType
 #line 4 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
@@ -61,8 +62,8 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
 #pragma warning disable 649
   private static Dictionary<int, string> aliases;
 #pragma warning restore 649
-  private static Rule[] rules = new Rule[66];
-  private static State[] states = new State[127];
+  private static Rule[] rules = new Rule[70];
+  private static State[] states = new State[135];
   private static string[] nonTerms = new string[] {
       "start", "$accept", "declarations", "instructions", "declaration", "declarationInt", 
       "declarationDouble", "declarationBool", "instruction", "blockInstruction", 
@@ -76,129 +77,137 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
     states[1] = new State(new int[]{3,2});
     states[2] = new State(-1);
     states[3] = new State(new int[]{39,4});
-    states[4] = new State(new int[]{10,109,11,115,12,121,39,-15,5,-15,26,-15,30,-15,29,-15,37,-15,6,-15,8,-15,7,-15,31,-15,33,-15,34,-15,35,-15,36,-15,40,-15},new int[]{-3,5,-4,8,-5,107});
+    states[4] = new State(new int[]{10,111,11,119,12,127,39,-18,5,-18,26,-18,30,-18,29,-18,37,-18,6,-18,8,-18,7,-18,31,-18,33,-18,34,-18,35,-18,36,-18,2,-18,40,-18},new int[]{-3,5,-4,8,-5,109});
     states[5] = new State(new int[]{40,6});
     states[6] = new State(new int[]{3,7});
     states[7] = new State(-2);
-    states[8] = new State(new int[]{39,11,5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44,31,75,33,83,34,89,35,96,36,105,40,-3},new int[]{-9,9,-10,10,-11,14,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41,-12,74,-13,82,-14,88,-15,95,-16,104});
-    states[9] = new State(-14);
-    states[10] = new State(-16);
-    states[11] = new State(-15,new int[]{-4,12});
-    states[12] = new State(new int[]{40,13,39,11,5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44,31,75,33,83,34,89,35,96,36,105},new int[]{-9,9,-10,10,-11,14,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41,-12,74,-13,82,-14,88,-15,95,-16,104});
-    states[13] = new State(-23);
+    states[8] = new State(new int[]{39,11,5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44,31,75,33,83,34,89,35,96,36,105,2,107,40,-3},new int[]{-9,9,-10,10,-11,14,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41,-12,74,-13,82,-14,88,-15,95,-16,104});
+    states[9] = new State(-17);
+    states[10] = new State(-19);
+    states[11] = new State(-18,new int[]{-4,12});
+    states[12] = new State(new int[]{40,13,39,11,5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44,31,75,33,83,34,89,35,96,36,105,2,107},new int[]{-9,9,-10,10,-11,14,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41,-12,74,-13,82,-14,88,-15,95,-16,104});
+    states[13] = new State(-27);
     states[14] = new State(new int[]{41,15});
-    states[15] = new State(-17);
-    states[16] = new State(-24);
-    states[17] = new State(new int[]{14,18,17,-56,18,-56,27,-56,28,-56,25,-56,26,-56,19,-56,20,-56,21,-56,22,-56,23,-56,24,-56,15,-56,16,-56,41,-56,38,-56,42,-56});
+    states[15] = new State(-20);
+    states[16] = new State(-28);
+    states[17] = new State(new int[]{14,18,17,-60,18,-60,27,-60,28,-60,25,-60,26,-60,19,-60,20,-60,21,-60,22,-60,23,-60,24,-60,15,-60,16,-60,41,-60,38,-60,42,-60});
     states[18] = new State(new int[]{5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44},new int[]{-17,19,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41});
-    states[19] = new State(-25);
-    states[20] = new State(new int[]{15,21,16,72,41,-26,38,-26,42,-26});
+    states[19] = new State(-29);
+    states[20] = new State(new int[]{15,21,16,72,41,-30,38,-30,42,-30});
     states[21] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-19,22,-20,71,-21,62,-22,61,-23,60,-24,41});
-    states[22] = new State(new int[]{19,23,20,52,21,63,22,65,23,67,24,69,15,-27,16,-27,41,-27,38,-27,42,-27});
+    states[22] = new State(new int[]{19,23,20,52,21,63,22,65,23,67,24,69,15,-31,16,-31,41,-31,38,-31,42,-31});
     states[23] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-20,24,-21,62,-22,61,-23,60,-24,41});
-    states[24] = new State(new int[]{25,25,26,54,19,-30,20,-30,21,-30,22,-30,23,-30,24,-30,15,-30,16,-30,41,-30,38,-30,42,-30});
+    states[24] = new State(new int[]{25,25,26,54,19,-34,20,-34,21,-34,22,-34,23,-34,24,-34,15,-34,16,-34,41,-34,38,-34,42,-34});
     states[25] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-21,26,-22,61,-23,60,-24,41});
-    states[26] = new State(new int[]{27,27,28,56,25,-37,26,-37,19,-37,20,-37,21,-37,22,-37,23,-37,24,-37,15,-37,16,-37,41,-37,38,-37,42,-37});
+    states[26] = new State(new int[]{27,27,28,56,25,-41,26,-41,19,-41,20,-41,21,-41,22,-41,23,-41,24,-41,15,-41,16,-41,41,-41,38,-41,42,-41});
     states[27] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-22,28,-23,60,-24,41});
-    states[28] = new State(new int[]{17,29,18,58,27,-40,28,-40,25,-40,26,-40,19,-40,20,-40,21,-40,22,-40,23,-40,24,-40,15,-40,16,-40,41,-40,38,-40,42,-40});
+    states[28] = new State(new int[]{17,29,18,58,27,-44,28,-44,25,-44,26,-44,19,-44,20,-44,21,-44,22,-44,23,-44,24,-44,15,-44,16,-44,41,-44,38,-44,42,-44});
     states[29] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-23,30,-24,41});
-    states[30] = new State(-43);
+    states[30] = new State(-47);
     states[31] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-23,32,-24,41});
-    states[32] = new State(-46);
+    states[32] = new State(-50);
     states[33] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-23,34,-24,41});
-    states[34] = new State(-47);
+    states[34] = new State(-51);
     states[35] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-23,36,-24,41});
-    states[36] = new State(-48);
+    states[36] = new State(-52);
     states[37] = new State(new int[]{10,38,11,46,5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44},new int[]{-11,49,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41});
     states[38] = new State(new int[]{38,39});
     states[39] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-23,40,-24,41});
-    states[40] = new State(-49);
-    states[41] = new State(-51);
-    states[42] = new State(-53);
-    states[43] = new State(-54);
-    states[44] = new State(-55);
-    states[45] = new State(-56);
+    states[40] = new State(-53);
+    states[41] = new State(-55);
+    states[42] = new State(-57);
+    states[43] = new State(-58);
+    states[44] = new State(-59);
+    states[45] = new State(-60);
     states[46] = new State(new int[]{38,47});
     states[47] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-23,48,-24,41});
-    states[48] = new State(-50);
+    states[48] = new State(-54);
     states[49] = new State(new int[]{38,50});
-    states[50] = new State(-52);
-    states[51] = new State(new int[]{19,23,20,52,21,63,22,65,23,67,24,69,15,-29,16,-29,41,-29,38,-29,42,-29});
+    states[50] = new State(-56);
+    states[51] = new State(new int[]{19,23,20,52,21,63,22,65,23,67,24,69,15,-33,16,-33,41,-33,38,-33,42,-33});
     states[52] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-20,53,-21,62,-22,61,-23,60,-24,41});
-    states[53] = new State(new int[]{25,25,26,54,19,-31,20,-31,21,-31,22,-31,23,-31,24,-31,15,-31,16,-31,41,-31,38,-31,42,-31});
+    states[53] = new State(new int[]{25,25,26,54,19,-35,20,-35,21,-35,22,-35,23,-35,24,-35,15,-35,16,-35,41,-35,38,-35,42,-35});
     states[54] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-21,55,-22,61,-23,60,-24,41});
-    states[55] = new State(new int[]{27,27,28,56,25,-38,26,-38,19,-38,20,-38,21,-38,22,-38,23,-38,24,-38,15,-38,16,-38,41,-38,38,-38,42,-38});
+    states[55] = new State(new int[]{27,27,28,56,25,-42,26,-42,19,-42,20,-42,21,-42,22,-42,23,-42,24,-42,15,-42,16,-42,41,-42,38,-42,42,-42});
     states[56] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-22,57,-23,60,-24,41});
-    states[57] = new State(new int[]{17,29,18,58,27,-41,28,-41,25,-41,26,-41,19,-41,20,-41,21,-41,22,-41,23,-41,24,-41,15,-41,16,-41,41,-41,38,-41,42,-41});
+    states[57] = new State(new int[]{17,29,18,58,27,-45,28,-45,25,-45,26,-45,19,-45,20,-45,21,-45,22,-45,23,-45,24,-45,15,-45,16,-45,41,-45,38,-45,42,-45});
     states[58] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-23,59,-24,41});
-    states[59] = new State(-44);
-    states[60] = new State(-45);
-    states[61] = new State(new int[]{17,29,18,58,27,-42,28,-42,25,-42,26,-42,19,-42,20,-42,21,-42,22,-42,23,-42,24,-42,15,-42,16,-42,41,-42,38,-42,42,-42});
-    states[62] = new State(new int[]{27,27,28,56,25,-39,26,-39,19,-39,20,-39,21,-39,22,-39,23,-39,24,-39,15,-39,16,-39,41,-39,38,-39,42,-39});
+    states[59] = new State(-48);
+    states[60] = new State(-49);
+    states[61] = new State(new int[]{17,29,18,58,27,-46,28,-46,25,-46,26,-46,19,-46,20,-46,21,-46,22,-46,23,-46,24,-46,15,-46,16,-46,41,-46,38,-46,42,-46});
+    states[62] = new State(new int[]{27,27,28,56,25,-43,26,-43,19,-43,20,-43,21,-43,22,-43,23,-43,24,-43,15,-43,16,-43,41,-43,38,-43,42,-43});
     states[63] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-20,64,-21,62,-22,61,-23,60,-24,41});
-    states[64] = new State(new int[]{25,25,26,54,19,-32,20,-32,21,-32,22,-32,23,-32,24,-32,15,-32,16,-32,41,-32,38,-32,42,-32});
+    states[64] = new State(new int[]{25,25,26,54,19,-36,20,-36,21,-36,22,-36,23,-36,24,-36,15,-36,16,-36,41,-36,38,-36,42,-36});
     states[65] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-20,66,-21,62,-22,61,-23,60,-24,41});
-    states[66] = new State(new int[]{25,25,26,54,19,-33,20,-33,21,-33,22,-33,23,-33,24,-33,15,-33,16,-33,41,-33,38,-33,42,-33});
+    states[66] = new State(new int[]{25,25,26,54,19,-37,20,-37,21,-37,22,-37,23,-37,24,-37,15,-37,16,-37,41,-37,38,-37,42,-37});
     states[67] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-20,68,-21,62,-22,61,-23,60,-24,41});
-    states[68] = new State(new int[]{25,25,26,54,19,-34,20,-34,21,-34,22,-34,23,-34,24,-34,15,-34,16,-34,41,-34,38,-34,42,-34});
+    states[68] = new State(new int[]{25,25,26,54,19,-38,20,-38,21,-38,22,-38,23,-38,24,-38,15,-38,16,-38,41,-38,38,-38,42,-38});
     states[69] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-20,70,-21,62,-22,61,-23,60,-24,41});
-    states[70] = new State(new int[]{25,25,26,54,19,-35,20,-35,21,-35,22,-35,23,-35,24,-35,15,-35,16,-35,41,-35,38,-35,42,-35});
-    states[71] = new State(new int[]{25,25,26,54,19,-36,20,-36,21,-36,22,-36,23,-36,24,-36,15,-36,16,-36,41,-36,38,-36,42,-36});
+    states[70] = new State(new int[]{25,25,26,54,19,-39,20,-39,21,-39,22,-39,23,-39,24,-39,15,-39,16,-39,41,-39,38,-39,42,-39});
+    states[71] = new State(new int[]{25,25,26,54,19,-40,20,-40,21,-40,22,-40,23,-40,24,-40,15,-40,16,-40,41,-40,38,-40,42,-40});
     states[72] = new State(new int[]{26,31,30,33,29,35,37,37,6,42,8,43,7,44,5,45},new int[]{-19,73,-20,71,-21,62,-22,61,-23,60,-24,41});
-    states[73] = new State(new int[]{19,23,20,52,21,63,22,65,23,67,24,69,15,-28,16,-28,41,-28,38,-28,42,-28});
-    states[74] = new State(-18);
+    states[73] = new State(new int[]{19,23,20,52,21,63,22,65,23,67,24,69,15,-32,16,-32,41,-32,38,-32,42,-32});
+    states[74] = new State(-21);
     states[75] = new State(new int[]{37,76});
     states[76] = new State(new int[]{5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44},new int[]{-11,77,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41});
     states[77] = new State(new int[]{38,78});
-    states[78] = new State(new int[]{39,11,5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44,31,75,33,83,34,89,35,96,36,105},new int[]{-9,79,-10,10,-11,14,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41,-12,74,-13,82,-14,88,-15,95,-16,104});
-    states[79] = new State(new int[]{32,80,39,-57,5,-57,26,-57,30,-57,29,-57,37,-57,6,-57,8,-57,7,-57,31,-57,33,-57,34,-57,35,-57,36,-57,40,-57});
-    states[80] = new State(new int[]{39,11,5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44,31,75,33,83,34,89,35,96,36,105},new int[]{-9,81,-10,10,-11,14,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41,-12,74,-13,82,-14,88,-15,95,-16,104});
-    states[81] = new State(-58);
-    states[82] = new State(-19);
+    states[78] = new State(new int[]{39,11,5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44,31,75,33,83,34,89,35,96,36,105,2,107},new int[]{-9,79,-10,10,-11,14,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41,-12,74,-13,82,-14,88,-15,95,-16,104});
+    states[79] = new State(new int[]{32,80,39,-61,5,-61,26,-61,30,-61,29,-61,37,-61,6,-61,8,-61,7,-61,31,-61,33,-61,34,-61,35,-61,36,-61,2,-61,40,-61});
+    states[80] = new State(new int[]{39,11,5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44,31,75,33,83,34,89,35,96,36,105,2,107},new int[]{-9,81,-10,10,-11,14,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41,-12,74,-13,82,-14,88,-15,95,-16,104});
+    states[81] = new State(-62);
+    states[82] = new State(-22);
     states[83] = new State(new int[]{37,84});
     states[84] = new State(new int[]{5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44},new int[]{-11,85,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41});
     states[85] = new State(new int[]{38,86});
-    states[86] = new State(new int[]{39,11,5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44,31,75,33,83,34,89,35,96,36,105},new int[]{-9,87,-10,10,-11,14,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41,-12,74,-13,82,-14,88,-15,95,-16,104});
-    states[87] = new State(-59);
-    states[88] = new State(-20);
+    states[86] = new State(new int[]{39,11,5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44,31,75,33,83,34,89,35,96,36,105,2,107},new int[]{-9,87,-10,10,-11,14,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41,-12,74,-13,82,-14,88,-15,95,-16,104});
+    states[87] = new State(-63);
+    states[88] = new State(-23);
     states[89] = new State(new int[]{5,90});
     states[90] = new State(new int[]{41,91,42,92});
-    states[91] = new State(-60);
+    states[91] = new State(-64);
     states[92] = new State(new int[]{13,93});
     states[93] = new State(new int[]{41,94});
-    states[94] = new State(-61);
-    states[95] = new State(-21);
+    states[94] = new State(-65);
+    states[95] = new State(-24);
     states[96] = new State(new int[]{9,102,5,17,26,31,30,33,29,35,37,37,6,42,8,43,7,44},new int[]{-11,97,-17,16,-18,20,-19,51,-20,71,-21,62,-22,61,-23,60,-24,41});
     states[97] = new State(new int[]{41,98,42,99});
-    states[98] = new State(-62);
+    states[98] = new State(-66);
     states[99] = new State(new int[]{13,100});
     states[100] = new State(new int[]{41,101});
-    states[101] = new State(-63);
+    states[101] = new State(-67);
     states[102] = new State(new int[]{41,103});
-    states[103] = new State(-64);
-    states[104] = new State(-22);
+    states[103] = new State(-68);
+    states[104] = new State(-25);
     states[105] = new State(new int[]{41,106});
-    states[106] = new State(-65);
-    states[107] = new State(new int[]{10,109,11,115,12,121,39,-15,5,-15,26,-15,30,-15,29,-15,37,-15,6,-15,8,-15,7,-15,31,-15,33,-15,34,-15,35,-15,36,-15,40,-15},new int[]{-3,108,-4,8,-5,107});
-    states[108] = new State(-4);
-    states[109] = new State(new int[]{5,111},new int[]{-6,110});
-    states[110] = new State(-5);
-    states[111] = new State(new int[]{41,112,42,113});
-    states[112] = new State(-8);
-    states[113] = new State(new int[]{5,111},new int[]{-6,114});
-    states[114] = new State(-9);
-    states[115] = new State(new int[]{5,117},new int[]{-7,116});
-    states[116] = new State(-6);
-    states[117] = new State(new int[]{41,118,42,119});
+    states[106] = new State(-69);
+    states[107] = new State(new int[]{41,108});
+    states[108] = new State(-26);
+    states[109] = new State(new int[]{10,111,11,119,12,127,39,-18,5,-18,26,-18,30,-18,29,-18,37,-18,6,-18,8,-18,7,-18,31,-18,33,-18,34,-18,35,-18,36,-18,2,-18,40,-18},new int[]{-3,110,-4,8,-5,109});
+    states[110] = new State(-4);
+    states[111] = new State(new int[]{5,113,2,117},new int[]{-6,112});
+    states[112] = new State(-5);
+    states[113] = new State(new int[]{41,114,42,115});
+    states[114] = new State(-8);
+    states[115] = new State(new int[]{5,113,2,117},new int[]{-6,116});
+    states[116] = new State(-9);
+    states[117] = new State(new int[]{41,118});
     states[118] = new State(-10);
-    states[119] = new State(new int[]{5,117},new int[]{-7,120});
-    states[120] = new State(-11);
-    states[121] = new State(new int[]{5,123},new int[]{-8,122});
-    states[122] = new State(-7);
-    states[123] = new State(new int[]{41,124,42,125});
+    states[119] = new State(new int[]{5,121,2,125},new int[]{-7,120});
+    states[120] = new State(-6);
+    states[121] = new State(new int[]{41,122,42,123});
+    states[122] = new State(-11);
+    states[123] = new State(new int[]{5,121,2,125},new int[]{-7,124});
     states[124] = new State(-12);
-    states[125] = new State(new int[]{5,123},new int[]{-8,126});
+    states[125] = new State(new int[]{41,126});
     states[126] = new State(-13);
+    states[127] = new State(new int[]{5,129,2,133},new int[]{-8,128});
+    states[128] = new State(-7);
+    states[129] = new State(new int[]{41,130,42,131});
+    states[130] = new State(-14);
+    states[131] = new State(new int[]{5,129,2,133},new int[]{-8,132});
+    states[132] = new State(-15);
+    states[133] = new State(new int[]{41,134});
+    states[134] = new State(-16);
 
     for (int sNo = 0; sNo < states.Length; sNo++) states[sNo].number = sNo;
 
@@ -211,62 +220,66 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
     rules[7] = new Rule(-5, new int[]{12,-8});
     rules[8] = new Rule(-6, new int[]{5,41});
     rules[9] = new Rule(-6, new int[]{5,42,-6});
-    rules[10] = new Rule(-7, new int[]{5,41});
-    rules[11] = new Rule(-7, new int[]{5,42,-7});
-    rules[12] = new Rule(-8, new int[]{5,41});
-    rules[13] = new Rule(-8, new int[]{5,42,-8});
-    rules[14] = new Rule(-4, new int[]{-4,-9});
-    rules[15] = new Rule(-4, new int[]{});
-    rules[16] = new Rule(-9, new int[]{-10});
-    rules[17] = new Rule(-9, new int[]{-11,41});
-    rules[18] = new Rule(-9, new int[]{-12});
-    rules[19] = new Rule(-9, new int[]{-13});
-    rules[20] = new Rule(-9, new int[]{-14});
-    rules[21] = new Rule(-9, new int[]{-15});
-    rules[22] = new Rule(-9, new int[]{-16});
-    rules[23] = new Rule(-10, new int[]{39,-4,40});
-    rules[24] = new Rule(-11, new int[]{-17});
-    rules[25] = new Rule(-17, new int[]{5,14,-17});
-    rules[26] = new Rule(-17, new int[]{-18});
-    rules[27] = new Rule(-18, new int[]{-18,15,-19});
-    rules[28] = new Rule(-18, new int[]{-18,16,-19});
-    rules[29] = new Rule(-18, new int[]{-19});
-    rules[30] = new Rule(-19, new int[]{-19,19,-20});
-    rules[31] = new Rule(-19, new int[]{-19,20,-20});
-    rules[32] = new Rule(-19, new int[]{-19,21,-20});
-    rules[33] = new Rule(-19, new int[]{-19,22,-20});
-    rules[34] = new Rule(-19, new int[]{-19,23,-20});
-    rules[35] = new Rule(-19, new int[]{-19,24,-20});
-    rules[36] = new Rule(-19, new int[]{-20});
-    rules[37] = new Rule(-20, new int[]{-20,25,-21});
-    rules[38] = new Rule(-20, new int[]{-20,26,-21});
-    rules[39] = new Rule(-20, new int[]{-21});
-    rules[40] = new Rule(-21, new int[]{-21,27,-22});
-    rules[41] = new Rule(-21, new int[]{-21,28,-22});
-    rules[42] = new Rule(-21, new int[]{-22});
-    rules[43] = new Rule(-22, new int[]{-22,17,-23});
-    rules[44] = new Rule(-22, new int[]{-22,18,-23});
-    rules[45] = new Rule(-22, new int[]{-23});
-    rules[46] = new Rule(-23, new int[]{26,-23});
-    rules[47] = new Rule(-23, new int[]{30,-23});
-    rules[48] = new Rule(-23, new int[]{29,-23});
-    rules[49] = new Rule(-23, new int[]{37,10,38,-23});
-    rules[50] = new Rule(-23, new int[]{37,11,38,-23});
-    rules[51] = new Rule(-23, new int[]{-24});
-    rules[52] = new Rule(-24, new int[]{37,-11,38});
-    rules[53] = new Rule(-24, new int[]{6});
-    rules[54] = new Rule(-24, new int[]{8});
-    rules[55] = new Rule(-24, new int[]{7});
-    rules[56] = new Rule(-24, new int[]{5});
-    rules[57] = new Rule(-12, new int[]{31,37,-11,38,-9});
-    rules[58] = new Rule(-12, new int[]{31,37,-11,38,-9,32,-9});
-    rules[59] = new Rule(-13, new int[]{33,37,-11,38,-9});
-    rules[60] = new Rule(-14, new int[]{34,5,41});
-    rules[61] = new Rule(-14, new int[]{34,5,42,13,41});
-    rules[62] = new Rule(-15, new int[]{35,-11,41});
-    rules[63] = new Rule(-15, new int[]{35,-11,42,13,41});
-    rules[64] = new Rule(-15, new int[]{35,9,41});
-    rules[65] = new Rule(-16, new int[]{36,41});
+    rules[10] = new Rule(-6, new int[]{2,41});
+    rules[11] = new Rule(-7, new int[]{5,41});
+    rules[12] = new Rule(-7, new int[]{5,42,-7});
+    rules[13] = new Rule(-7, new int[]{2,41});
+    rules[14] = new Rule(-8, new int[]{5,41});
+    rules[15] = new Rule(-8, new int[]{5,42,-8});
+    rules[16] = new Rule(-8, new int[]{2,41});
+    rules[17] = new Rule(-4, new int[]{-4,-9});
+    rules[18] = new Rule(-4, new int[]{});
+    rules[19] = new Rule(-9, new int[]{-10});
+    rules[20] = new Rule(-9, new int[]{-11,41});
+    rules[21] = new Rule(-9, new int[]{-12});
+    rules[22] = new Rule(-9, new int[]{-13});
+    rules[23] = new Rule(-9, new int[]{-14});
+    rules[24] = new Rule(-9, new int[]{-15});
+    rules[25] = new Rule(-9, new int[]{-16});
+    rules[26] = new Rule(-9, new int[]{2,41});
+    rules[27] = new Rule(-10, new int[]{39,-4,40});
+    rules[28] = new Rule(-11, new int[]{-17});
+    rules[29] = new Rule(-17, new int[]{5,14,-17});
+    rules[30] = new Rule(-17, new int[]{-18});
+    rules[31] = new Rule(-18, new int[]{-18,15,-19});
+    rules[32] = new Rule(-18, new int[]{-18,16,-19});
+    rules[33] = new Rule(-18, new int[]{-19});
+    rules[34] = new Rule(-19, new int[]{-19,19,-20});
+    rules[35] = new Rule(-19, new int[]{-19,20,-20});
+    rules[36] = new Rule(-19, new int[]{-19,21,-20});
+    rules[37] = new Rule(-19, new int[]{-19,22,-20});
+    rules[38] = new Rule(-19, new int[]{-19,23,-20});
+    rules[39] = new Rule(-19, new int[]{-19,24,-20});
+    rules[40] = new Rule(-19, new int[]{-20});
+    rules[41] = new Rule(-20, new int[]{-20,25,-21});
+    rules[42] = new Rule(-20, new int[]{-20,26,-21});
+    rules[43] = new Rule(-20, new int[]{-21});
+    rules[44] = new Rule(-21, new int[]{-21,27,-22});
+    rules[45] = new Rule(-21, new int[]{-21,28,-22});
+    rules[46] = new Rule(-21, new int[]{-22});
+    rules[47] = new Rule(-22, new int[]{-22,17,-23});
+    rules[48] = new Rule(-22, new int[]{-22,18,-23});
+    rules[49] = new Rule(-22, new int[]{-23});
+    rules[50] = new Rule(-23, new int[]{26,-23});
+    rules[51] = new Rule(-23, new int[]{30,-23});
+    rules[52] = new Rule(-23, new int[]{29,-23});
+    rules[53] = new Rule(-23, new int[]{37,10,38,-23});
+    rules[54] = new Rule(-23, new int[]{37,11,38,-23});
+    rules[55] = new Rule(-23, new int[]{-24});
+    rules[56] = new Rule(-24, new int[]{37,-11,38});
+    rules[57] = new Rule(-24, new int[]{6});
+    rules[58] = new Rule(-24, new int[]{8});
+    rules[59] = new Rule(-24, new int[]{7});
+    rules[60] = new Rule(-24, new int[]{5});
+    rules[61] = new Rule(-12, new int[]{31,37,-11,38,-9});
+    rules[62] = new Rule(-12, new int[]{31,37,-11,38,-9,32,-9});
+    rules[63] = new Rule(-13, new int[]{33,37,-11,38,-9});
+    rules[64] = new Rule(-14, new int[]{34,5,41});
+    rules[65] = new Rule(-14, new int[]{34,5,42,13,41});
+    rules[66] = new Rule(-15, new int[]{35,-11,41});
+    rules[67] = new Rule(-15, new int[]{35,-11,42,13,41});
+    rules[68] = new Rule(-15, new int[]{35,9,41});
+    rules[69] = new Rule(-16, new int[]{36,41});
   }
 
   protected override void Initialize() {
@@ -282,323 +295,343 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
     switch (action)
     {
       case 2: // start -> Program, OpenCurl, declarations, CloseCurl, EOF
-#line 69 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 72 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                     { }
 #line default
         break;
       case 3: // declarations -> instructions
-#line 72 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 75 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                             { }
 #line default
         break;
       case 4: // declarations -> declaration, declarations
-#line 73 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 76 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                { }
 #line default
         break;
       case 5: // declaration -> Integer, declarationInt
-#line 76 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 79 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                      { }
 #line default
         break;
       case 6: // declaration -> Double, declarationDouble
-#line 77 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 80 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                               { }
 #line default
         break;
       case 7: // declaration -> Bool, declarationBool
-#line 78 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 81 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                           { }
 #line default
         break;
       case 8: // declarationInt -> Identifier, Semicolon
-#line 81 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 84 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                       { Compiler.PushNode(new DeclarationNode(ExpressionType.Integer, ValueStack[ValueStack.Depth-2].String)); }
 #line default
         break;
       case 9: // declarationInt -> Identifier, Comma, declarationInt
-#line 82 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 85 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                         { Compiler.PushNode(new DeclarationNode(ExpressionType.Integer, ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
-      case 10: // declarationDouble -> Identifier, Semicolon
-#line 85 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 10: // declarationInt -> error, Semicolon
+#line 86 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                        { yyerrok(); }
+#line default
+        break;
+      case 11: // declarationDouble -> Identifier, Semicolon
+#line 89 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                          { Compiler.PushNode(new DeclarationNode(ExpressionType.Double, ValueStack[ValueStack.Depth-2].String)); }
 #line default
         break;
-      case 11: // declarationDouble -> Identifier, Comma, declarationDouble
-#line 86 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 12: // declarationDouble -> Identifier, Comma, declarationDouble
+#line 90 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                            { Compiler.PushNode(new DeclarationNode(ExpressionType.Double, ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
-      case 12: // declarationBool -> Identifier, Semicolon
-#line 89 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 13: // declarationDouble -> error, Semicolon
+#line 91 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                           { yyerrok(); }
+#line default
+        break;
+      case 14: // declarationBool -> Identifier, Semicolon
+#line 94 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                        { Compiler.PushNode(new DeclarationNode(ExpressionType.Bool, ValueStack[ValueStack.Depth-2].String)); }
 #line default
         break;
-      case 13: // declarationBool -> Identifier, Comma, declarationBool
-#line 90 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 15: // declarationBool -> Identifier, Comma, declarationBool
+#line 95 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                        { Compiler.PushNode(new DeclarationNode(ExpressionType.Bool, ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
-      case 14: // instructions -> instructions, instruction
-#line 93 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 16: // declarationBool -> error, Semicolon
+#line 96 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                         { yyerrok(); }
+#line default
+        break;
+      case 17: // instructions -> instructions, instruction
+#line 99 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                         { BlockInstructionNode.InsertInstructionToTopBlock(); }
 #line default
         break;
-      case 15: // instructions -> /* empty */
-#line 94 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 18: // instructions -> /* empty */
+#line 100 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
       { Compiler.PushNode(new BlockInstructionNode()); }
 #line default
         break;
-      case 16: // instruction -> blockInstruction
-#line 97 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 19: // instruction -> blockInstruction
+#line 103 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                { }
 #line default
         break;
-      case 17: // instruction -> expression, Semicolon
-#line 98 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 20: // instruction -> expression, Semicolon
+#line 104 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                           { }
 #line default
         break;
-      case 18: // instruction -> ifInstruction
-#line 99 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 21: // instruction -> ifInstruction
+#line 105 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                    { }
 #line default
         break;
-      case 19: // instruction -> whileInstruction
-#line 100 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                      { }
-#line default
-        break;
-      case 20: // instruction -> inputInstruction
-#line 101 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                      { }
-#line default
-        break;
-      case 21: // instruction -> outputInstruction
-#line 102 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                       { }
-#line default
-        break;
-      case 22: // instruction -> returnInstruction
-#line 103 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
-                       { }
-#line default
-        break;
-      case 23: // blockInstruction -> OpenCurl, instructions, CloseCurl
+      case 22: // instruction -> whileInstruction
 #line 106 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                      { }
+#line default
+        break;
+      case 23: // instruction -> inputInstruction
+#line 107 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                      { }
+#line default
+        break;
+      case 24: // instruction -> outputInstruction
+#line 108 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                       { }
+#line default
+        break;
+      case 25: // instruction -> returnInstruction
+#line 109 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                       { }
+#line default
+        break;
+      case 26: // instruction -> error, Semicolon
+#line 110 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+                     { yyerrok(); }
+#line default
+        break;
+      case 27: // blockInstruction -> OpenCurl, instructions, CloseCurl
+#line 113 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                    {  }
 #line default
         break;
-      case 24: // expression -> assignExpression
-#line 109 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 28: // expression -> assignExpression
+#line 116 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                               { }
 #line default
         break;
-      case 25: // assignExpression -> Identifier, Assign, assignExpression
-#line 112 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 29: // assignExpression -> Identifier, Assign, assignExpression
+#line 119 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                       { Compiler.PushNode(new AssignNode(ValueStack[ValueStack.Depth-3].String)); }
 #line default
         break;
-      case 26: // assignExpression -> logicalExpression
-#line 113 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 30: // assignExpression -> logicalExpression
+#line 120 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                          { }
 #line default
         break;
-      case 27: // logicalExpression -> logicalExpression, Or, relationExpression
-#line 116 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 31: // logicalExpression -> logicalExpression, Or, relationExpression
+#line 123 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                             { Compiler.PushNode(new LogicalExpressionNode(LogicalExpressionNode.Type.Or)); }
 #line default
         break;
-      case 28: // logicalExpression -> logicalExpression, And, relationExpression
-#line 117 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 32: // logicalExpression -> logicalExpression, And, relationExpression
+#line 124 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                  { Compiler.PushNode(new LogicalExpressionNode(LogicalExpressionNode.Type.And)); }
 #line default
         break;
-      case 29: // logicalExpression -> relationExpression
-#line 118 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 33: // logicalExpression -> relationExpression
+#line 125 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                            { }
 #line default
         break;
-      case 30: // relationExpression -> relationExpression, Equals, addExpression
-#line 121 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 34: // relationExpression -> relationExpression, Equals, addExpression
+#line 128 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                              { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.Equals)); }
 #line default
         break;
-      case 31: // relationExpression -> relationExpression, NotEquals, addExpression
-#line 122 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 35: // relationExpression -> relationExpression, NotEquals, addExpression
+#line 129 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                     { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.NotEquals)); }
 #line default
         break;
-      case 32: // relationExpression -> relationExpression, GreaterThan, addExpression
-#line 123 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 36: // relationExpression -> relationExpression, GreaterThan, addExpression
+#line 130 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                       { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.GreaterThan )); }
 #line default
         break;
-      case 33: // relationExpression -> relationExpression, GreaterOrEqual, addExpression
-#line 124 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 37: // relationExpression -> relationExpression, GreaterOrEqual, addExpression
+#line 131 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                          { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.GreaterOrEqual)); }
 #line default
         break;
-      case 34: // relationExpression -> relationExpression, LessThan, addExpression
-#line 125 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 38: // relationExpression -> relationExpression, LessThan, addExpression
+#line 132 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                    { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.LessThan)); }
 #line default
         break;
-      case 35: // relationExpression -> relationExpression, LessOrEqual, addExpression
-#line 126 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 39: // relationExpression -> relationExpression, LessOrEqual, addExpression
+#line 133 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                       { Compiler.PushNode(new RelationExpressionNode(RelationExpressionNode.Type.LessOrEqual)); }
 #line default
         break;
-      case 36: // relationExpression -> addExpression
-#line 127 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 40: // relationExpression -> addExpression
+#line 134 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                        { }
 #line default
         break;
-      case 37: // addExpression -> addExpression, Plus, mulExpression
-#line 130 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 41: // addExpression -> addExpression, Plus, mulExpression
+#line 137 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                  { Compiler.PushNode(new AddExpressionNode(AddExpressionNode.Type.Plus)); }
 #line default
         break;
-      case 38: // addExpression -> addExpression, Minus, mulExpression
-#line 131 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 42: // addExpression -> addExpression, Minus, mulExpression
+#line 138 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                          { Compiler.PushNode(new AddExpressionNode(AddExpressionNode.Type.Minus)); }
 #line default
         break;
-      case 39: // addExpression -> mulExpression
-#line 132 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 43: // addExpression -> mulExpression
+#line 139 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                      { }
 #line default
         break;
-      case 40: // mulExpression -> mulExpression, Multiply, bitExpression
-#line 136 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 44: // mulExpression -> mulExpression, Multiply, bitExpression
+#line 143 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                      { Compiler.PushNode(new MulExpressionNode(MulExpressionNode.Type.Multiply)); }
 #line default
         break;
-      case 41: // mulExpression -> mulExpression, Divide, bitExpression
-#line 137 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 45: // mulExpression -> mulExpression, Divide, bitExpression
+#line 144 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                           { Compiler.PushNode(new MulExpressionNode(MulExpressionNode.Type.Divide)); }
 #line default
         break;
-      case 42: // mulExpression -> bitExpression
-#line 138 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 46: // mulExpression -> bitExpression
+#line 145 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                      { }
 #line default
         break;
-      case 43: // bitExpression -> bitExpression, BitwiseOr, unaryExpression
-#line 142 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 47: // bitExpression -> bitExpression, BitwiseOr, unaryExpression
+#line 149 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                         { Compiler.PushNode(new BitExpressionNode(BitExpressionNode.Type.Or)); }
 #line default
         break;
-      case 44: // bitExpression -> bitExpression, BitwiseAnd, unaryExpression
-#line 143 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 48: // bitExpression -> bitExpression, BitwiseAnd, unaryExpression
+#line 150 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                 { Compiler.PushNode(new BitExpressionNode(BitExpressionNode.Type.And)); }
 #line default
         break;
-      case 45: // bitExpression -> unaryExpression
-#line 144 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 49: // bitExpression -> unaryExpression
+#line 151 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                        { }
 #line default
         break;
-      case 46: // unaryExpression -> Minus, unaryExpression
-#line 147 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 50: // unaryExpression -> Minus, unaryExpression
+#line 154 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                         { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.Minus)); }
 #line default
         break;
-      case 47: // unaryExpression -> BitwiseNegate, unaryExpression
-#line 148 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 51: // unaryExpression -> BitwiseNegate, unaryExpression
+#line 155 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                     { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.BitwiseNegate)); }
 #line default
         break;
-      case 48: // unaryExpression -> Negate, unaryExpression
-#line 149 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 52: // unaryExpression -> Negate, unaryExpression
+#line 156 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                              { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.Negate)); }
 #line default
         break;
-      case 49: // unaryExpression -> OpenBracket, Integer, CloseBracket, unaryExpression
-#line 150 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 53: // unaryExpression -> OpenBracket, Integer, CloseBracket, unaryExpression
+#line 157 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                        { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.IntConversion)); }
 #line default
         break;
-      case 50: // unaryExpression -> OpenBracket, Double, CloseBracket, unaryExpression
-#line 151 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 54: // unaryExpression -> OpenBracket, Double, CloseBracket, unaryExpression
+#line 158 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                       { Compiler.PushNode(new UnaryExpressionNode(UnaryExpressionNode.Type.DoubleConversion)); }
 #line default
         break;
-      case 51: // unaryExpression -> factorExpression
-#line 152 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 55: // unaryExpression -> factorExpression
+#line 159 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                        { }
 #line default
         break;
-      case 52: // factorExpression -> OpenBracket, expression, CloseBracket
-#line 155 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 56: // factorExpression -> OpenBracket, expression, CloseBracket
+#line 162 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                        { }
 #line default
         break;
-      case 53: // factorExpression -> IntegerLiteral
-#line 156 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 57: // factorExpression -> IntegerLiteral
+#line 163 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                          { Compiler.PushNode(new IntegerFactorNode(ValueStack[ValueStack.Depth-1].Integer)); }
 #line default
         break;
-      case 54: // factorExpression -> BoolLiteral
-#line 157 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 58: // factorExpression -> BoolLiteral
+#line 164 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                       { Compiler.PushNode(new BoolFactorNode(ValueStack[ValueStack.Depth-1].Bool)); }
 #line default
         break;
-      case 55: // factorExpression -> DoubleLiteral
-#line 158 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 59: // factorExpression -> DoubleLiteral
+#line 165 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                         { Compiler.PushNode(new DoubleFactorNode(ValueStack[ValueStack.Depth-1].String)); }
 #line default
         break;
-      case 56: // factorExpression -> Identifier
-#line 159 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 60: // factorExpression -> Identifier
+#line 166 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                   { Compiler.PushNode(new IdentifierNode(ValueStack[ValueStack.Depth-1].String)); }
 #line default
         break;
-      case 57: // ifInstruction -> If, OpenBracket, expression, CloseBracket, instruction
-#line 162 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 61: // ifInstruction -> If, OpenBracket, expression, CloseBracket, instruction
+#line 169 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                                    { Compiler.PushNode(new IfNode(false)); }
 #line default
         break;
-      case 58: // ifInstruction -> If, OpenBracket, expression, CloseBracket, instruction, Else, 
+      case 62: // ifInstruction -> If, OpenBracket, expression, CloseBracket, instruction, Else, 
                //                  instruction
-#line 163 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 170 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                                            { Compiler.PushNode(new IfNode(true)); }
 #line default
         break;
-      case 59: // whileInstruction -> While, OpenBracket, expression, CloseBracket, instruction
-#line 166 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 63: // whileInstruction -> While, OpenBracket, expression, CloseBracket, instruction
+#line 173 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                                          { Compiler.PushNode(new WhileNode()); }
 #line default
         break;
-      case 60: // inputInstruction -> Read, Identifier, Semicolon
-#line 169 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 64: // inputInstruction -> Read, Identifier, Semicolon
+#line 176 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                              { Compiler.PushNode(new ReadNode(ValueStack[ValueStack.Depth-2].String, false)); }
 #line default
         break;
-      case 61: // inputInstruction -> Read, Identifier, Comma, Hex, Semicolon
-#line 170 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 65: // inputInstruction -> Read, Identifier, Comma, Hex, Semicolon
+#line 177 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                            { Compiler.PushNode(new ReadNode(ValueStack[ValueStack.Depth-4].String, true)); }
 #line default
         break;
-      case 62: // outputInstruction -> Write, expression, Semicolon
-#line 173 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 66: // outputInstruction -> Write, expression, Semicolon
+#line 180 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                                { Compiler.PushNode(new WriteExpressionNode(false)); }
 #line default
         break;
-      case 63: // outputInstruction -> Write, expression, Comma, Hex, Semicolon
-#line 174 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 67: // outputInstruction -> Write, expression, Comma, Hex, Semicolon
+#line 181 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                              { Compiler.PushNode(new WriteExpressionNode(true)); }
 #line default
         break;
-      case 64: // outputInstruction -> Write, StringLiteral, Semicolon
-#line 175 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 68: // outputInstruction -> Write, StringLiteral, Semicolon
+#line 182 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                       { WriteStringNode.CreateWriteStringNodes(ValueStack[ValueStack.Depth-2].String); }
 #line default
         break;
-      case 65: // returnInstruction -> Return, Semicolon
-#line 178 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+      case 69: // returnInstruction -> Return, Semicolon
+#line 185 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
                                      { Compiler.PushNode(new ReturnNode()); }
 #line default
         break;
@@ -616,7 +649,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
         return CharToString((char)terminal);
   }
 
-#line 183 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
+#line 190 "C:\Users\Mateusz\Documents\GitHub\mini-compiler\mini-compiler\kompilator.y"
 
 public Parser(Scanner scnr) : base(scnr) { }
 #line default

@@ -63,6 +63,9 @@
 %token Semicolon
 %token Comma
 
+// unexpected
+%token Dot
+
 // non-terminals
 
 %%
@@ -80,14 +83,17 @@ declaration : Integer declarationInt { }
 
 declarationInt : Identifier Semicolon { Compiler.PushNode(new DeclarationNode(ExpressionType.Integer, $1)); }
 			   | Identifier Comma declarationInt { Compiler.PushNode(new DeclarationNode(ExpressionType.Integer, $1)); }
+			   | error Semicolon { yyerrok(); }
 			   ;
 
 declarationDouble : Identifier Semicolon { Compiler.PushNode(new DeclarationNode(ExpressionType.Double, $1)); }
 				  | Identifier Comma declarationDouble { Compiler.PushNode(new DeclarationNode(ExpressionType.Double, $1)); }
+			      | error Semicolon { yyerrok(); }
 				  ;
 
 declarationBool : Identifier Semicolon { Compiler.PushNode(new DeclarationNode(ExpressionType.Bool, $1)); }
 				| Identifier Comma declarationBool { Compiler.PushNode(new DeclarationNode(ExpressionType.Bool, $1)); }
+			    | error Semicolon { yyerrok(); }
 				;
 
 instructions : instructions instruction { BlockInstructionNode.InsertInstructionToTopBlock(); }
@@ -101,6 +107,7 @@ instruction : blockInstruction { }
 			| inputInstruction { }
 			| outputInstruction { }
 			| returnInstruction { }
+			| error Semicolon { yyerrok(); }
 			;
 
 blockInstruction : OpenCurl instructions CloseCurl {  }

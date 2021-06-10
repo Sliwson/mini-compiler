@@ -1,11 +1,11 @@
 program { 
-	int stloc;
-	int ldc;
-	bool ldloc;
-	double br;
+	int i32;
+	int br;
+	bool i8;
+	double label;
 
-	stloc = 5;
-	ldloc = true;
-	ldc = -5;
-	br = 0.505;
+	i32 = 5;
+	i8 = true;
+	br = -5;
+	label = 0.505;
 }

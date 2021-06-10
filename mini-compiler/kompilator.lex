@@ -4,7 +4,12 @@
 %{
 public override void yyerror(string format, params object[] args)
 {
-	Compiler.Errors.Add(new Error(yyline,string.Format(format, args)));
+	var error = string.Format(format, args);
+	var removeString = ", or error";
+	int index = error.IndexOf(removeString);
+	if (index > 0)
+		error = error.Remove(index, removeString.Length);
+	Compiler.Errors.Add(new Error(yyline, error));
 }
 %}
 
@@ -12,7 +17,7 @@ public override void yyerror(string format, params object[] args)
 Identifier [a-zA-Z]([a-zA-Z0-9])*
 IntegerLiteral	([0-9]|[1-9][0-9]*)
 IntegerLiteralHex (0x|0X)([0-9a-fA-F]+)
-DoubleLiteral	([0-9]|[1-9][0-9]*)[.][0-9]+
+DoubleLiteral	([0-9]|[1-9][0-9]*)([.][0-9]+)
 BoolLiteral		(true|false)
 StringLiteral	\".*\"
 Whitespace		\s	
@@ -101,6 +106,8 @@ Comment			"//".*
 						yylval.String = yytext;
 						return (int) Tokens.Identifier;
 					}
+
+"."					{ return (int)Tokens.Dot; }
 
 
 %% 

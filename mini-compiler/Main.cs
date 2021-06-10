@@ -1196,7 +1196,7 @@ namespace mini_compiler
             }
             else if (lhsType != rhsType)
             {
-                Compiler.Errors.Add(new Error(GetLine(), $"Type mismatch in assign expression"));
+                Compiler.Errors.Add(new Error(GetLine(), $"Trying to assign {rhsType} to {lhsType}"));
                 return "";
             }
 
@@ -1405,7 +1405,13 @@ namespace mini_compiler
         public static void InsertInstructionToTopBlock()
         {
             var instruction = Compiler.Nodes.Pop();
-            var block = Compiler.Nodes.Last() as BlockInstructionNode;
+            if (instruction == null)
+                return;
+
+            var block = Compiler.Nodes.LastOrDefault() as BlockInstructionNode;
+            if (block == null)
+                return;
+
             block.instructions.Add(instruction);
         }
 
