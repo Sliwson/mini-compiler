@@ -327,3 +327,6 @@ By_Sliwson_Hex
 By_Sliwson_Hex_Fail1
 By_Sliwson_Hex_Fail2
 By_Sliwson_Hex_Fail3
+By_Sliwson_Mail_Write
+By_Sliwson_Mail_Write_Fail1
+By_Sliwson_Mail_Write_Fail2

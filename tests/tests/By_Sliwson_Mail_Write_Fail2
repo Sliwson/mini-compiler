@@ -1,0 +1,12 @@
+program
+{
+    int x;
+    x=1;
+    write 1;  // poprawne
+    write x;  // poprawne
+    write(x);  // poprawne
+    write(1);  // poprawne
+    writex;  // błąd kompilacji
+    write "1";  // poprawne
+    write"1";  // poprawne
+}
