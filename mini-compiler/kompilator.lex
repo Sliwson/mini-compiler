@@ -20,7 +20,7 @@ IntegerLiteralHex (0x|0X)([0-9a-fA-F]+)
 DoubleLiteral	([0-9]|[1-9][0-9]*)([.][0-9]+)
 BoolLiteral		(true|false)
 StringLiteral	\".*\"
-Whitespace		\s	
+Whitespace		[ \t\r]+	
 Comment			"//".*
 
 %% 
@@ -98,7 +98,7 @@ Comment			"//".*
 ";"					{ return (int)Tokens.Semicolon; }
 ","					{ return (int)Tokens.Comma; }
 
-"\n"				{ Compiler.CurrentLine = yyline + 1; }
+\n				    { Compiler.CurrentLine = yyline + 1; }
 
 {Whitespace}		{ }
 
@@ -108,6 +108,11 @@ Comment			"//".*
 					}
 
 "."					{ return (int)Tokens.Dot; }
+.					{ 
+						string error = "Unexpected character: {0}";
+						error = string.Format(error, yytext);
+						Compiler.Errors.Add(new Error(yyline, error)); 
+					}
 
 
 %% 

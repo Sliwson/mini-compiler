@@ -1,10 +1,5 @@
 ﻿// Based on Kuba Janaszkiewicz test
 program { 
     double d;
-    d = 2. ;
-    write d;
-    write "\n";
-    d = .5 ;
-    write d;
-    write "\n";
-}
+    $
+    d = 2.0;
