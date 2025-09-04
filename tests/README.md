@@ -1,25 +1,25 @@
-# Narzędzia do testowania kompilatorów języków *mini* i *mini++* (patrz: [zadania](./doc))
+# Testing tools for *mini* and *mini++* language compilers (see: [tasks](../doc))
 
-### Struktura testów
+### Test structure
 
-W plikach `tests.txt`, `tests_groupA.txt`, itp. znajdują się listy plików testowych.
+Files `tests.txt`, `tests_groupA.txt`, etc. contain lists of test files.
 	
-Pliki źródłowe wymienione w np. `tests.txt` powinny znajdować się w folderze `tests`. Oczekiwane wyniki powinny znajdować się w `expected_results` i mieć dokładnie takie same nazwy jak pliki w `tests`. W katalogu `inputs` powinien znajdować się oczekiwany plik wejściowy, jeśli jest potrzebny.
+Source files listed in e.g. `tests.txt` should be located in the `tests` folder. Expected results should be located in `expected_results` and have exactly the same names as files in `tests`. The `inputs` directory should contain the expected input file, if needed.
 	
-W przypadku oczekiwanego błędu kompilacji, odpowiedni plik w folderze `expected_results` powinien zawierać tekst "error" – przykłady już istnieją.
+In case of an expected compilation error, the corresponding file in the `expected_results` folder should contain the text "error" – examples already exist.
 	
-### Jak testować
+### How to test
 	
-Do testowania służą pliki `.bat`. Uruchamiamy plik `test.bat` (z VS CMD, z folderu w którym znajduje się ten plik), dla którego pierwszym argumentem **musi** być ścieżka do pliku wykonywalnego naszego kompilatora języka *mini*.
+`.bat` files are used for testing. Run the `test.bat` file (from VS CMD, from the folder where this file is located), where the first argument **must** be the path to the executable file of our *mini* language compiler.
 	
-Pliki te zapisują wyniki w folderze `results`. Komunikat "critical_error" w pliku informuje o błędzie na jednym z trzech etapów występujących po przejściu naszego kompilatora (asemblacja kodu CIL, weryfikacja programem peverify, wykonanie programu). Komunikat "compiler_error" mówi o ujemnym kodzie wyjścia z naszego kompilatora – najprawdopodobniej chodzi o wtedy o niewyłapany wyjątek. Należy zadbać, by w przypadku błędu kompilacji zwrócić wartość dodatnią.
+These files save results in the `results` folder. The message "critical_error" in a file indicates an error in one of the three stages that occur after our compiler passes (CIL code assembly, verification by peverify program, program execution). The message "compiler_error" indicates a negative exit code from our compiler – this most likely refers to an uncaught exception. Make sure to return a positive value in case of compilation error.
 
-Wyjścia z `results` porównywane są z odpowiadającymi im plikami w `expected_results`. Wszystkie znalezione różnice zapisywane są do pliku `errors.txt`. Jeśli zawiera on tylko linijkę "errors_detected" - oznacza to, że wszystko jest OK.
+Outputs from `results` are compared with corresponding files in `expected_results`. All found differences are saved to the `errors.txt` file. If it contains only the line "errors_detected" - it means everything is OK.
 
-### Uwagi
+### Notes
 
-Test `test_for5.bat`, oprócz testów z `tests_for5.txt` agreguje także wszystkie pozostałe grupy testów.
+The `test_for5.bat` test, in addition to tests from `tests_for5.txt`, also aggregates all other test groups.
 	
-W samym kompilatorze nie może być wywołań metod `Console.ReadKey` ani `Console.ReadLine` – oczekiwanie na wejście od użytkownika jest zbędne i traktowane jako zawieszenie się kompilatora.
+The compiler itself cannot contain calls to `Console.ReadKey` or `Console.ReadLine` methods – waiting for user input is unnecessary and treated as compiler hanging.
 
-Osoby rozwijające swój kompilator na systemach Unixowych mogą skorzystać ze skryptu `test.sh` który jest Bashowym odpowiednikiem skryptu `test.bat`.
+People developing their compiler on Unix systems can use the `test.sh` script which is the Bash equivalent of the `test.bat` script.
